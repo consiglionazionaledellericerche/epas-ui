@@ -1,3 +1,5 @@
+@import url("//fonts.googleapis.com/css?family=Shadows+Into+Light");
+
 html,
 body {
   padding: 0;
@@ -13,6 +15,33 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+#__next {
+  display: flex;
+  height: 100%;
+  flex-direction: column !important;
+}
+
+main {
+  padding: 75px 10px 15px;
+}
+
+nav {
+  padding: 0 10px 0 !important;
+  background-color: #05396d;
+  color: white !important;
+  border-bottom: 1px #031f3c solid;
+}
+
+.navbar-brand {
+  font-family: 'Shadows Into Light', cursive !important;
+  font-size: 200% !important;
+  padding: 1px 15px !important;
+}
+
+.nav-item {
+  padding: 0 15px !important;
 }
 
 @media (prefers-color-scheme: dark) {
