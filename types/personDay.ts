@@ -8,4 +8,5 @@ export type PersonDay = {
     progressive: number
     author: string
     content: string
+    workingTime: string
 }

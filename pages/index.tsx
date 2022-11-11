@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Container from 'react-bootstrap/Container';
-import MonthRecap from '../components/monthRecap';
+import MonthRecap from '../components/simpleMonthRecap';
 
 const App: React.FC = () => {
   return (

@@ -1,20 +1,21 @@
 import { Accordion, Col, Container, Row } from "react-bootstrap";
 import StampingsTable from "./stampingsTable";
 import { PersonDay } from "../types/personDay";
+import { MonthRecap } from "../types/monthRecap";
 
 interface MonthRecapProps {
-    personDays: PersonDay[]
+    monthRecap: MonthRecap
 }
 
-const MonthRecap: React.FC<MonthRecapProps> = ({
-    personDays
+const MonthRecapView: React.FC<MonthRecapProps> = ({
+    monthRecap
   }) => {
     return (
         <>
         <Container fluid>
             <Row>
                 <Col sm={8}>
-                    <StampingsTable personDays={personDays} />
+                    <StampingsTable monthRecap={monthRecap} />
                 </Col>
                 <Col sm={4}>
                     <Accordion defaultActiveKey="0">
@@ -50,4 +51,4 @@ const MonthRecap: React.FC<MonthRecapProps> = ({
     );
 }
 
-export default MonthRecap
+export default MonthRecapView

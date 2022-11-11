@@ -13,7 +13,7 @@ function Header() {
     <Navbar expand="lg" className="fixed-top">
         <Navbar.Brand className="text-white" href="#home">ePAS</Navbar.Brand>
         <NavDropdown title="cristian.lucchesi" id="personal-data">
-          <NavDropdown.Item href="#action/3.1"><FontAwesomeIcon icon={faCalendarDays} /> Situazione mensile</NavDropdown.Item>
+          <NavDropdown.Item href="/stampings"><FontAwesomeIcon icon={faCalendarDays} /> Situazione mensile</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faUserXmark} /> Assenze Mensili</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.3">Assenze Annuali</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.4">Ferie</NavDropdown.Item>

@@ -1,12 +1,13 @@
 import { Table } from "react-bootstrap";
+import { MonthRecap } from "../types/monthRecap";
 import { PersonDay } from "../types/personDay";
 
 interface StampingsTableProps {
-    personDays: PersonDay[]
+    monthRecap: MonthRecap
 }
 
 const StampingsTable: React.FC<StampingsTableProps> = ({
-    personDays
+    monthRecap
   }) => {
     return (
         <Table striped bordered hover>
@@ -25,20 +26,20 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                 <th className="group-single">Progres-<br />sivo</th>
                 <th className="group-single">Tipo<br />Orario</th>
             </tr>
-            {personDays.map((personDay) => (
-                    <tr key={personDay.id}>
-                        <td>{personDay.date}</td>
-                        <td>{personDay.ticketAvailable ? "Si" : "No"}</td>
+            {monthRecap.daysRecap.map((personDayRecap) => (
+                    <tr key={personDayRecap.personDay.id}>
+                        <td>{personDayRecap.personDay.date.toString()}</td>
+                        <td>{personDayRecap.mealTicket}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{personDay.timeAtWork}</td>
-                        <td>{personDay.difference}</td>
-                        <td>{personDay.progressive}</td>
-                        <td></td>
+                        <td>{personDayRecap.personDay.timeAtWork}</td>
+                        <td>{personDayRecap.personDay.difference}</td>
+                        <td>{personDayRecap.personDay.progressive}</td>
+                        <td>{personDayRecap.personDay.workingTime}</td>
                     </tr>
                 )
             )
