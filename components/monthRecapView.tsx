@@ -1,5 +1,5 @@
 import { Accordion, Col, Container, Row } from "react-bootstrap";
-import StampingsTable from "./stampingsTable";
+import StampingsTable from "./stampings/stampingsTable";
 import { PersonDay } from "../types/personDay";
 import { MonthRecap } from "../types/monthRecap";
 
