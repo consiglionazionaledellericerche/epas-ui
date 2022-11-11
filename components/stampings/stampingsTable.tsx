@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
 import { PersonDay } from "../../types/personDay";
+import AbsencesShow from "./absencesShow";
 import StampingTemplates from "./stampingTemplates";
 
 interface StampingsTableProps {
@@ -47,7 +48,9 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
 
                         <th className="invisible"></th>
 
-                        <td>abs</td>
+                        <td>
+                            <AbsencesShow absences={pdr.personDay.absences} />
+                        </td>
                         
                         <StampingTemplates personDayRecap={pdr} />
 
@@ -56,7 +59,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         <td>{pdr.personDay.timeAtWork}</td>
                         <td>{pdr.personDay.difference}</td>
                         <td>{pdr.personDay.progressive}</td>
-                        <td>{pdr.personDay.workingTime}</td>
+                        <td>{pdr.wttd.workingTimeType?.description}</td>
                     </tr>
                     )
                 )

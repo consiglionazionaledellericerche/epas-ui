@@ -4,15 +4,16 @@ import { StampingTemplate } from "./stampingTemplate"
 import { WorkingTimeTypeDay } from "./workingTimeTypeDay"
 
 export type PersonDayRecap = {
-    personDay: PersonDay
-    wttd: WorkingTimeTypeDay
-    lunchInterval: LocalTimeInterval
-    workInterval: LocalTimeInterval
-    personalWorkInterval: LocalTimeInterval
-    ignoreDay: boolean
-    firstDay: boolean
-    stampingTemplates: StampingTemplate[]
-    mealTicket: string
     exitingNowCode: string
+    firstDay: boolean
+    id: number
+    ignoreDay: boolean
+    lunchInterval: LocalTimeInterval
+    mealTicket: string
     note: string[]
+    personDay: PersonDay
+    personalWorkInterval: LocalTimeInterval
+    stampingTemplates: StampingTemplate[]
+    workInterval: LocalTimeInterval
+    wttd: WorkingTimeTypeDay
 }

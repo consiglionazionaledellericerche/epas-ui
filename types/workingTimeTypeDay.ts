@@ -1,3 +1,5 @@
+import { WorkingTimeType } from "./workingTimeType"
+
 export type WorkingTimeTypeDay = {
     dayOfWeek: number
     workingTime: number
@@ -6,4 +8,5 @@ export type WorkingTimeTypeDay = {
     breakTicketTime: number
     ticketAfternoonThreshold: number
     ticketAfternoonWorkingTime: number
+    workingTimeType: WorkingTimeType
 }

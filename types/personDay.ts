@@ -1,12 +1,26 @@
+import { Absence } from "./absence"
+
 export type PersonDay = {
-    id: number
+    absences: Absence[]
+    approvedOnHoliday: number
+    approvedOutOpening: number
     date: Date
-    holiday: boolean
-    ticketAvailable: boolean
-    timeAtWork: number
+    decurtedMeal: number
     difference: number
+    holiday: boolean
+    id: number
+    justifiedTimeBetweenZones: number
+    justifiedTimeMeal: number
+    justifiedTimeNoMeal: number
+    onHoliday: number
+    outOpening: number
+    personId: number
     progressive: number
-    author: string
-    content: string
-    workingTime: string
+    stampingTime: number
+    ticketAvailable: boolean
+    ticketForcedByAdmin: boolean
+    timeAtWork: number
+    workingInAnotherPlace: boolean
+    workingTimeInMission: number
+
 }
