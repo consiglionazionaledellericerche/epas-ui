@@ -4,8 +4,8 @@ import { MonthRecap } from "../../types/monthRecap";
 import AbsencesShow from "./absencesShow";
 import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
-import formatDateShort from '../../utils/dateUtility'
 import MealTicketShow from "./mealTicketShow";
+import DateUtility from "../../utils/dateUtility";
 
 interface StampingsTableProps {
     monthRecap: MonthRecap
@@ -15,7 +15,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     monthRecap
   }) => {
     return (
-        <Table id="tabellonetimbrature" striped bordered hover>
+        <Table id="tabellonetimbrature" bordered hover>
             <caption className="sr-only">Riepilogo mensile Ottobre 2022</caption>
             <thead>
             <tr>
@@ -46,7 +46,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             {monthRecap.daysRecap.map((pdr) => (
                     <tr key={pdr.personDay.id} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
                         <td className={pdr.personDay.holiday ? 'festivi' : 'capitalized'}>
-                            {formatDateShort(pdr.personDay.date)}
+                            {DateUtility.formatDateShort(pdr.personDay.date)}
                         </td>
 
                         <MealTicketShow personDayRecap={pdr} />

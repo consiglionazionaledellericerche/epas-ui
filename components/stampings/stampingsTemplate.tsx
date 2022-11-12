@@ -1,5 +1,4 @@
 import { PersonDayRecap } from "../../types/personDayRecap";
-import { StampingTemplate } from "../../types/stampingTemplate";
 
 interface StampingTemplatesProps {
     personDayRecap: PersonDayRecap
@@ -8,11 +7,20 @@ interface StampingTemplatesProps {
 const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
     personDayRecap
   }) => {
+
+    let colorMap = new Map<string, string>(
+        [["in" , "default-left"],
+        ["out", "default-right"],
+        ["warn" , "warn"]
+    ])
+
     return (
         <>
         {personDayRecap.stampingTemplates.map((stampingTemplate, index) => (
             <td key={personDayRecap.personDay.id.toString() + index} 
-                className="position{stampingTemplate.position}">{stampingTemplate.hour}</td>
+                className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour)}`}>
+                {stampingTemplate.hour}
+            </td>
         ))}
         </>
     )
