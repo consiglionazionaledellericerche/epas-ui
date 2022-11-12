@@ -1,4 +1,6 @@
 @import url("//fonts.googleapis.com/css?family=Shadows+Into+Light");
+@import url("./epas.css");
+@import url("./stampingsTable.css");
 
 html,
 body {
@@ -43,6 +45,16 @@ nav {
 .nav-item {
   padding: 0 15px !important;
 }
+
+  /* header */
+  table#tabellonetimbrature > thead > th {
+    border: 1px solid #bbb;
+    background-color: #d3d3d3 !important;
+    text-align: center;
+    color: red !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
 
 @media (prefers-color-scheme: dark) {
   html {

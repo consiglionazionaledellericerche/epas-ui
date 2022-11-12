@@ -4,10 +4,12 @@ export type PersonDay = {
     absences: Absence[]
     approvedOnHoliday: number
     approvedOutOpening: number
+    consideredExitingNow: boolean
     date: Date
     decurtedMeal: number
     difference: number
     holiday: boolean
+    future: boolean
     id: number
     justifiedTimeBetweenZones: number
     justifiedTimeMeal: number

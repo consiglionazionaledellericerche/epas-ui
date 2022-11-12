@@ -1,9 +1,11 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
-import { PersonDay } from "../../types/personDay";
 import AbsencesShow from "./absencesShow";
-import StampingTemplates from "./stampingTemplates";
+import StampingsTemplate from "./stampingsTemplate";
+import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
+import formatDateShort from '../../utils/dateUtility'
+import MealTicketShow from "./mealTicketShow";
 
 interface StampingsTableProps {
     monthRecap: MonthRecap
@@ -13,7 +15,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     monthRecap
   }) => {
     return (
-        <Table striped bordered hover>
+        <Table id="tabellonetimbrature" striped bordered hover>
             <caption className="sr-only">Riepilogo mensile Ottobre 2022</caption>
             <thead>
             <tr>
@@ -42,23 +44,25 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             </thead>
             <tbody>
             {monthRecap.daysRecap.map((pdr) => (
-                    <tr key={pdr.personDay.id}>
-                        <td>{pdr.personDay.date.toString()}</td>
-                        <td>{pdr.mealTicket}</td>
+                    <tr key={pdr.personDay.id} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
+                        <td className={pdr.personDay.holiday ? 'festivi' : 'capitalized'}>
+                            {formatDateShort(pdr.personDay.date)}
+                        </td>
+
+                        <MealTicketShow personDayRecap={pdr} />
 
                         <th className="invisible"></th>
 
-                        <td>
+                        <td className="assenza default-single">
                             <AbsencesShow absences={pdr.personDay.absences} />
                         </td>
                         
-                        <StampingTemplates personDayRecap={pdr} />
+                        <StampingsTemplate personDayRecap={pdr} />
 
                         <td className="invisible"></td>
 
-                        <td>{pdr.personDay.timeAtWork}</td>
-                        <td>{pdr.personDay.difference}</td>
-                        <td>{pdr.personDay.progressive}</td>
+                        <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
+
                         <td>{pdr.wttd.workingTimeType?.description}</td>
                     </tr>
                     )

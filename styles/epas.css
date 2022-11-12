@@ -1,0 +1,8 @@
+table[datatable] {
+    border-radius: 5px;
+    border: 1px solid rgb(220, 220, 220);
+}
+
+table[datatable] > thead > tr > th:hover{
+  background: #F9F9F9;
+}

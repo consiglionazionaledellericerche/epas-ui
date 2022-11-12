@@ -5,7 +5,7 @@ interface StampingTemplatesProps {
     personDayRecap: PersonDayRecap
 }
 
-const StampingTemplates: React.FC<StampingTemplatesProps> = ({
+const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
     personDayRecap
   }) => {
     return (
@@ -18,4 +18,4 @@ const StampingTemplates: React.FC<StampingTemplatesProps> = ({
     )
 }
 
-export default StampingTemplates
+export default StampingsTemplate
