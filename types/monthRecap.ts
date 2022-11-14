@@ -1,3 +1,4 @@
+import { ContractMonth } from "./contractMonth"
 import { PersonDayRecap } from "./personDayRecap"
 
 export type MonthRecap = {
@@ -19,8 +20,10 @@ export type MonthRecap = {
     absenceCodeMap: object
     //tipo da creare
     absenceList: object[]
+    contractMonths: ContractMonth[]
     absenceToRecoverYet: boolean
     //tipo da creare
     absencesToRecoverList: object[]
     numberOfInOut: number
+    topQualification: boolean
 }
