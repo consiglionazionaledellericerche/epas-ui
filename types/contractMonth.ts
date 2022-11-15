@@ -53,6 +53,8 @@ export type ContractMonth = {
     qualifica: number 
     straordinarioMinuti: number
     positiveResidualInMonth: number
+    hasResidualLastYear: boolean
+    residualLastYearInit: number
 
     /**
      * Verifica se è l'ultimo mese prima della scadenza del contratto.

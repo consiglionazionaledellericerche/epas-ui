@@ -36,6 +36,34 @@ class DateUtility {
         }
         return string;
       }
+
+            /**
+   * La stringa contenente ore e minuti col "+" davanti se positivo.
+   *
+   * @param minutes il numero dei minuti
+   * @return il numero di ore e miunti col "+" davanti se positivo.
+   */
+  static toHourTimeWithPlus(minutes : number) : string {
+    let hourTime = DateUtility.fromMinuteToHourMinute(minutes);
+    if (minutes < 0) {
+      return hourTime;
+    }
+    return "+" + hourTime;
+  }
+
+  /**
+   * La stringa contenente ore e minuti col "-" davanti se negativo.
+   *
+   * @param minutes il numero dei minuti
+   * @return il numero di ore e miunti col "-" davanti se negativo.
+   */
+  static toHourTimeWithMinus(minutes : number) {
+    let hourTime = DateUtility.fromMinuteToHourMinute(minutes);
+    if (minutes < 0) {
+      return hourTime;
+    }
+    return "-" + hourTime;
+  }
 }
 
 export default DateUtility

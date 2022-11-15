@@ -23,20 +23,8 @@ const HoursRecapGenericInfo: React.FC<HoursRecapGenericInfoProps> = ({
         return progressivoStyle
     }
     return (
-
-        <Accordion.Item eventKey="0">
-        {/* Verificare che sia l'ultimo contratto nel mese */}
-        {/*
-            #{if mese.contract.isLastInMonth((int)psDto.month, (int)psDto.year)}
-                ... implementazione attuale
-            #{/if}
-            #{else}
-                <p class="text-error" style="margin-top: 5px;"><em>Il contratto e' terminato nel corso di questo mese.</em></p>
-            #{/else}
-        */}
-        <Accordion.Header>Riepilogo ore</Accordion.Header>
-        <Accordion.Body>
-            <h5>Info generiche</h5>
+        <>
+            <h4>Info generiche</h4>
             <Table bordered className="riepilogo-ore table-sm">
             <tbody>
                 <tr>
@@ -66,9 +54,8 @@ const HoursRecapGenericInfo: React.FC<HoursRecapGenericInfoProps> = ({
                         }
                 </tr>
             </tbody>
-            </Table>              
-        </Accordion.Body>
-    </Accordion.Item>
+            </Table>
+        </>
     )
 }
 
