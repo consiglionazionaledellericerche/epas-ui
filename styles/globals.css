@@ -46,15 +46,26 @@ nav {
   padding: 0 15px !important;
 }
 
-  /* header */
-  table#tabellonetimbrature > thead > th {
-    border: 1px solid #bbb;
-    background-color: #d3d3d3 !important;
-    text-align: center;
-    color: red !important;
-    padding-left:0 !important;
-    padding-right:0 !important;
-  }
+h2.accordion-header, 
+h2.accordion-header > button[aria-expanded=true], 
+h2.accordion-header > button[aria-expanded=false] {
+  background-color: #337ab7;
+  color: white !important;
+}
+
+button.accordion-button[aria-expanded=true]::after,
+button.accordion-button[aria-expanded=false]::after {
+  color: white !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+table.riepilogo-ore {
+  font-size: 90%;
+}
+
+table > tbody > tr > td.success {
+  background-color: #dff0d8;
+}
 
 @media (prefers-color-scheme: dark) {
   html {
