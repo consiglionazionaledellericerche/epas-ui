@@ -1,4 +1,8 @@
+import { Contract } from "./contract"
+
 export type ContractMonth = {
+    contract: Contract
+
     year: number
     month: number
   
@@ -55,9 +59,13 @@ export type ContractMonth = {
     positiveResidualInMonth: number
     hasResidualLastYear: boolean
     residualLastYearInit: number
+    hasResidualInitInYearMonth: boolean
 
     /**
      * Verifica se è l'ultimo mese prima della scadenza del contratto.
      */
     expireInMonth: boolean
+
+    isPreviousRecapInYearPresent : boolean
+    previousRecapInYearRemainingMinutesCurrentYear : number
 }

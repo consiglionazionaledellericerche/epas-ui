@@ -3,6 +3,7 @@ import { Accordion, Table } from "react-bootstrap";
 import { ContractMonth } from "../../types/contractMonth";
 import { MonthRecap } from "../../types/monthRecap";
 import DateUtility from "../../utils/dateUtility";
+import HoursRecapCurrentYear from "./hoursRecapCurrentYear";
 import HoursRecapGenericInfo from "./hoursRecapGenericInfo";
 import HoursRecapPreviousYear from "./hoursRecapPreviousYear";
 
@@ -30,6 +31,7 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
                 <Accordion.Body>
                     <HoursRecapGenericInfo monthRecap={monthRecap} contractMonth={contractMonth} />
                     <HoursRecapPreviousYear monthRecap={monthRecap} contractMonth={contractMonth} />
+                    <HoursRecapCurrentYear monthRecap={monthRecap} contractMonth={contractMonth} />
                 </Accordion.Body>
             </Accordion.Item>
 
