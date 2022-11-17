@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { ContractMonth } from "../../types/contractMonth";
 import { MonthRecap } from "../../types/monthRecap";
 import DateUtility from "../../utils/dateUtility";

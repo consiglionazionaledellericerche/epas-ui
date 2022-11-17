@@ -66,6 +66,6 @@ export type ContractMonth = {
      */
     expireInMonth: boolean
 
-    isPreviousRecapInYearPresent : boolean
+    previousRecapInYearPresent : boolean
     previousRecapInYearRemainingMinutesCurrentYear : number
 }

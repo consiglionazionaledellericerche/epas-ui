@@ -2,7 +2,6 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { ContractMonth } from "../../types/contractMonth";
 import { MonthRecap } from "../../types/monthRecap";
-import ComponentUtility from "../../utils/componentUtility";
 import DateUtility from "../../utils/dateUtility";
 
 interface HoursRecapPreviousProps {
@@ -13,28 +12,19 @@ interface HoursRecapPreviousProps {
 const HoursRecapPreviousYear: React.FC<HoursRecapPreviousProps> = ({
     monthRecap, contractMonth
   }) => {
-    function progressivoStyleClass(progressivo : number) {
-        let progressivoStyle : string = "col-xs-2 success"
-        if (progressivo === 0) {
-            progressivoStyle = "col-xs-2 warning"
-        }
-        if (progressivo < 0) {
-            progressivoStyle = "col-xs-2 danger"
-        }
-        return progressivoStyle
-    }
     if (contractMonth.hasResidualLastYear) {
         return (
             <>
             {/* #{if mese.hasResidualLastYear() } */}
             {/* <!--  Anno passato --></> */}
-            <h4>Situazione residuo derivante dall'anno precedente</h4>
+            <h4>Situazione residuo derivante dall&apos;anno precedente</h4>
             <Table className="table-sm riepilogo-ore">
             <tbody>
             <tr>
-                <td className="col-xs-10">Residuo da anno precedente disponibile all'inizio del mese</td>
+                <td className="col-xs-10">Residuo da anno precedente disponibile all&apos;inizio del mese</td>
                 <td className="col-xs-2 success">
-                    {DateUtility.toHourTimeWithPlus(contractMonth.residualLastYearInit)}</td>
+                    {DateUtility.toHourTimeWithPlus(contractMonth.residualLastYearInit)}
+                </td>
             </tr>
             <tr>
                 <td className="col-xs-10">Residuo da anno precedente utilizzato questo mese come recupero ore</td>

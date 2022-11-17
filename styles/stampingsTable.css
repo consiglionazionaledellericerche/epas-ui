@@ -169,6 +169,14 @@ table#tabellonetimbrature td.valore-negativo {
   padding-bottom: 3px;
 }
 
+table.riepilogo-ore td.col-xs-10 {
+  width: 83.33333333%;
+}
+
+.table-sm > :not(caption) > tr > td {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
 .col-xs-2 {
   text-align: center;
 }
@@ -177,10 +185,6 @@ table#tabellonetimbrature td.valore-negativo {
   #tabellonetimbrature {
     font-size: 10px !important;
     /* min-width: 600px; */
-  }
-
-  #padre {
-    /* min-width: 640px; */
   }
 
   #riepiloghi {

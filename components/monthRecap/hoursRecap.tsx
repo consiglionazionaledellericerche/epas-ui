@@ -6,6 +6,7 @@ import DateUtility from "../../utils/dateUtility";
 import HoursRecapCurrentYear from "./hoursRecapCurrentYear";
 import HoursRecapGenericInfo from "./hoursRecapGenericInfo";
 import HoursRecapPreviousYear from "./hoursRecapPreviousYear";
+import HoursRecapTotals from "./hoursRecapTotals";
 
 interface HoursRecapProps {
     monthRecap: MonthRecap
@@ -32,6 +33,7 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
                     <HoursRecapGenericInfo monthRecap={monthRecap} contractMonth={contractMonth} />
                     <HoursRecapPreviousYear monthRecap={monthRecap} contractMonth={contractMonth} />
                     <HoursRecapCurrentYear monthRecap={monthRecap} contractMonth={contractMonth} />
+                    <HoursRecapTotals contractMonth={contractMonth} />
                 </Accordion.Body>
             </Accordion.Item>
 
