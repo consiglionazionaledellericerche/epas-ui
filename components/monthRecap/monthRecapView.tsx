@@ -7,12 +7,12 @@ import { useState } from "react";
 
 interface MonthRecapProps {
     monthRecap: MonthRecap
+    month: number
 }
 
 const MonthRecapView: React.FC<MonthRecapProps> = ({
-    monthRecap
+    monthRecap, month
   }) => {
-    const [month] = useState(1);
     return (
         <>
         <Container fluid>
