@@ -16,9 +16,9 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
     monthRecap
   }) => {
     return (
-        <>
+        <Accordion defaultActiveKey="0">
         {monthRecap.contractMonths.map((contractMonth: ContractMonth, index: number) => (   
-            <Accordion.Item eventKey="0" key={index}>            
+            <Accordion.Item eventKey={index.toString()} key={index}>            
                 {/* Verificare che sia l'ultimo contratto nel mese */}
                 {/*
                 #{if mese.contract.isLastInMonth((int)psDto.month, (int)psDto.year)}
@@ -28,7 +28,7 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
                     <p class="text-error" style="margin-top: 5px;"><em>Il contratto e' terminato nel corso di questo mese.</em></p>
                 #{/else}
                 */}
-                <Accordion.Header>Riepilogo ore</Accordion.Header>
+                <Accordion.Header>Riepilogo ore {contractMonth.contractDescription}</Accordion.Header>
                 <Accordion.Body>
                     <HoursRecapGenericInfo monthRecap={monthRecap} contractMonth={contractMonth} />
                     <HoursRecapPreviousYear monthRecap={monthRecap} contractMonth={contractMonth} />
@@ -38,7 +38,7 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
             </Accordion.Item>
 
         ))}
-        </>
+        </Accordion>
     )
 }
 

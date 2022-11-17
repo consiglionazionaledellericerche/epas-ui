@@ -68,4 +68,11 @@ export type ContractMonth = {
 
     previousRecapInYearPresent : boolean
     previousRecapInYearRemainingMinutesCurrentYear : number
+
+    //Dal contrato
+    contractDescription : string
+    sourceDateResidual : Date
+    sourceDateVacation : Date
+    sourceDateMealTicket : Date
+    sourceDateRecoveryDay : Date
 }
