@@ -3,6 +3,7 @@ import StampingsTable from "../stampings/stampingsTable";
 import { MonthRecap } from "../../types/monthRecap";
 import HoursRecap from "./hoursRecap";
 import MealTicketsRecap from "./mealTicketsRecap";
+import { useState } from "react";
 
 interface MonthRecapProps {
     monthRecap: MonthRecap
@@ -11,10 +12,12 @@ interface MonthRecapProps {
 const MonthRecapView: React.FC<MonthRecapProps> = ({
     monthRecap
   }) => {
+    const [month] = useState(1);
     return (
         <>
         <Container fluid>
             <Row>
+                <strong>Riepilogo timbrature {month}</strong>
                 <Col sm={8}>
                     <StampingsTable monthRecap={monthRecap} />
                 </Col>

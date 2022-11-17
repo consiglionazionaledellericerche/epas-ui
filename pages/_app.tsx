@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { SSRProvider} from 'react-bootstrap/'
 
 import type { AppProps } from 'next/app'
-import Layout from '../components/layout'
+import Layout from '../components/layout/layout'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

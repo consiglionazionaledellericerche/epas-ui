@@ -17,7 +17,7 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
     return (
         <>
         {personDayRecap.stampingTemplates.map((stampingTemplate, index) => (
-            <td key={personDayRecap.personDay.id.toString() + index} 
+            <td key={personDayRecap.personDay.id?.toString() + index} 
                 className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour)}`}>
                 {stampingTemplate.hour}
             </td>

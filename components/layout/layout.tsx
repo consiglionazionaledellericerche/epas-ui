@@ -1,6 +1,4 @@
-import type { AppProps } from 'next/app'
 import { ReactNode } from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
 import Header from './header'
 import Footer from './footer'
 
