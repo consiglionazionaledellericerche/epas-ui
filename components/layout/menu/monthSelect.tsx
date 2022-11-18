@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Form } from "react-bootstrap";
+import { CurrentDateContext } from "../../../contexts/currentDateContext";
 
 function MonthSelect() {
-    const [month, setMonth]: any = useState('');
+    let context = useContext(CurrentDateContext);
+    const [month, setMonth]: any = useState(context.getMonth() + 1);
+
+    function setContextMonth(month : string) {
+        context.setMonth(Number(month) - 1)
+        setMonth(month)
+    }
+
     let monthsMap = [
         [1, "Gennaio"], [2, "Febbraio"],
         [3 , "Marzo"], [4, "Aprile"],
@@ -19,7 +27,7 @@ function MonthSelect() {
                 onChange=
                 {e => {
                     console.log("month = ", e.target.value);
-                    setMonth(e.target.value);
+                    setContextMonth(e.target.value);
                 }}
                 >
                 {monthsMap.map((monthTuple, index) => (

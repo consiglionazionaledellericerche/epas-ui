@@ -1,21 +1,20 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Spinner } from 'react-bootstrap'
 import useSWR from 'swr'
 import MonthRecapView from '../components/monthRecap/monthRecapView'
+import { CurrentDateContext} from '../contexts/currentDateContext'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 function Stampings() {
-  let now = new Date();
   const router = useRouter()
-  let month = router.query["month"]
-  let year = router.query["year"];
-  let personId = router.query["personId"];
-  month = month ? month : now.getMonth();
-  year = year ? year : now.getFullYear();
+  let personId = router.query["personId"]
   personId = personId ? personId : 146
-  let API_URL = `/api/rest/v4/monthrecaps?personId=${personId}&year=${year}&month=${month}` 
+  let context = useContext(CurrentDateContext);
+  console.log("CurrentDateContext = " + (context.getMonth() + 1 ))
+
+  let API_URL = `/api/rest/v4/monthrecaps?personId=${personId}&year=${context.getFullYear()}&month=${context.getMonth() + 1}`
   const { data, error } = useSWR(API_URL, fetcher)
 
   if (error) return <div>Impossibile caricare la situazione mensile</div>
@@ -23,7 +22,7 @@ function Stampings() {
     <React.Suspense fallback={<Spinner />} />
 
   return (
-    <MonthRecapView monthRecap={data} month={month} />
+    <MonthRecapView monthRecap={data} month={context.getMonth() + 1} />
   )
 }
 
