@@ -5,27 +5,32 @@ import HoursRecap from "./hoursRecap";
 import MealTicketsRecap from "./mealTicketsRecap";
 
 interface MonthRecapProps {
-    monthRecap: MonthRecap
+        monthRecap: MonthRecap;
+        month: integer;
+        year: integer
 }
 
 const MonthRecapView: React.FC<MonthRecapProps> = ({
-    monthRecap
+    monthRecap,
+    month,
+    year
   }) => {
-    return (
-        <>
-        <Container fluid>
-            <Row>
-                <Col sm={8}>
-                    <StampingsTable monthRecap={monthRecap} />
-                </Col>
-                <Col sm={4}>
-                    <HoursRecap monthRecap={monthRecap} />
-                    <MealTicketsRecap monthRecap={monthRecap} />
-                </Col>
-            </Row>
-        </Container>
-        </>
-    );
+
+  return (
+      <>
+      <Container fluid>
+          <Row>
+              <Col sm={8}>
+                  <StampingsTable monthRecap={monthRecap} year={year} month={month} />
+              </Col>
+              <Col sm={4}>
+                  <HoursRecap monthRecap={monthRecap} />
+                  <MealTicketsRecap monthRecap={monthRecap} />
+              </Col>
+          </Row>
+      </Container>
+      </>
+  );
 }
 
 export default MonthRecapView
