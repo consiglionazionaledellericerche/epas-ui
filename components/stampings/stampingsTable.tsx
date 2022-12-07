@@ -8,15 +8,19 @@ import MealTicketShow from "./mealTicketShow";
 import DateUtility from "../../utils/dateUtility";
 
 interface StampingsTableProps {
-    monthRecap: MonthRecap
+    monthRecap: MonthRecap;
+    year: integer;
+    month: integer;
 }
 
 const StampingsTable: React.FC<StampingsTableProps> = ({
-    monthRecap
+    monthRecap,
+    year,
+    month
   }) => {
     return (
         <Table id="tabellonetimbrature" bordered hover>
-            <caption className="sr-only">Riepilogo mensile Ottobre 2022</caption>
+            <caption className="sr-only">Riepilogo mensile </caption>
             <thead>
             <tr>
                 <th className="group-single">Giorno</th>
@@ -43,13 +47,13 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             </tr>
             </thead>
             <tbody>
-            {monthRecap.daysRecap.map((pdr) => (
-                    <tr key={pdr.personDay.id} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
+            {monthRecap.daysRecap?.map((pdr) => (
+                    <tr key={pdr.personDay.date} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
                         <td className={pdr.personDay.holiday ? 'festivi' : 'capitalized'}>
                             {DateUtility.formatDateShort(pdr.personDay.date)}
                         </td>
 
-                        <MealTicketShow personDayRecap={pdr} />
+                        <MealTicketShow id="MealTicketShow" personDayRecap={pdr} />
 
                         <th className="invisible"></th>
 

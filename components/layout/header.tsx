@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import PersonalDataMenu from './menu/personalDataMenu';
 import PersonalWorkflowsMenu from './menu/personalWorkflowsMenu';
-import MonthSelect from './menu/monthSelect';
+import SelectPeriod from './menu/selectPeriod'
 
 function Header() {
   return (
@@ -13,7 +13,7 @@ function Header() {
         <Navbar.Brand className="text-white" href="#home">ePAS</Navbar.Brand>
         <PersonalDataMenu />
         <PersonalWorkflowsMenu />
-        <MonthSelect />
+        <SelectPeriod />
         <Nav className="ms-auto text-white">
           <Nav.Link className="text-white" href="#exit">Esci <FontAwesomeIcon icon={faRightFromBracket}/></Nav.Link>
         </Nav>
