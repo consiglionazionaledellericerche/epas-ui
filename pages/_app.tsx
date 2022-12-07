@@ -7,7 +7,11 @@ import type { AppProps } from 'next/app'
 import Layout from '../components/layout/layout'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { CurrentDateContext } from '../contexts/currentDateContext'
+import { SWRConfig } from 'swr'
+import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
+
+
+const currentDate = new Date()
 
 function currentPerson() {
   /*const router = useRouter()
@@ -16,20 +20,22 @@ function currentPerson() {
   */
 }
 
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
+
 export default function App({ Component, pageProps }: AppProps) {
- 
-  
+
   //const CurrentPerson = React.createContext(currentPerson())
-  
+//          <CurrentDateContext.Provider value={new Date()}>
+
   return (
     <SSRProvider>
-      {/*<CurrentPerson.Provider value={undefined}> */}
-        <CurrentDateContext.Provider value={new Date()}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </CurrentDateContext.Provider>
-      {/*</CurrentPerson.Provider> */}
+        <SWRConfig value={{ fetcher }}>
+          <CurrentDateProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CurrentDateProvider>
+        </SWRConfig>
     </SSRProvider>
   )
 }
