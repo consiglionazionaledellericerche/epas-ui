@@ -8,8 +8,6 @@ type Props = {
 };
 
 export default function Layout ({ children, title }: Props): JSX.Element {
-    const [currentYear, setCurrentYear] = useState(2022)
-    const [currentMonth, setCurrentMonth] = useState(1)
     return (
         <>
             <Header />
