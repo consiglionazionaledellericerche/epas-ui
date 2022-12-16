@@ -1,15 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback } from "react";
 import { Form } from "react-bootstrap";
-import { CurrentDateContext } from "../../../contexts/currentDateContext";
+import React from 'react'
 
-function MonthSelect() {
-    let context = useContext(CurrentDateContext);
-    const [month, setMonth]: any = useState(context.getMonth() + 1);
-
-    function setContextMonth(month : string) {
-        context.setMonth(Number(month) - 1)
-        setMonth(month)
-    }
+function MonthSelect({month, setContextMonth}) {
 
     let monthsMap = [
         [1, "Gennaio"], [2, "Febbraio"],
@@ -21,21 +14,20 @@ function MonthSelect() {
     ]
 
     return (
-        <Form.Group controlId="monthSelect">
-            <Form.Select 
-                value={month}
-                onChange=
-                {e => {
-                    console.log("month = ", e.target.value);
-                    setContextMonth(e.target.value);
-                }}
-                >
-                {monthsMap.map((monthTuple, index) => (
-                        <option key={index} value={monthTuple[0]}>{monthTuple[1]}</option>
-                ))}
-            </Form.Select>
-        </Form.Group>
-    )
+            <Form.Group controlId="monthSelect">
+                <Form.Select
+                className="badge-select"
+                    value={month}
+                    onChange={e => {
+                                    setContextMonth(parseInt(e.target.value));
+                              }}
+                    >
+                    {monthsMap.map((monthTuple, index) => (
+                            <option key={index} value={monthTuple[0]}>{monthTuple[1]}</option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
+          )
 }
 
-export default MonthSelect
+export default React.memo(MonthSelect)
