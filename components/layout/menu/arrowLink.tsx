@@ -8,7 +8,8 @@ import Link from 'next/link';
 
 function ArrowLink({year, month, direction, setContextDate}) {
 
-   console.log("arrowlink>>>", year, month, direction)
+   year =  parseInt(year)
+   month =  parseInt(month)
 
     function handleClick() {
         if (direction == 'left'){
@@ -33,7 +34,6 @@ function ArrowLink({year, month, direction, setContextDate}) {
         }
 
         setContextDate(month, year)
-
       }
 
     return (

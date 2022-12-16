@@ -19,7 +19,7 @@ function MonthSelect({month, setContextMonth}) {
                 className="badge-select"
                     value={month}
                     onChange={e => {
-                                    setContextMonth(e.target.value);
+                                    setContextMonth(parseInt(e.target.value));
                               }}
                     >
                     {monthsMap.map((monthTuple, index) => (

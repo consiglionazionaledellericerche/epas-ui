@@ -13,18 +13,19 @@ function Stampings() {
   let personId = router.query["personId"]
   personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
+
   const year = currentDate.year
   const month = currentDate.month
 
-    const parameters = `personId=${personId}&year=${year}&month=${month}`
-    const { data, error } = useRequest('/monthrecaps', parameters)
-
-    if (error) return <div>Impossibile caricare la situazione mensile</div>
-    if (!data) return <React.Suspense fallback={<Spinner />} />
+  const parameters = `personId=${personId}&year=${year}&month=${month}`
+  const {data, error} = useRequest('/monthrecaps', parameters);
+  if (error) return <div>Impossibile caricare la situazione mensile</div>
+  if (!data) return <React.Suspense fallback={<Spinner />} />
 
   return (
       <MonthRecapView monthRecap={data} month={month} year={year} />
   )
+
 }
 
 export default Stampings

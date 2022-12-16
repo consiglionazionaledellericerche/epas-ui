@@ -15,7 +15,7 @@ function YearSelect({year, setContextYear}) {
                 value={year}
                 onChange=
                 {e => {
-                    setContextYear(e.target.value);
+                    setContextYear(parseInt(e.target.value));
                 }}
                 >
                 {yearsMap.map((yearTuple, index) => (
