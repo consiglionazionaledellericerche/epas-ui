@@ -12,7 +12,7 @@ const MealTicketsRecap: React.FC<MealTicketsRecapProps> = ({
   }) => {
     return (
         <Accordion defaultActiveKey="0">
-        {monthRecap.contractMonths.map((contractMonth: ContractMonth, index: number) => (   
+        {monthRecap.contractMonths?.map((contractMonth: ContractMonth, index: number) => (
             <Accordion.Item eventKey={index.toString()} key={index}>            
                 <Accordion.Header>Situazione buoni pasto {contractMonth.contractDescription}</Accordion.Header>
                 <Accordion.Body>
