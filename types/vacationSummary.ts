@@ -1,5 +1,3 @@
-import { VacationSummary } from "./vacationSummary"
-
 export type VacationSummary = {
     type: string
     year: number
@@ -8,4 +6,5 @@ export type VacationSummary = {
     accrued: number
     used: number
     usableTotal: number
-    usable: number}
+    usable: number
+}

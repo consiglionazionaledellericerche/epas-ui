@@ -6,11 +6,9 @@ import { SSRProvider} from 'react-bootstrap/'
 import type { AppProps } from 'next/app'
 import Layout from '../components/layout/layout'
 import { useRouter } from 'next/router'
-import React from 'react'
+import {React, useEffect} from 'react'
 import { SWRConfig } from 'swr'
 import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
-
-
 const currentDate = new Date()
 
 function currentPerson() {
