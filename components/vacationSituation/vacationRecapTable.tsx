@@ -35,11 +35,11 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
           <tbody>
                 {tableName == 'tabellaFerie' ? (
                 <>
-                <VacationSummaryRow vacationSummary={vacationSituation.lastYear} setModal={setModal} />
+                <VacationSummaryRow vacationSummary={vacationSituation.lastYear} setModal={setModal}/>
                 <VacationSummaryRow vacationSummary={vacationSituation.currentYear} setModal={setModal} />
                 </>
                 ) : (
-                <VacationSummaryRow vacationSummary={vacationSituation.permissions} setModal={setModal} />
+                <VacationSummaryRow vacationSummary={vacationSituation.permissions} setModal={setModal}/>
                 )}
            </tbody>
       </Table>

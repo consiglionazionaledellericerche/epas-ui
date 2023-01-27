@@ -7,21 +7,14 @@ import { useRequest } from "../../request/useRequest"
 class VacationModal  extends React.Component {
   constructor(props) {
     super(props);
-    console.log("VacationModal props", props);
-    this.state = { data: [] };
+    this.state = { data: []};
+    console.log("props", props);
   }
 
   componentDidUpdate(propsPrecedenti) {
-    console.log("1) this.props.show", this.props.show);
-    console.log("2) propsPrecedenti.show", propsPrecedenti.show);
-
-    // Utilizzo tipico (non dimenticarti di comparare le props):
     if (this.props.show !== propsPrecedenti.show) {
-      //this.fetchData(this.props.idUtente);
       if (this.props.show){
-        console.log("3) mettere fetch data");
-        const parameters = `personId=12&year=2023&month=1&contractId=12&type=VACATION`
-//         const {data, error} = useRequest('', parameters);
+        const parameters = this.props.parameters
         const url = '/api/rest/v4/vacations/summary?'+parameters;
         fetch(url, {
             method: 'GET',
@@ -35,9 +28,7 @@ class VacationModal  extends React.Component {
                 console.log('succes', data);
                 this.state.data = data;
             });
-        //
         }
-      console.log("4) e' cambiato il props show", this.props);
     }
   }
 
@@ -47,6 +38,8 @@ class VacationModal  extends React.Component {
               <Modal
                       show={this.props.show}
                       cancel={this.props.close}
+                      size="lg"
+                      aria-labelledby="modal-vacation-info"
                     >
                       <Modal.Header closeButton>
                         <Modal.Title>Modal title</Modal.Title>

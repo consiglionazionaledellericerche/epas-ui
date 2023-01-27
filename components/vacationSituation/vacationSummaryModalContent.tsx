@@ -1,6 +1,7 @@
 import React from "react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import InfoTot from './modalSummary/infoTot'
 
 interface VacationSummaryModalContentProps {
   data;
@@ -18,19 +19,19 @@ console.log('VacationSummaryModalContent', data);
               className="mb-3"
             >
               <Tab eventKey="infoTot" title="Riepilogo">
-                <div></div>
+                <InfoTot data={data}/>
               </Tab>
-              <Tab eventKey="date" title="Date Utilizzo">
-                <div></div>
+              <Tab eventKey="dateUse" title="Date Utilizzo">
+                <InfoTot data={data}/>
               </Tab>
               <Tab eventKey="dateReduction" title="Date Riduzione" disabled>
-                <div></div>
+                <InfoTot data={data}/>
               </Tab>
               <Tab eventKey="calcTot" title="Calcolo Giorni Totali">
-                <div></div>
+                <InfoTot data={data}/>
               </Tab>
               <Tab eventKey="calcAcc" title="Calcolo Giorni Maturati">
-                  <div></div>
+                  <InfoTot data={data}/>
               </Tab>
               </Tabs>
             </>
