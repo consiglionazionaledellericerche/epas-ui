@@ -24,7 +24,7 @@ function Vacations() {
   if (!data) return <React.Suspense fallback={<Spinner />} />
 
   return (
-      <VacationSituationView data={data} year={year} month={month} personId={personId} />
+      <VacationSituationView data={data} year={year} month={month}/>
   )
 
 }

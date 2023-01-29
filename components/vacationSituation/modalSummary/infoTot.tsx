@@ -1,5 +1,9 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
+import DateUtility from "../../../utils/dateUtility";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 interface InfoTotProps {
     data;
@@ -8,10 +12,15 @@ interface InfoTotProps {
 const InfoTot: React.FC<InfoTotProps> = ({
     data
   }) => {
+  console.log('InfoTot data>>>>', data);
 
     return(
+    <>
      <div className="col-md-12">
-       <i className="fa fa-info-circle"></i> Per il primo anno di contratto il dipendente potrà usufruire dei soli giorni maturati.
+      <div className="alert alert-info">
+      <FontAwesomeIcon icon={faCircleInfo}/>
+       &nbsp;Per il primo anno di contratto il dipendente potrà usufruire dei soli giorni maturati.
+      </div>
      </div>
 
 	 <div className="col-md-6 col-md-offset-3">
@@ -29,8 +38,8 @@ const InfoTot: React.FC<InfoTotProps> = ({
 		       <td>{data.used}</td>
 		     </tr>
 		     <tr>
-           <td><strong>vacations.takable</strong></td>
-           <td>{data.usable} <i className="fa fa-info-circle"></i></td>
+           <td><strong>Usufruibili</strong></td>
+           <td>{data.usable} <FontAwesomeIcon icon={faCircleInfo}/></td>
          </tr>
          <tr>
            <td><strong>Limite Massimo Utilizzo</strong></td>
@@ -38,6 +47,7 @@ const InfoTot: React.FC<InfoTotProps> = ({
          </tr>
 		   </Table>
 	   </div>
+	   </>
     );
 }
 

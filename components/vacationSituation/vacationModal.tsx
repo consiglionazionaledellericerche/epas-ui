@@ -7,13 +7,12 @@ import { useRequest } from "../../request/useRequest"
 class VacationModal  extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: []};
-    console.log("props", props);
+    this.state = { data: [], show:false};
   }
 
   componentDidUpdate(propsPrecedenti) {
-    if (this.props.show !== propsPrecedenti.show) {
-      if (this.props.show){
+    if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
+      if (this.props.tmpshow){
         const parameters = this.props.parameters
         const url = '/api/rest/v4/vacations/summary?'+parameters;
         fetch(url, {
@@ -25,18 +24,20 @@ class VacationModal  extends React.Component {
         }).then(response => response.json())
           .catch(error => console.error("unable to achive this", error))
             .then(data => {
-                console.log('succes', data);
-                this.state.data = data;
+                this.setState({'data': data.vacationSummary, 'show':true})
             });
+        }
+        else {
+          this.setState({'data': [], 'show':false})
         }
     }
   }
 
  render() {
- console.log('succes', this.state.data);
     return (
               <Modal
-                      show={this.props.show}
+                      tmpshow= {this.props.tmpshow}
+                      show={this.state.show}
                       cancel={this.props.close}
                       size="lg"
                       aria-labelledby="modal-vacation-info"
