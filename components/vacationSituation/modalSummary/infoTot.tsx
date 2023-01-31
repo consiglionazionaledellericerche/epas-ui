@@ -25,6 +25,7 @@ const InfoTot: React.FC<InfoTotProps> = ({
 
 	 <div className="col-md-6 col-md-offset-3">
 		   <Table className="table">
+		   <tbody>
 		     <tr>
 		       <td><strong>Totali</strong></td>
 		       <td>{data.total}</td>
@@ -45,6 +46,7 @@ const InfoTot: React.FC<InfoTotProps> = ({
            <td><strong>Limite Massimo Utilizzo</strong></td>
            <td>{DateUtility.formatDate(data.upperLimit)}</td>
          </tr>
+         </tbody>
 		   </Table>
 	   </div>
 	   </>

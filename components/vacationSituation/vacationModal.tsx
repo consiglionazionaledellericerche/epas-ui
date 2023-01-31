@@ -46,7 +46,7 @@ class VacationModal  extends React.Component {
                         <Modal.Title>Modal title</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                          <VacationSummaryModalContent data={this.state.data}/>
+                         {this.state.show ? <VacationSummaryModalContent  data={this.state.data}/> : ''}
                       </Modal.Body>
                       <Modal.Footer>
                         <Button onClick={this.props.close}>Cancel</Button>

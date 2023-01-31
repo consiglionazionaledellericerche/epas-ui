@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
-import DateUtility from "../../../utils/dateUtility";
+import CalcTotRow from "./calcTotRow";
 
 interface CalcTotProps {
     data;
@@ -10,6 +10,7 @@ const CalcTot: React.FC<CalcTotProps> = ({
     data
   }) => {
 
+    console.log('data.absencePeriod', data.absencePeriod);
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
@@ -31,40 +32,14 @@ const CalcTot: React.FC<CalcTotProps> = ({
          </tr>
          </thead>
         <tbody>
-         { data.absencePeriod.subPeriods?.map((period) => {
-         console.log('period', period.vacationCode, data.subFixedPostPartum);
-
-            { period.vacationCode ?
-
-(<tr {data.subFixedPostPartum ? (className="bg-danger") : ('')}>
-              <td>{period.vacationCode.name}</td>
-              <td>{DateUtility.formatDate(period.from)}</td>
-              <td>
-               {data.subAmountBeforeFixedPostPartum}
-              </td>
-              <td><strong>{data.subTotalAmount}</strong></td>
-              <td>{period.periodInterval().dayInInterval()} ({data.subDayProgression})</td>
-              { !data.postPartumisEmpty ? (
-              <td>
-                {data.subDayPostPartum > 0 ?
-                  ({data.subDayPostPartum}
-                  ({data.subDayPostPartumProgression})
-                  {vacationSummary.subDayToFixPostPartum > 0 ?
-                  (<span className="text-warning"><i className="fa fa-exclamation-triangle"
-                   popover-hover data-content="Utilizzando ulteriori {data.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i {data.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo."></i>
-                  </span>
-                  ) : ()}
-                ) : ()}
-              </td>
-              ):('')}
-            </tr>
-            ) : ()
-
-             }
-
-
-
-            })
+         {  data.absencePeriod.subPeriods?.map((period) => {
+            console.log('data.absencePeriod.subPeriods period', period);
+            return ( period.vacationCode ? (
+              <>
+              <CalcTotRow data={data} period={period} />
+              </> ) : ''
+            );
+         })
          }
          </tbody>
        </Table>
