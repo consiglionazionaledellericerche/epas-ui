@@ -2,6 +2,8 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { PeriodChain } from "../../types/periodChain";
 import DateUtility from "../../utils/dateUtility";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 interface PermissionGroupListProps {
     periodChain: PeriodChain;
@@ -48,7 +50,7 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
 
        absencePeriod.takableWithLimit ? (
           toUse = <>
-          <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
+           <FontAwesomeIcon icon={faExclamationCircle}/>
            <span>Rimangono </span>
            <strong><span className="text-success">
            {DateUtility.fromMinuteToHour(absencePeriod.remainingAmount, absencePeriod.takeAmountType)}

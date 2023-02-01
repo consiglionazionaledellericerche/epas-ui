@@ -10,26 +10,27 @@ const calcAcc: React.FC<calcAccProps> = ({
   }) => {
 
     return(
-         <p>Sono stati calcolati <strong>{data.accrued}</strong> giorni maturati alla data di oggi.<br>
+         <p>Sono stati calcolati <strong>{data.accrued}</strong> giorni maturati alla data di oggi.<br/>
 	     I giorni di maturazione trascorsi per l'anno {data.year} sono <strong>{data.accruedDay}</strong>.<br>
-	     #{if !vacationSummary.postPartum().empty }
-            Dai giorni dell'anno sono sottratti <strong>{data.postPartumSize}</strong> giorni di assenza usufruiti
-	        che non contribuiranno alla maturazione.
-	     #{/if}
+	     { !data.postPartumisEmpty ? (<span>Dai giorni dell'anno sono sottratti <strong>{data.postPartumSize}</strong>
+	     giorni di assenza usufruiti che non contribuiranno alla maturazione.</span>)  : ''
+	     }
 	     </p>
 
 	   <Table className="table table-condensed center">
+	   <thead>
 	     <tr>
            <th>Piano Ferie</th>
 	       <th>Data di Maturazione</th>
 	       <th>Maturati</th>
 	       <th>Progressione</th>
 	       <th>Giorni nell'anno</th>
-	       #{if !vacationSummary.postPartum().empty}
-	         <th>Giorni riduzione</th>
-	       #{/if}
+	       { !data.postPartumisEmpty ? <th>Giorni riduzione</th> :''}
 	     </tr>
-	     {data.absencePeriod.subPeriods?.map((period) => {
+	     </thead>
+	     <tbody>
+	     </tbody>
+	     { data.absencePeriod.subPeriods?.map((period) => {
          	period.vacationCode ?
             (<tr
 	           {data.subFixedPostPartum ? (className="bg-danger") : (
