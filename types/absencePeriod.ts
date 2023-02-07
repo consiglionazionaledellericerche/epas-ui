@@ -2,7 +2,6 @@ import { GroupAbsenceType } from "./groupAbsenceType"
 
 export type AbsencePeriod = {
     personId: number
-    initialization: string
     from: Date
     to: Date
     takeAmountType: string

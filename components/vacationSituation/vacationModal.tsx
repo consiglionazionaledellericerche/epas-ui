@@ -24,6 +24,7 @@ class VacationModal  extends React.Component {
         }).then(response => response.json())
           .catch(error => console.error("unable to achive this", error))
             .then(data => {
+            console.log('data.vacationSummary',data);
                 this.setState({'data': data.vacationSummary, 'show':true})
             });
         }

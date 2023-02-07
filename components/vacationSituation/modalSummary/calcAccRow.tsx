@@ -27,28 +27,29 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
               <span className="text-success"><i className="fa fa-info-circle"
                  popover-hover data-content={dataContentContractEnd}></i>
                </span>
-               </>
+               </>)
                : spanContractEnd = ''
 
-     period.subDayToFixPostPartum > 0 ?
+     period.subDayToFixPostPartum > 0 ? (
       spanPostPartum = <>
               <span className="text-warning">
               <i className="fa fa-exclamation-triangle" popover-hover data-content={dataContentPostPartum}></i>
               </span>
-              </>
+              </>)
        : spanPostPartum = ''
 
-      period.subDayPostPartum > 0 ?
+      period.subDayPostPartum > 0 ? (
              tdPostPartum = <>
                   {period.subDayPostPartum}
                   ({period.subDayPostPartumProgression})
                   {spanPostPartum}
-                  </>
+                  </>)
              : tdPostPartum = ''
 
+    let className = period.subFixedPostPartum ? "bg-danger" :  period.subAccrued ? "bg-warning" : ""
     return(
             <>
-            <tr className={period.subFixedPostPartum ? "bg-danger" : {period.subAccrued ? className="bg-warning" : ""}}>
+            <tr className={className}>
               <td>{period.vacationCode.name}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
               <td>{period.subAmount}</td>

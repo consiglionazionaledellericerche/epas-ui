@@ -5,6 +5,7 @@ import InfoTot from './modalSummary/infoTot'
 import DateUse from './modalSummary/dateUse'
 import DateReduction from './modalSummary/dateReduction'
 import CalcTot  from './modalSummary/calcTot'
+import CalcAcc  from './modalSummary/calcAcc'
 
 interface VacationSummaryModalContentProps {
   data;
@@ -38,7 +39,7 @@ data
                 <CalcTot data={data}/>
               </Tab>
               <Tab eventKey="calcAcc" title="Calcolo Giorni Maturati">
-                  <InfoTot data={data}/>
+                  <CalcAcc data={data}/>
               </Tab>
               </Tabs>
             </>

@@ -36,17 +36,18 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
       ) : (
       withLimit = '');
 
-     absencePeriod.groupAbsenceType.initializable ? (
-         absencePeriod.initialization ? (
-           init =
-           <a className="btn btn-sm btn-warning pull-right" href="@{AbsenceGroups.initialization(absencePeriod.person.id, absencePeriod.groupAbsenceType.id, initializationGroup.date.format(), true)}" data-async-modal="#defaultModal">Modifica Inizializzazione</a>
-         ) : ( init = '')
-     ) : (
-       init = <>
-       <span>Per questo periodo non è stata definita alcuna inizializzazione.</span>
-       <a>Inizializzazione</a>
-       </>
-     );
+//TODO: questa parte è dell'amministrazione da fare più avanti
+//      absencePeriod.groupAbsenceType.initializable ? (
+//          absencePeriod.initialization ? (
+//            init =
+//            <a className="btn btn-sm btn-warning pull-right" href="@{AbsenceGroups.initialization(absencePeriod.person.id, absencePeriod.groupAbsenceType.id, initializationGroup.date.format(), true)}" data-async-modal="#defaultModal">Modifica Inizializzazione</a>
+//          ) : ( init = '')
+//      ) : (
+//        init = <>
+//        <span>Per questo periodo non è stata definita alcuna inizializzazione.</span>
+//        <a>Inizializzazione</a>
+//        </>
+//      );
 
        absencePeriod.takableWithLimit ? (
           toUse = <>

@@ -19,7 +19,6 @@ const CalcTot: React.FC<CalcTotProps> = ({
 	                                  giorni di assenza usufruiti che non contribuiranno alla maturazione.</span>)  : ''
         }
 	     </p>
-      <div className="col-md-8 col-md-offset-2">
        <Table className="table table-condensed center">
         <thead>
          <tr>
@@ -43,7 +42,6 @@ const CalcTot: React.FC<CalcTotProps> = ({
          }
          </tbody>
        </Table>
-       </div>
 	   </>
     );
 }
