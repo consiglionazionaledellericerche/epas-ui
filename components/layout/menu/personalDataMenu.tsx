@@ -8,7 +8,7 @@ function PersonalDataMenu() {
             <NavDropdown.Item href="/stampings"><FontAwesomeIcon icon={faCalendarDays} /> Situazione mensile</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faUserXmark} /> Assenze Mensili</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.3">Assenze Annuali</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.4">Ferie</NavDropdown.Item>
+            <NavDropdown.Item href="/vacations">Ferie</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.5">Competenze</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.6">Ore di formazione</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.7">Riepilogo orario</NavDropdown.Item>

@@ -25,3 +25,31 @@ table[datatable] > thead > tr > th:hover{
     text-align: center !important;
     border-radius: 10px !important;
 }
+
+table.riepilogo-ore {
+  font-size: 90%;
+}
+
+table > thead > tr.warning {
+  background-color: #fcf8e3;
+}
+
+table > tbody > tr > td.success,
+table > tbody > tr.success  {
+  background-color: #dff0d8;
+}
+
+table > tbody > tr > td.warning,
+table > tbody > tr.warning {
+  background-color: #fcf8e3;
+}
+
+table > tbody > tr > td.danger,
+table > tbody > tr.danger {
+  background-color: #f2dede;
+}
+
+
+.modal-style {
+max-width: none !important;
+}

@@ -17,7 +17,7 @@ const HoursRecap: React.FC<HoursRecapProps> = ({
   }) => {
     return (
         <Accordion defaultActiveKey="0">
-        {monthRecap.contractMonths.map((contractMonth: ContractMonth, index: number) => (   
+        {monthRecap.contractMonths?.map((contractMonth: ContractMonth, index: number) => (
             <Accordion.Item eventKey={index.toString()} key={index}>            
                 {/* Verificare che sia l'ultimo contratto nel mese */}
                 {/*

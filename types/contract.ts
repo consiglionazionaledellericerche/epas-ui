@@ -1,3 +1,5 @@
+import {VacationPeriod} from "./vacationPeriod"
+
 export type Contract = {
     id : number
     perseoId : string
@@ -32,4 +34,6 @@ export type Contract = {
   
     //data di termine contratto in casi di licenziamento, pensione, morte, ecc ecc...
     endContract : Date
+
+    vacationPeriods: VacationPeriod[]
 }

@@ -6,8 +6,16 @@ class DateUtility {
     //Minuti in un'ora
     static MINUTE_IN_HOUR = 60;
 
+    static formatPeriodType(periodType : string) {
+        return periodType == 'year' ? 'anno' : 'mese'
+    }
+
     static formatDateShort(date : Date) {
         return moment(date).locale('it-IT').format('DD ddd');
+    }
+
+    static formatDate(date : Date) {
+        return moment(date).locale('it-IT').format('DD/MM/YYYY');
     }
 
     static fromMinuteToHourMinute(minute : number) {
@@ -64,6 +72,32 @@ class DateUtility {
     }
     return "-" + hourTime;
   }
+
+    static fromMinuteToHour(minute : number, amountType : string) {
+        if (minute == 0) {
+          return "0 ore";
+        }
+        let string = "";
+        let positiveMinute = minute;
+        if (minute < 0) {
+          //string = string + "-";
+          positiveMinute = minute * -1;
+        }
+        let hours : number = Math.trunc(positiveMinute / this.MINUTE_IN_HOUR);
+        let minutes : number = positiveMinute % this.MINUTE_IN_HOUR;
+
+        if (hours > 0 && minutes > 0) {
+          string = hours + " ore " + minutes + " minuti";
+        } else if (hours > 0) {
+          string = hours + " ore";
+        } else if (minutes > 0) {
+          string = minutes + " minuti";
+        }
+
+        return string;
+      }
+
 }
+
 
 export default DateUtility
