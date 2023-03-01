@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
 import { SSRProvider} from 'react-bootstrap/'
+import { SessionProvider } from "next-auth/react"
 
 import type { AppProps } from 'next/app'
 import Layout from '../components/layout/layout'
@@ -20,12 +21,13 @@ function currentPerson() {
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps }}: AppProps) {
 
   //const CurrentPerson = React.createContext(currentPerson())
 //          <CurrentDateContext.Provider value={new Date()}>
 
   return (
+  <SessionProvider session={session}>
     <SSRProvider>
         <SWRConfig value={{ fetcher }}>
           <CurrentDateProvider>
@@ -35,5 +37,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </CurrentDateProvider>
         </SWRConfig>
     </SSRProvider>
+  </SessionProvider>
   )
 }
