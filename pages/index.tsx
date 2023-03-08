@@ -1,17 +1,14 @@
 import React from 'react';
 import { useSession, signIn, signOut } from "next-auth/react"
-
 import Container from 'react-bootstrap/Container';
-
 
 const App: React.FC = () => {
 
-  const { data: session } = useSession()
-  if(session) {
-      const { accessToken } = data
+  const { data: session, status } = useSession()
+    if(session) {
+      const accessToken = session.accessToken
       return <>
-      <div>Access Token: {accessToken}</div>
-        Signed in as {session.user.email} <br/>
+        Signed in as {session.user.name} <br/>
         <button onClick={() => signOut()}>Sign out</button>
           <h1 className="header">
             Benvenuto nella nuova UI di ePAS
