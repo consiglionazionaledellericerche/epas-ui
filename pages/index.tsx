@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSession, signIn, signOut } from "next-auth/react"
-import Container from 'react-bootstrap/Container';
+import LoginTabbed from '../components/login/loginTabbed';
+import { Col, Container, Row } from "react-bootstrap";
 
 const App: React.FC = () => {
 
@@ -16,8 +17,17 @@ const App: React.FC = () => {
         </>
     }
     return <>
-      Not signed in <br/>
-      <button onClick={() => signIn()}>Sign in</button>
+    <Container fluid>
+      <Row>
+          <Col sm={12} className="mx-auto text-center"> <h2>Benvenuto in ePAS</h2></Col>
+      </Row>
+      <Row>
+      <Col sm={3} className="mx-auto text-center">
+      <LoginTabbed />
+      </Col>
+      </Row>
+    </Container>
+
     </>
 };
 
