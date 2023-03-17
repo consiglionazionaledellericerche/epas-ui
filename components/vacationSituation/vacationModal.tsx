@@ -3,6 +3,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import VacationSummaryModalContent from './vacationSummaryModalContent'
 import { useRequest } from "../../request/useRequest"
+import { getServerSession } from "next-auth/next"
+import { getSession } from 'next-auth/react';
 
 class VacationModal  extends React.Component {
   constructor(props) {
@@ -10,16 +12,23 @@ class VacationModal  extends React.Component {
     this.state = { data: [], show:false};
   }
 
-  componentDidUpdate(propsPrecedenti) {
+  async componentDidUpdate(propsPrecedenti) {
     if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
       if (this.props.tmpshow){
         const parameters = this.props.parameters
+        const session = await getSession();
+
+        const accessToken = session.accessToken
+
+        console.log("session", session, accessToken);
         const url = '/api/rest/v4/vacations/summary?'+parameters;
+
         fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer '+accessToken
             }
         }).then(response => response.json())
           .catch(error => console.error("unable to achive this", error))
@@ -58,5 +67,12 @@ class VacationModal  extends React.Component {
 
 }
 
+export async function getServerSideProps({ req, res }) {
+  return {
+    props: {
+      session: await getServerSession(req, res, authOptions)
+    }
+  }
+}
 
 export default VacationModal;

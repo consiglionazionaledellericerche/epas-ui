@@ -5,14 +5,18 @@ import React, { useContext, useState, useEffect } from 'react'
 import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
 import { useRequest } from "../request/useRequest"
 import { Spinner } from 'react-bootstrap'
-
+import { useSession } from "next-auth/react"
+import { getServerSession } from "next-auth/next"
 import VacationSituationView from '../components/vacationSituation/vacationSituationView'
+import { authOptions } from './api/auth/[...nextauth]'
 
 function Vacations() {
   const router = useRouter()
   let personId = router.query["personId"]
   personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
+
+  const { data: session, status } = useSession()
 
   const year = currentDate.year
   const month = currentDate.month
@@ -27,6 +31,14 @@ function Vacations() {
       <VacationSituationView data={data} year={year} month={month}/>
   )
 
+}
+
+export async function getServerSideProps({ req, res }) {
+  return {
+    props: {
+      session: await getServerSession(req, res, authOptions)
+    }
+  }
 }
 
 export default Vacations

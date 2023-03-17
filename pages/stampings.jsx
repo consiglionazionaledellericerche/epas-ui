@@ -5,7 +5,9 @@ import React, { useContext, useState, useEffect } from 'react'
 import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
 import { useRequest } from "../request/useRequest"
 import { Spinner } from 'react-bootstrap'
-
+import { useSession } from "next-auth/react"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from './api/auth/[...nextauth]'
 import MonthRecapView from '../components/monthRecap/monthRecapView'
 
 function Stampings() {
@@ -13,6 +15,8 @@ function Stampings() {
   let personId = router.query["personId"]
   personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
+
+  const { data: session, status } = useSession()
 
   const year = currentDate.year
   const month = currentDate.month
@@ -28,4 +32,11 @@ function Stampings() {
 
 }
 
+export async function getServerSideProps({ req, res }) {
+  return {
+    props: {
+      session: await getServerSession(req, res, authOptions)
+    }
+  }
+}
 export default Stampings
