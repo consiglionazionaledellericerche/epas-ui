@@ -33,8 +33,8 @@ function SelectPeriod() {
     return (
         <>
           <ArrowLink month={month} year={year} setContextDate={setContextDate} direction={"left"} />
-          <YearSelect year={year} setContextYear={setContextYear} />
           <MonthSelect month={month} setContextMonth={setContextMonth} />
+          <YearSelect year={year} setContextYear={setContextYear} />
           <ArrowLink month={month} year={year} setContextDate={setContextDate} direction={"right"} />
         </>
     )

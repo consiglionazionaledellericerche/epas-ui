@@ -4,6 +4,10 @@ import Tabs from 'react-bootstrap/Tabs';
 import { useRouter } from 'next/router';
 import { signIn, signOut } from "next-auth/react"
 
+function handleClick() {
+  signIn('authIIT', { callbackUrl: '/stampings' })
+}
+
 const LoginTabbed = ({ children }) => {
   const router = useRouter();
   const activeTab = router.query.tab || 'loginOauth';
@@ -16,7 +20,7 @@ const LoginTabbed = ({ children }) => {
               >
                 <Tab eventKey="loginCNR" title="login CNR" active>
                   <h4>Utilizza il bottone sottostante per accedere con le credenziali CNR</h4>
-                  <button onClick={() => signIn()}>Consiglio Nazionale delle Ricerche</button>
+                  <button onClick={handleClick}>Consiglio Nazionale delle Ricerche</button>
                 </Tab>
                 <Tab eventKey="loginEPAS" title="login EPAS" disabled>
 

@@ -9,62 +9,34 @@ import PersonalDataMenu from './menu/personalDataMenu';
 import PersonalWorkflowsMenu from './menu/personalWorkflowsMenu';
 import SelectPeriod from './menu/selectPeriod'
 
+function handleSignOut() {
+  signOut({ callbackUrl: 'http://localhost:3000' })
+}
+
 function Header() {
   const { data: session, status } = useSession()
   const loading = status === "loading"
 
+  let navbarElem;
+
+  if(session) {
+   navbarElem = <>
+                  <PersonalDataMenu />
+                  {/*
+                  <PersonalWorkflowsMenu />
+                  */}
+                  <SelectPeriod />
+                  <Nav className="ms-auto text-white">
+                    <Nav.Link className="text-white" onClick={handleSignOut}>Esci <FontAwesomeIcon icon={faRightFromBracket}/></Nav.Link>
+                  </Nav>
+               </>
+  }
+
   return (
     <header className="bg-primary bg-gradient">
-
-      <div className="">
-        <p>
-          {!session && (
-            <>
-              <span className="">
-                You are not signed in
-              </span>
-              <a
-                href={`/api/auth/signin`}
-                className=""
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                Sign in
-              </a>
-            </>
-          )}
-          {session?.user && (
-            <>
-              <span className="">
-                <small>Signed in as</small>
-                <br />
-                <strong>{session.user.email ?? session.user.name}</strong>
-              </span>
-              <a
-                href={`/api/auth/signout`}
-                className=""
-                onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
-                }}
-              >
-                Sign out
-              </a>
-            </>
-          )}
-        </p>
-      </div>
-
     <Navbar expand="lg" className="fixed-top">
         <Navbar.Brand className="text-white" href="#home">ePAS</Navbar.Brand>
-        <PersonalDataMenu />
-        <PersonalWorkflowsMenu />
-        <SelectPeriod />
-        <Nav className="ms-auto text-white">
-          <Nav.Link className="text-white" href="#exit">Esci <FontAwesomeIcon icon={faRightFromBracket}/></Nav.Link>
-        </Nav>
+        {navbarElem}
     </Navbar>
     </header>
   );
