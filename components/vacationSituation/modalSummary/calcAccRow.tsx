@@ -2,7 +2,9 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import DateUtility from "../../../utils/dateUtility";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 
 interface CalcAccRowProps {
     data;
@@ -17,15 +19,16 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     console.log('period.from', period.from);
 
     let spanContractEnd;
-    let dataContentContractEnd = "Dal {DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.";
+    let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
     let spanPostPartum;
     let tdPostPartum;
-    let dataContentPostPartum = "Utilizzando ulteriori {period.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i {period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo."
+    let dataContentPostPartum = `Utilizzando ulteriori ${period.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
 
     period.contractEndFirstYearInPeriod ? (
               spanContractEnd = <>
-              <span className="text-success"><i className="fa fa-info-circle"
-                 popover-hover data-content={dataContentContractEnd}></i>
+              <span className="text-success">
+              <FontAwesomeIcon icon={faCircleInfo} data-tooltip-id="dataContentContractEndTooltip" data-tooltip-content={dataContentContractEnd} />
+              <Tooltip id="dataContentContractEndTooltip" />
                </span>
                </>)
                : spanContractEnd = ''
@@ -33,7 +36,8 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
      period.subDayToFixPostPartum > 0 ? (
       spanPostPartum = <>
               <span className="text-warning">
-              <i className="fa fa-exclamation-triangle" popover-hover data-content={dataContentPostPartum}></i>
+              <FontAwesomeIcon icon={faExclamationTriangle} data-tooltip-id="dataContentPostPartumTooltip" data-tooltip-content={dataContentPostPartum} />
+              <Tooltip id="dataContentPostPartumTooltip" />
               </span>
               </>)
        : spanPostPartum = ''

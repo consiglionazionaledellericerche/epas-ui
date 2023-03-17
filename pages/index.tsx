@@ -18,9 +18,10 @@ const App: React.FC = () => {
       <Row>
           <Col sm={12} className="mx-auto text-center"> <h2>Benvenuto in ePAS</h2></Col>
       </Row>
+      <br/><br/>
       <Row>
-      <Col sm={3} className="mx-auto text-center">
-      <LoginTabbed />
+      <Col sm={6} className="mx-auto text-center">
+        <LoginTabbed />
       </Col>
       </Row>
     </Container>
