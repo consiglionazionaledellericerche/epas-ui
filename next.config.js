@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+      OAUTH_LOGIN: process.env.OAUTH_LOGIN,
+      LDAP_LOGIN: process.env.LDAP_LOGIN,
+    },
   reactStrictMode: true,
   swcMinify: true,
   async rewrites() {
     return [
-//      {
-//        source: '/api(^(?!.*\/auth\/).*$)/:path*',
-////        source: '/api/rest/:path*',
-//        destination: 'http://localhost:8080/:path*' // Proxy to Backend
-//      }
       {
               source: '/api/auth/:path*',
               destination: '/api/auth/:path*',
