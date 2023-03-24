@@ -1,4 +1,4 @@
-import useSwr from 'swr'
+import useSwr from 'swr';
 
 const baseUrl = '/api/rest/v4'
 
@@ -20,4 +20,40 @@ export const useRequest = (path, parameters) => {
                                    } )
 
     return { data, error }
+}
+
+export const useRequestPost = (path, body, accessToken) => {
+    if (!path) {
+        throw new Error('Path is required')
+    }
+
+    const url = baseUrl + path
+
+    console.log("useRequestPost url", url);
+
+    const { data, error} = useSwr(url, async url => {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            })
+
+            if (!response.ok) {
+                const error = new Error('An error occurred while fetching the data.');
+                error.info = await response.json();
+                error.status = response.status;
+                throw error;
+            }
+
+            return response.json();
+        })
+
+    console.log("data url", data);
+    let result = data;
+    return { result, error}
+
 }
