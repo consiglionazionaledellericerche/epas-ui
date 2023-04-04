@@ -1,59 +1,39 @@
 import NextAuth, { NextAuthOptions} from "next-auth"
+import KeycloakProvider from "next-auth/providers/keycloak";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   // https://next-auth.js.org/configuration/providers/oauth
   providers: [
-  {
-      id: "authIIT",
-      name: "authIIT",
-      type: "oauth",
-      wellKnown:"https://auth.iit.cnr.it/auth/realms/testing/.well-known/uma2-configuration",
-      issuer : "https://auth.iit.cnr.it/auth/realms/testing",
-      params: { grant_type: "client_credentials" },
-      checks: ["pkce", "state"],
-      profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          preferred_username: profile.preferred_username,
-        }
-      },
+    KeycloakProvider({
       clientId: process.env.CLIENTID,
       clientSecret: process.env.CLIENTSECRET,
-      redirect: false,
-      idToken:true
-     }
+      wellKnown:"https://auth.iit.cnr.it/auth/realms/testing/.well-known/uma2-configuration",
+      issuer : "https://auth.iit.cnr.it/auth/realms/testing",
+    })
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-   session: {
-       strategy: "jwt",
-     },
+  debug: true,
   callbacks: {
-//      async signIn({ user, account, profile, email, credentials }) {
-//            return true
-//      },
-//      async redirect({ url, baseUrl }) {
-//        return baseUrl
-//      },
-    async jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token
-        token.id_token = account.id_token
+    async session({ session, user, token }) {
+      if (token) {
+            session.accessToken = token.access_token;
+            session.refreshToken = token.refresh_token;
+            session.user = token.user;
+      }
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (account){
+       return {
+                user: {name: token.name,
+                       email: token.email},
+                access_token: account.access_token,
+                refresh_token: account.refresh_token
+              }
       }
       return token
-    },
-    async session({ session, token, user }) {
-      // Send properties to the client, like an access_token from a provider.
-      session.accessToken = token.accessToken
-      session.user.image = null;
-      console.log('session>>>', session);
-     return session
     }
-  },
-  debug: true
+  }
 }
 
 export default NextAuth(authOptions)

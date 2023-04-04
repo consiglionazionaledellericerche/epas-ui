@@ -72,7 +72,6 @@ if (isLoading) return <React.Suspense fallback={<Spinner />} />
             <tr className={result.subFixedPostPartum ? "bg-danger" : ""}>
               <td>{period.vacationCode}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
-              <td>{period.subAmount}</td>
               <td>
                {result.subAmountBeforeFixedPostPartum}
               </td>

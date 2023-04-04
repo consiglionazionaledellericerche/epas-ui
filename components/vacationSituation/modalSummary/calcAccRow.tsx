@@ -88,7 +88,6 @@ console.log('result pippo',result);
             <tr className={className}>
               <td>{period.vacationCode}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
-              <td>{result.subAmount}</td>
               <td>
                {result.subAmountBeforeFixedPostPartum}
                {spanContractEnd}
