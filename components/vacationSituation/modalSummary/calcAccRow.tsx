@@ -21,7 +21,7 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode);
+    console.log('period.vacationCode.name', period.vacationCode.name);
     console.log('period.from', period.from);
 
 const { data: session, status } = useSession()
@@ -80,11 +80,12 @@ console.log('result pippo',result);
                   </>)
              : tdPostPartum = ''
 
+    let vacationcodeName = period.vacationCode.name;
     let className = result.subFixedPostPartum ? "bg-danger" :  result.subAccrued ? "bg-warning" : ""
     return(
             <>
             <tr className={className}>
-              <td>{period.vacationCode}</td>
+              <td>{vacationcodeName}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
               <td>
                {result.subAmountBeforeFixedPostPartum}

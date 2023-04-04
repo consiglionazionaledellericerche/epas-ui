@@ -20,7 +20,7 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode);
+    console.log('period.vacationCode.name', period.vacationCode.name);
     console.log('period.from', period.from);
 
 const { data: session, status } = useSession()
@@ -66,11 +66,12 @@ if (isLoading) return <React.Suspense fallback={<Spinner />} />
                   {spanPostPartum}
                   </>
              : tdPostPartum = ''
+    let vacationcodeName = period.vacationCode.name;
 
     return(
             <>
             <tr className={result.subFixedPostPartum ? "bg-danger" : ""}>
-              <td>{period.vacationCode}</td>
+              <td>{vacationcodeName}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
               <td>
                {result.subAmountBeforeFixedPostPartum}
