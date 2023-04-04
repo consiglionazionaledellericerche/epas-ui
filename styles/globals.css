@@ -43,7 +43,7 @@ nav {
 }
 
 .nav-item {
-  padding: 0 15px !important;
+    padding: 0!important;
 }
 
 h2.accordion-header, 

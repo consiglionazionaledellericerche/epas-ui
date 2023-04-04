@@ -2,32 +2,29 @@ import React from "react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useRouter } from 'next/router';
-import { signIn, signOut } from "next-auth/react"
-
-function handleClick() {
-  signIn('authIIT', { callbackUrl: '/stampings' })
-}
+import LoginOauth from './loginOauth';
+import LoginLdap from './loginLdap';
 
 const LoginTabbed = ({ children }) => {
   const router = useRouter();
   const activeTab = router.query.tab || 'loginOauth';
 
   return (<>
-          <Tabs
-                defaultActiveKey="loginCNR"
-                id="loginTab"
-                className="mb-3"
-              >
-                <Tab eventKey="loginCNR" title="login CNR" active>
-                  <h4>Utilizza il bottone sottostante per accedere con le credenziali CNR</h4>
-                  <button onClick={handleClick}>Consiglio Nazionale delle Ricerche</button>
+		<div className="panel-body">
+		  <div className="row">
+			<div className="col-lg-12">
+          <Tabs defaultActiveKey="loginCNR" id="loginTab" >
+                <Tab id="login-idp-link" eventKey="loginCNR" title="login CNR" active className="p-4 panel panel-login">
+                  <LoginOauth />
                 </Tab>
                 <Tab eventKey="loginEPAS" title="login EPAS" disabled>
-
+                  <LoginLdap />
                 </Tab>
-
-                </Tabs>
-              </>
+          </Tabs>
+      </div>
+      </div>
+    </div>
+  </>
   );
 };
 

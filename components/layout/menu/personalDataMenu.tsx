@@ -1,4 +1,4 @@
-import { faCalendarDays, faUserXmark } from "@fortawesome/free-solid-svg-icons"
+import { faCalendarDays, faUserXmark, faPlane } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NavDropdown } from "react-bootstrap"
 import { useSession} from "next-auth/react"
@@ -18,7 +18,7 @@ function PersonalDataMenu() {
             <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faUserXmark} /> Assenze Mensili</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.3">Assenze Annuali</NavDropdown.Item>
             */}
-            <NavDropdown.Item href="/vacations">Ferie</NavDropdown.Item>
+            <NavDropdown.Item href="/vacations"><FontAwesomeIcon icon={faPlane} /> Ferie</NavDropdown.Item>
             {/*
             <NavDropdown.Item href="#action/3.5">Competenze</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.6">Ore di formazione</NavDropdown.Item>

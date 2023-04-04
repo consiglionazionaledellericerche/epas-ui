@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react"
 import { useRequestPost } from "../../../request/useRequest"
 import { Spinner } from 'react-bootstrap'
 import { CalcAccRowElem} from './calcAccRowElem'
+
 interface CalcAccRowProps {
     data;
     period;
@@ -45,15 +46,12 @@ if (error) return <div>Impossibile caricare la situazione annuale</div>
 if (isLoading) return <React.Suspense fallback={<Spinner />} />
     console.log('result > CalcAccRowElem', result);
     console.log('period', period);
-
-    let dataend="";
-//     result.contractEndFirstYearInPeriod != null ? dataend = DateUtility.formatDate(result.contractEndFirstYearInPeriod) : dataend = ""
-
     let spanContractEnd;
-    let dataContentContractEnd = `Dal ${dataend} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
+
+    let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
     let spanPostPartum;
     let tdPostPartum;
-    let dataContentPostPartum = `Utilizzando ulteriori ${result.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${result.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
+    let dataContentPostPartum = `Utilizzando ulteriori ${period.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
 
 console.log('result pippo',result);
     period.contractEndFirstYearInPeriod ? (
