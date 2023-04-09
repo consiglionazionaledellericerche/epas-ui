@@ -14,7 +14,6 @@ interface VacationSummaryModalContentProps {
 const VacationSummaryModalContent: React.FC<VacationSummaryModalContentProps> = ({
 data
   }) => {
-    console.log('VacationSummaryModalContent', data);
 
     return( <>
 

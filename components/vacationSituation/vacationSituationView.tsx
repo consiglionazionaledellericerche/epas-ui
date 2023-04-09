@@ -18,36 +18,37 @@ const VacationSituationView: React.FC<VacationSituationProps> = ({
     month,
     data
   }) => {
+  const [titleModal, setTitleModal] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [parameters, setParameters] = useState("");
-  console.log('data', data);
+
   return (
       <>
       <h4>Ferie e Permessi {year}</h4>
-       <VacationModal tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
+       <VacationModal title={titleModal} tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
 
       <Container fluid>
         { data.vacationSituations?.map((vsr) => {
          let param = "personId="+vsr.personId+"&year="+vsr.year+"&month=1&contractId="+vsr.contract.id+"&type=VACATION";
          return (
-          <Row>
+          <Row key="VacationRecapTable">
                 <Col sm={6}>
-                    <VacationRecapTable vacationSituation={vsr} tableName="tabellaFerie" setModal={setShowModal} setParameters={setParameters} param={param} />
+                    <VacationRecapTable vacationSituation={vsr} tableName="tabellaFerie" setTitleModal={setTitleModal} setModal={setShowModal} setParameters={setParameters} param={param} />
                 </Col>
                 <Col sm={6}>
-                    <VacationRecapTable vacationSituation={vsr} tableName="tabellaPermessi" setModal={setShowModal} setParameters={setParameters} param={param} />
+                    <VacationRecapTable vacationSituation={vsr} tableName="tabellaPermessi" setTitleModal={setTitleModal} setModal={setShowModal} setParameters={setParameters} param={param} />
                 </Col>
           </Row> );
         }
 
          )}
           <br/>
-          <Row>
+          <Row key="PermissionGroupList">
               <Col sm={12}>
                   <PermissionGroupList periodChain={data.periodChain} />
               </Col>
           </Row>
-          <Row>
+          <Row key="VacationPeriodTable">
               <Col sm={12}>
                   <VacationPeriodTable contracts={data.contracts} />
               </Col>

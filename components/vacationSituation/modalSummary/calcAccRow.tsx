@@ -21,8 +21,6 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode.name);
-    console.log('period.from', period.from);
 
 const { data: session, status } = useSession()
 const accessToken = session?.accessToken;
@@ -37,15 +35,8 @@ useEffect(() => {
 }, [result]);
 
 
-  console.log('error', error);
-  console.log('isLoading', isLoading);
-
-    console.log('result', result);
-
 if (error) return <div>Impossibile caricare la situazione annuale</div>
 if (isLoading) return <React.Suspense fallback={<Spinner />} />
-    console.log('result > CalcAccRowElem', result);
-    console.log('period', period);
     let spanContractEnd;
 
     let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
@@ -53,7 +44,6 @@ if (isLoading) return <React.Suspense fallback={<Spinner />} />
     let tdPostPartum;
     let dataContentPostPartum = `Utilizzando ulteriori ${period.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
 
-console.log('result pippo',result);
     period.contractEndFirstYearInPeriod ? (
               spanContractEnd = <>
               <span className="text-success">
@@ -81,10 +71,12 @@ console.log('result pippo',result);
              : tdPostPartum = ''
 
     let vacationcodeName = period.vacationCode.name;
-    let className = result.subFixedPostPartum ? "bg-danger" :  result.subAccrued ? "bg-warning" : ""
+    let className = result.subFixedPostPartum ? "bg-danger" :  result.subAccrued ? "bg-warning" : "";
+
+    let trID = vacationcodeName + "$" + DateUtility.formatDate(period.from);
     return(
             <>
-            <tr className={className}>
+            <tr className={className} key={trID}>
               <td>{vacationcodeName}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
               <td>

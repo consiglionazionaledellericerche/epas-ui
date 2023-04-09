@@ -12,8 +12,6 @@ interface InfoTotProps {
 const InfoTot: React.FC<InfoTotProps> = ({
     data
   }) => {
-  console.log('InfoTot data>>>>', data);
-
     return(
     <>
      <div className="col-md-12">

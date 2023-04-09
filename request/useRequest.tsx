@@ -8,9 +8,6 @@ export const useRequest = (path, parameters) => {
     }
 
     const url = parameters ? baseUrl + path + '?' + parameters : baseUrl + path
-
-    console.log("useRequest", url);
-
     const { data, error} = useSwr(url,
                                    {  revalidateIfStale: false,
                                       revalidateOnFocus: false,
@@ -28,9 +25,6 @@ export const useRequestPost = (path, body, accessToken) => {
     }
 
     const url = baseUrl + path
-
-    console.log("useRequestPost url", url);
-
     const { data, error} = useSwr(url, async url => {
             const response = await fetch(url, {
                 method: 'POST',
@@ -52,7 +46,6 @@ export const useRequestPost = (path, body, accessToken) => {
             return response.json();
         })
 
-    console.log("data url", data);
     let result = data;
     return { result, error}
 

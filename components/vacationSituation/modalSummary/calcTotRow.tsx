@@ -20,8 +20,6 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode.name);
-    console.log('period.from', period.from);
 
 const { data: session, status } = useSession()
 const accessToken = session?.accessToken;
@@ -36,16 +34,8 @@ useEffect(() => {
 }, [result]);
 
 
-  console.log('error', error);
-  console.log('isLoading', isLoading);
-
-    console.log('result', result);
-
 if (error) return <div>Impossibile caricare la situazione annuale</div>
 if (isLoading) return <React.Suspense fallback={<Spinner />} />
-    console.log('result > CalcAccRowElem', result);
-    console.log('period', period);
-
     let spanPostPartum;
     let tdPostPartum;
     let dataContent=`Utilizzando ulteriori ${result.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
@@ -67,10 +57,11 @@ if (isLoading) return <React.Suspense fallback={<Spinner />} />
                   </>
              : tdPostPartum = ''
     let vacationcodeName = period.vacationCode.name;
+    let trID = vacationcodeName + "$" + DateUtility.formatDate(period.from);
 
     return(
             <>
-            <tr className={result.subFixedPostPartum ? "bg-danger" : ""}>
+            <tr className={result.subFixedPostPartum ? "bg-danger" : ""} key={trID}>
               <td>{vacationcodeName}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
               <td>

@@ -13,16 +13,20 @@ const VacationSummaryRow: React.FC<VacationSummaryRowProps> = ({
     vacationSummary,
     param,
     setModal,
-    setParameters
+    setParameters,
+    setTitleModal
   }) => {
 
     function setModalParam(){
       setModal(true);
       setParameters(param);
+      setTitleModal(vacationSummary.title);
     }
 
+    let idRow = vacationSummary.year;
+
     return(<>
-          <tr>
+          <tr key={idRow}>
             <td>{vacationSummary.year}</td>
             <td>{vacationSummary.total} ({vacationSummary.accrued})</td>
             <td>
