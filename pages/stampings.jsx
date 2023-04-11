@@ -13,7 +13,6 @@ import MonthRecapView from '../components/monthRecap/monthRecapView'
 function Stampings() {
   const router = useRouter()
   let personId = router.query["personId"]
-  personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
 
   const { data: session, status } = useSession()
@@ -21,7 +20,7 @@ function Stampings() {
   const year = currentDate.year
   const month = currentDate.month
 
-  const parameters = `personId=${personId}&year=${year}&month=${month}`
+  let parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
   const {data, error} = useRequest('/monthrecaps', parameters);
   if (error) return <div>Impossibile caricare la situazione mensile</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />
