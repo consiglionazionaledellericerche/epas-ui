@@ -20,7 +20,6 @@ const VacationSituationView: React.FC<VacationSituationProps> = ({
   }) => {
   const [showModal, setShowModal] = useState(false);
   const [parameters, setParameters] = useState("");
-  console.log('data', data);
   return (
       <>
       <h4>Ferie e Permessi {year}</h4>

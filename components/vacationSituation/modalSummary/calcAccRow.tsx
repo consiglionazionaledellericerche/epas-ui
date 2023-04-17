@@ -15,9 +15,6 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode.name);
-    console.log('period.from', period.from);
-
     let spanContractEnd;
     let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
     let spanPostPartum;

@@ -15,10 +15,6 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
     data,
     period
   }) => {
-    console.log('period.vacationCode.name', period.vacationCode.name);
-    console.log('period.from', period.from);
-
-
     let spanPostPartum;
     let tdPostPartum;
     let dataContent=`Utilizzando ulteriori ${period.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`

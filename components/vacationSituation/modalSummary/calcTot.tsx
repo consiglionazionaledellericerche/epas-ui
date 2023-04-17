@@ -10,7 +10,6 @@ const CalcTot: React.FC<CalcTotProps> = ({
     data
   }) => {
 
-    console.log('data.absencePeriod', data.absencePeriod);
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
@@ -32,7 +31,6 @@ const CalcTot: React.FC<CalcTotProps> = ({
          </thead>
         <tbody>
          {  data.absencePeriod.subPeriods?.map((period) => {
-            console.log('data.absencePeriod.subPeriods period', period);
             return ( period.vacationCode ? (
               <>
               <CalcTotRow data={data} period={period} />
