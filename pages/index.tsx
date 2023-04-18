@@ -29,14 +29,11 @@ const App: React.FC = () => {
   let loginElem;
 
   if (OAUTH_LOGIN === "true" && LDAP_LOGIN === "true") {
-      console.log("LoginTabbed", OAUTH_LOGIN, LDAP_LOGIN);
       loginElem = <LoginTabbed />;
     } else {
     if (OAUTH_LOGIN === "true") {
-      console.log("OAUTH_LOGIN", OAUTH_LOGIN);
       loginElem = <LoginOauth />;
     } else {
-      console.log("LDAP_LOGIN", LDAP_LOGIN);
       loginElem = <LoginLdap />;
     }
   }

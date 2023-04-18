@@ -11,8 +11,17 @@ import {React, useEffect} from 'react'
 import { SWRConfig } from 'swr'
 import { useSession} from "next-auth/react"
 
-import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
+// import { CurrentDateContext } from '../contexts/currentDateContext'
 const currentDate = new Date()
+
+import dynamic from "next/dynamic";
+
+const CurrentDateProvider = dynamic(
+  () => import("../contexts/currentDateContext").then((ctx) => ctx.CurrentDateProvider),
+  {
+    ssr: false,
+  }
+);
 
 function currentPerson() {
   /*const router = useRouter()
@@ -24,10 +33,11 @@ function currentPerson() {
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function App({ Component, pageProps: { session, ...pageProps }}: AppProps) {
+
   return (
   <SessionProvider session={session}>
     <SSRProvider>
-        <SWRConfig  value={{
+        <SWRConfig value={{
                            fetcher: async (url) => {
                                const res = await fetch(url, {
                                    headers: {
