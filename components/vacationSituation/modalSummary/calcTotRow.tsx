@@ -36,6 +36,7 @@ useEffect(() => {
 
 if (error) return <div>Impossibile caricare la situazione annuale</div>
 if (isLoading) return <React.Suspense fallback={<Spinner />} />
+
     let spanPostPartum;
     let tdPostPartum;
     let dataContent=`Utilizzando ulteriori ${result.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${period.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`

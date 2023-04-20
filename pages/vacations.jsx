@@ -20,8 +20,8 @@ function Vacations() {
   const year = currentDate.year
   const month = currentDate.month
 
-  let parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
-  // TODO: rivedere parametri da passare a api vacations
+  const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
+
   const {data, error} = useRequest('/vacations', parameters);
   if (error) return <div>Impossibile caricare la situazione annuale</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />

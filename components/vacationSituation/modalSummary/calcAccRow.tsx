@@ -37,6 +37,7 @@ useEffect(() => {
 
 if (error) return <div>Impossibile caricare la situazione annuale</div>
 if (isLoading) return <React.Suspense fallback={<Spinner />} />
+
     let spanContractEnd;
 
     let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;

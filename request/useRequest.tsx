@@ -8,6 +8,7 @@ export const useRequest = (path, parameters) => {
     }
 
     const url = parameters ? baseUrl + path + '?' + parameters : baseUrl + path
+
     const { data, error} = useSwr(url,
                                    {  revalidateIfStale: false,
                                       revalidateOnFocus: false,
