@@ -5,6 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import { useState, useEffect } from 'react';
+import { getServerSession } from "next-auth/next"
+import { useSession } from "next-auth/react"
+import { useRequestPost } from "../../../request/useRequest"
+import { Spinner } from 'react-bootstrap'
+import { CalcAccRowElem} from './calcAccRowElem'
 
 interface CalcAccRowProps {
     data;
@@ -15,7 +21,25 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     data,
     period
   }) => {
+
+const { data: session, status } = useSession()
+const accessToken = session?.accessToken;
+
+const [isLoading, setIsLoading] = useState(true);
+const { result, error } = useRequestPost('/vacations/summary/subperiod?' + period.from, JSON.stringify({ "summary": data, "period": period }), accessToken);
+
+useEffect(() => {
+  if (result !== undefined) {
+    setIsLoading(false);
+  }
+}, [result]);
+
+
+if (error) return <div>Impossibile caricare la situazione annuale</div>
+if (isLoading) return <React.Suspense fallback={<Spinner />} />
+
     let spanContractEnd;
+
     let dataContentContractEnd = `Dal ${DateUtility.formatDate(period.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
     let spanPostPartum;
     let tdPostPartum;
@@ -41,29 +65,32 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
 
       period.subDayPostPartum > 0 ? (
              tdPostPartum = <>
-                  {period.subDayPostPartum}
-                  ({period.subDayPostPartumProgression})
+                  {result.subDayPostPartum}
+                  ({result.subDayPostPartumProgression})
                   {spanPostPartum}
                   </>)
              : tdPostPartum = ''
 
-    let className = period.subFixedPostPartum ? "bg-danger" :  period.subAccrued ? "bg-warning" : ""
+    let vacationcodeName = period.vacationCode.name;
+    let className = result.subFixedPostPartum ? "bg-danger" :  result.subAccrued ? "bg-warning" : "";
+
+    let trID = vacationcodeName + "$" + DateUtility.formatDate(period.from);
     return(
             <>
-            <tr className={className}>
-              <td>{period.vacationCode.name}</td>
+            <tr className={className} key={trID}>
+              <td>{vacationcodeName}</td>
               <td>{DateUtility.formatDate(period.from)}</td>
-              <td>{period.subAmount}</td>
               <td>
-               {period.subAmountBeforeFixedPostPartum}
+               {result.subAmountBeforeFixedPostPartum}
                {spanContractEnd}
               </td>
-              <td><strong>{period.subTotalAmount}</strong></td>
-              <td>{period.dayInInterval} ({period.subDayProgression})</td>
+              <td><strong>{result.subTotalAmount}</strong></td>
+              <td>{result.dayInInterval} ({result.subDayProgression})</td>
               {tdPostPartum}
             </tr>
             </>
     );
+
 }
 
 export default CalcAccRow

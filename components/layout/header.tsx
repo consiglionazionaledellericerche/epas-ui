@@ -1,21 +1,29 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signIn, signOut, useSession, getToken } from "next-auth/react"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import PersonalDataMenu from './menu/personalDataMenu';
 import PersonalWorkflowsMenu from './menu/personalWorkflowsMenu';
 import SelectPeriod from './menu/selectPeriod'
+import dotenv from 'dotenv/config';
 
-function handleSignOut() {
-  signOut({ callbackUrl: 'http://localhost:3000' })
-}
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
 
 function Header() {
   const { data: session, status } = useSession()
   const loading = status === "loading"
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/' });
+    // effettua il logout di Keycloak
+    const logoutUrl = `https://auth.iit.cnr.it/auth/realms/testing/protocol/openid-connect/logout`;
+    const redirectUrl = `${NEXTAUTH_URL}`;
+    const keycloakLogoutUrl = `${logoutUrl}?redirect_uri=${redirectUrl}`;
+    window.location.replace(keycloakLogoutUrl);
+  };
 
   let navbarElem;
 

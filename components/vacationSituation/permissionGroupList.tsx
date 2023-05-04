@@ -12,6 +12,7 @@ interface PermissionGroupListProps {
 const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
     periodChain
   }) => {
+
     let res;
     let withLimit;
 
@@ -61,25 +62,28 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
            </>
        ) : ( toUse = '' )
 
-            return(
-            <>
-                <li className="list-group-item list-group-item-info">
-                    <p>
-                      <strong>{absencePeriod.groupAbsenceType.description}</strong>
-                    </p>
-                </li>
-                <li className="list-group-item">
-                 <p>
-                    {withLimit}
-                  </p>
-                 <p>
-                    {init}
-                  </p>
+       let keyDesc = "absenceDescription$" + absencePeriod.groupAbsenceType.description;
+       let keyLimit = "absenceLimit$" + absencePeriod.groupAbsenceType.description;
+
+        return(
+          <>
+            <li className="list-group-item list-group-item-info" key={keyDesc}>
+                <p>
+                  <strong>{absencePeriod.groupAbsenceType.description}</strong>
+                </p>
+            </li>
+            <li className="list-group-item" key={keyLimit}>
+             <p>
+                {withLimit}
+              </p>
+             <p>
+                {init}
+              </p>
               <p>
               {toUse}
                </p>
-                  <p><em>Non ci sono assenze utilizzate per questo gruppo nel periodo selezionato.</em></p>
-                </li>
+              <p><em>Non ci sono assenze utilizzate per questo gruppo nel periodo selezionato.</em></p>
+            </li>
           </>
         )
     }
@@ -88,7 +92,7 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
     return (
     <>
     <h4>Permessi personali (661)</h4>
-    <ul>
+    <ul key="permessiPersonali">
         {res}
     </ul>
     </>
