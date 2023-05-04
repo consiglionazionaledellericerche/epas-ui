@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 function handleClick() {
-  signIn("authIIT", { callbackUrl: "/stampings" });
+  signIn("keycloak", { callbackUrl: "/stampings" });
 }
 
 const OauthButton = React.forwardRef(({ onClick, href }, ref) => {

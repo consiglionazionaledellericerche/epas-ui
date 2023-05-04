@@ -9,6 +9,7 @@ interface VacationRecapTableProps {
     param: string;
     setModal;
     setParameters;
+    setTitleModal;
 }
 
 const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
@@ -16,7 +17,8 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
     tableName,
     param,
     setModal,
-    setParameters
+    setParameters,
+    setTitleModal
   }) => {
 
     let caption;
@@ -39,11 +41,11 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
           <tbody>
                 {tableName == 'tabellaFerie' ? (
                 <>
-                <VacationSummaryRow vacationSummary={vacationSituation.lastYear} setModal={setModal} setParameters={setParameters} param={param} />
-                <VacationSummaryRow vacationSummary={vacationSituation.currentYear} setModal={setModal} setParameters={setParameters} param={param} />
+                <VacationSummaryRow vacationSummary={vacationSituation.lastYear} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param} />
+                <VacationSummaryRow vacationSummary={vacationSituation.currentYear} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param} />
                 </>
                 ) : (
-                <VacationSummaryRow vacationSummary={vacationSituation.permissions} setModal={setModal} setParameters={setParameters} param={param} />
+                <VacationSummaryRow vacationSummary={vacationSituation.permissions} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param} />
                 )}
            </tbody>
       </Table>

@@ -25,7 +25,7 @@ const VacationPeriodTable: React.FC<VacationPeriodTableProps> = ({
     <tbody>
       {contracts?.map((contract) => {
                                       return contract.vacationPeriods?.map((vp) => {
-                                     return <tr id={vp.id}>
+                                     return <tr key={vp.id}>
                                        <td>{DateUtility.formatDate(vp.beginDate)}</td>
                                        <td>{vp.endDate ? DateUtility.formatDate(vp.endDate) : <em>Indeterminato</em>}</td>
                                        <td>{vp.vacationCode}</td>

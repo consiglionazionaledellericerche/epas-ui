@@ -9,7 +9,7 @@ import { getSession } from 'next-auth/react';
 class VacationModal  extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], show:false};
+    this.state = { data: [], show:false, title: ""};
   }
 
   async componentDidUpdate(propsPrecedenti) {
@@ -32,26 +32,31 @@ class VacationModal  extends React.Component {
         }).then(response => response.json())
           .catch(error => console.error("unable to achive this", error))
             .then(data => {
-                this.setState({'data': data.vacationSummary, 'show':true})
+                this.setState({'data': data.vacationSummary, 'show':true, 'title':data.vacationSummary.title})
             });
         }
         else {
-          this.setState({'data': [], 'show':false})
+          this.setState({'data': [], 'show':false, 'title':""})
         }
     }
+  }
+
+  handleClose = () => {
+    this.setState ({'show': false})
   }
 
  render() {
     return (
               <Modal
-                      tmpshow= {this.props.tmpshow}
+                      tmpshow= {this.props.tmpshow.toString()}
                       show={this.state.show}
-                      cancel={this.props.close}
+                      onHide={this.handleClose}
+                      cancel={this.state.close}
                       size="lg"
                       aria-labelledby="modal-vacation-info"
                     >
                       <Modal.Header closeButton>
-                        <Modal.Title>Modal title</Modal.Title>
+                        <Modal.Title>{this.state.title}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
                          {this.state.show ? <VacationSummaryModalContent  data={this.state.data}/> : ''}

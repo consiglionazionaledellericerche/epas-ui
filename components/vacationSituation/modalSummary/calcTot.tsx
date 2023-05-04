@@ -9,7 +9,6 @@ interface CalcTotProps {
 const CalcTot: React.FC<CalcTotProps> = ({
     data
   }) => {
-
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
@@ -33,7 +32,7 @@ const CalcTot: React.FC<CalcTotProps> = ({
          {  data.absencePeriod.subPeriods?.map((period) => {
             return ( period.vacationCode ? (
               <>
-              <CalcTotRow data={data} period={period} />
+              <CalcTotRow data={data} period={period} key={period.from} />
               </> ) : ''
             );
          })
