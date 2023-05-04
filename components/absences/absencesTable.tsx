@@ -1,28 +1,33 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-// import { AbsencesRecap } from "../../types/absencesRecap";
 import DateUtility from "../../utils/dateUtility";
+import AbsenceRecapRow from "./absenceRecapRow";
 
 interface AbsencesTableProps {
-    absencesRecap: string;
+    absencesRecap: Absence[];
     year: integer;
-    month: integer;
 }
 
 const AbsencesTable: React.FC<AbsencesTableProps> = ({
     absencesRecap,
-    year,
-    month
+    year
   }) => {
 
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
+    const months = [{'id':'01', 'name':'January'},{'id':'02', 'name':'February'},{'id':'03', 'name':'March'},
+     {'id':'04', 'name':'April'}, {'id':'05', 'name':'May'}, {'id':'06', 'name':'June'},
+      {'id':'07', 'name':'July'},{'id':'08', 'name': 'August'},
+     {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
+     {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
+
+    console.log('absencesRecap',absencesRecap);
     return (
         <Table id="assenzeannuali" bordered hover>
             <caption className="sr-only">Assenze Annuali</caption>
             <thead>
             <tr className="warning">
                 <th >Mese</th>
-                <th colspan="31">Giorni</th>
+                <th colSpan="31">Giorni</th>
             </tr>
             <tr className="warning">
             <th></th>
@@ -32,6 +37,14 @@ const AbsencesTable: React.FC<AbsencesTableProps> = ({
             </tr>
             </thead>
             <tbody>
+            {months.map((month) => (
+            <tr key={`tr-${month.name}`}>
+            <td key={month.name}>{month.name}</td>
+              {days.map((day) => (
+                        <AbsenceRecapRow key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day}/>
+              ))}
+            </tr>
+            ))}
             </tbody>
         </Table>
     );

@@ -13,22 +13,29 @@ import AbsencesRecapView from '../components/absences/absencesRecapView'
 function Absences() {
   const router = useRouter()
   let personId = router.query["personId"]
-  personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
 
   const { data: session, status } = useSession()
 
-  const year = currentDate.year
-  const month = currentDate.month
+  const year = 2018 //currentDate.year
+  const beginDate = year + "-01-01"
+  const endDate = year + "-12-31"
 
-//   const parameters = `personId=${personId}&year=${year}&month=${month}`
-//   const {data, error} = useRequest('/absences', parameters);
-//   if (error) return <div>Impossibile caricare la situazione mensile</div>
-//   if (!data) return <React.Suspense fallback={<Spinner />} />
+  const parameters = personId ? `id=${personId}&beginDate=${beginDate}&endDate=${endDate}` : `beginDate=${beginDate}&endDate=${endDate}`
 
-  return (
-  <AbsencesRecapView absencesRecap="" month={month} year={year} />
-  )
+  console.log('parameters', parameters);
+
+  if (typeof window === 'undefined') {
+    return <React.Suspense fallback={<Spinner />} />
+  } else {
+    const {data, error} = useRequest('/absences/absencesInPeriod', parameters);
+    if (error) return (<div>Impossibile caricare la situazione annuale</div>);
+    if (!data) return <React.Suspense fallback={<Spinner />} />
+
+    return (
+    <AbsencesRecapView absencesRecap={data} year={year} />
+    )
+  }
 
 }
 
