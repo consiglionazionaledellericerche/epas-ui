@@ -13,7 +13,6 @@ import { authOptions } from './api/auth/[...nextauth]'
 function Vacations() {
   const router = useRouter()
   let personId = router.query["personId"]
-  personId = personId ? personId : 12
   const currentDate = useContext(CurrentDateContext)
 
   const { data: session, status } = useSession()
@@ -21,8 +20,8 @@ function Vacations() {
   const year = currentDate.year
   const month = currentDate.month
 
-  const parameters = `personId=${personId}&year=${year}&month=${month}`
-  // TODO: rivedere parametri da passare a api vacations
+  const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
+
   const {data, error} = useRequest('/vacations', parameters);
   if (error) return <div>Impossibile caricare la situazione annuale</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />

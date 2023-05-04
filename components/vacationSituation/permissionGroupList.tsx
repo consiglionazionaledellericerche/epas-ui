@@ -12,8 +12,6 @@ interface PermissionGroupListProps {
 const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
     periodChain
   }) => {
-
-    //console.log("periodChain", periodChain.periods)
     let res;
     let withLimit;
 
