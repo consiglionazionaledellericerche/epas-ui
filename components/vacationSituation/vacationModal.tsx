@@ -59,7 +59,7 @@ class VacationModal  extends React.Component {
                         <Modal.Title>{this.state.title}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                         {this.state.show ? <VacationSummaryModalContent  data={this.state.data}/> : ''}
+                         {this.state.show ? <VacationSummaryModalContent  data={this.state.data} parameters={this.props.parameters} /> : ''}
                       </Modal.Body>
                       <Modal.Footer>
                         <Button onClick={this.props.close}>Cancel</Button>
