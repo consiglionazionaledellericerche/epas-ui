@@ -602,3 +602,11 @@ a#web-stamping-btn {
 }
 
 /***************************/
+
+.tooltip-white {
+  background-color: rgb(255, 255, 255) !important;
+}
+
+.tooltip-icon-black {
+  color: rgb(0, 0, 0) !important;
+}

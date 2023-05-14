@@ -16,9 +16,15 @@ const AbsencesRecapView: React.FC<AbsencesRecapProps> = ({
       <>
       <Container fluid>
           <Row>
-              <Col sm={12}>
+            <Col sm={2} />
+            <Col sm={6}>
+                  <div className="page-header">
+                      <h2>Assenze Annuali {year}</h2>
+                      <br/>
+                  </div>
                   <AbsencesTable absencesRecap={absencesRecap} year={year} />
-              </Col>
+            </Col>
+            <Col sm={2} />
           </Row>
       </Container>
       </>

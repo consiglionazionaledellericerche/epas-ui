@@ -17,7 +17,7 @@ function Absences() {
 
   const { data: session, status } = useSession()
 
-  const year = 2018 //currentDate.year
+  const year = currentDate.year
   const beginDate = year + "-01-01"
   const endDate = year + "-12-31"
 

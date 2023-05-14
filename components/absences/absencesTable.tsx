@@ -2,6 +2,8 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import AbsenceRecapRow from "./absenceRecapRow";
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 
 interface AbsencesTableProps {
     absencesRecap: Absence[];
@@ -20,9 +22,8 @@ const AbsencesTable: React.FC<AbsencesTableProps> = ({
      {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
      {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
 
-    console.log('absencesRecap',absencesRecap);
     return (
-        <Table id="assenzeannuali" bordered hover>
+        <Table id="assenzeannuali" className="table table-bordered table-hover table-condensed">
             <caption className="sr-only">Assenze Annuali</caption>
             <thead>
             <tr className="warning">
