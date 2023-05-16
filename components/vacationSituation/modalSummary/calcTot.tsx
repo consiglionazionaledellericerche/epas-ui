@@ -1,6 +1,11 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 import CalcTotRow from "./calcTotRow";
+import { useState, useEffect } from 'react';
+import { getServerSession } from "next-auth/next"
+import { useSession } from "next-auth/react"
+import { useRequest } from "../../../request/useRequest"
+import { Spinner } from 'react-bootstrap'
 
 interface CalcTotProps {
     data;
@@ -9,6 +14,7 @@ interface CalcTotProps {
 const CalcTot: React.FC<CalcTotProps> = ({
     data
   }) => {
+
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
@@ -29,10 +35,10 @@ const CalcTot: React.FC<CalcTotProps> = ({
          </tr>
          </thead>
         <tbody>
-         {  data.absencePeriod.subPeriods?.map((period) => {
+         {  data.absenceSubPeriods?.map((period) => {
             return ( period.vacationCode ? (
               <>
-              <CalcTotRow data={data} period={period} key={period.from} />
+              <CalcTotRow subperiod={period}/>
               </> ) : ''
             );
          })

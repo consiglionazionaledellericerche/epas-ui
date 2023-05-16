@@ -29,10 +29,10 @@ const CalcAcc: React.FC<CalcAccProps> = ({
            </tr>
            </thead>
            <tbody>
-           { data.absencePeriod.subPeriods?.map((period) => {
+           { data.absenceSubPeriods?.map((period) => {
               return ( period.vacationCode ? (
                             <>
-                            <CalcAccRow data={data} period={period} />
+                            <CalcAccRow subperiod={period}/>
                             </> ) : ''
                        );
              })
