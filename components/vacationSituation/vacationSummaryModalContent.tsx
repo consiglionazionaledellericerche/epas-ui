@@ -9,10 +9,12 @@ import CalcAcc  from './modalSummary/calcAcc'
 
 interface VacationSummaryModalContentProps {
   data;
+  parameters;
 }
 
 const VacationSummaryModalContent: React.FC<VacationSummaryModalContentProps> = ({
-data
+data,
+parameters
   }) => {
 
     return( <>
