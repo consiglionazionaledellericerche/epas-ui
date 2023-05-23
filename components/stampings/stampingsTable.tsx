@@ -58,7 +58,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         <th className="invisible"></th>
 
                         <td className="assenza default-single">
-                            <AbsencesShow absences={pdr.personDay.absences} />
+                            <AbsencesShow absences={pdr.personDay.absences} year={year} month={month} day={DateUtility.formatDateDay(pdr.personDay.date)} />
                         </td>
                         
                         <StampingsTemplate personDayRecap={pdr} />

@@ -1,16 +1,16 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
-import AbsenceRecapRow from "./absenceRecapRow";
+import AbsenceYearlyRecapRow from "./absenceYearlyRecapRow";
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
-interface AbsencesTableProps {
+interface AbsencesYearlyTableProps {
     absencesRecap: Absence[];
     year: integer;
 }
 
-const AbsencesTable: React.FC<AbsencesTableProps> = ({
+const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
     absencesRecap,
     year
   }) => {
@@ -42,7 +42,12 @@ const AbsencesTable: React.FC<AbsencesTableProps> = ({
             <tr key={`tr-${month.name}`}>
             <td key={month.name}>{month.name}</td>
               {days.map((day) => (
-                        <AbsenceRecapRow key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day}/>
+                        <td key={`td-${month}-${day}`}>
+                        <a href="#" onClick={(e) => e.preventDefault()}>
+                          <AbsenceYearlyRecapRow key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day}/>
+                        </a>
+                        </td>
+
               ))}
             </tr>
             ))}
@@ -51,4 +56,4 @@ const AbsencesTable: React.FC<AbsencesTableProps> = ({
     );
 }
 
-export default AbsencesTable
+export default AbsencesYearlyTable

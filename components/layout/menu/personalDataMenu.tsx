@@ -14,10 +14,8 @@ function PersonalDataMenu() {
     return (
         <NavDropdown title={userLogon} id="personal-data">
             <NavDropdown.Item href="/stampings"><FontAwesomeIcon icon={faCalendarDays} /> Situazione mensile</NavDropdown.Item>
-            {/*
-            <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faUserXmark} /> Assenze Mensili</NavDropdown.Item>
-            */}
-            <NavDropdown.Item href="/absences"><FontAwesomeIcon icon={faCalendar} /> Assenze Annuali</NavDropdown.Item>
+            <NavDropdown.Item href="/absencesMonthly"><FontAwesomeIcon icon={faUserXmark} /> Assenze Mensili</NavDropdown.Item>
+            <NavDropdown.Item href="/absencesYearly"><FontAwesomeIcon icon={faCalendar} /> Assenze Annuali</NavDropdown.Item>
             <NavDropdown.Item href="/vacations"><FontAwesomeIcon icon={faPlane} /> Ferie</NavDropdown.Item>
             {/*
             <NavDropdown.Item href="#action/3.5">Competenze</NavDropdown.Item>

@@ -8,25 +8,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRequest } from "../../request/useRequest";
 import messages from '../../public/data/messages.json';
 import DateUtility from "../../utils/dateUtility";
+import { useState } from 'react';
 
 library.add(faPaperPlane);
 
-interface AbsenceRecapRowProps {
+interface AbsenceYearlyRecapRowProps {
     absencesRecap: Absence[];
     year: integer;
     month: string;
     day: integer;
 }
 
-const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
+const AbsenceYearlyRecapRow: React.FC<AbsenceYearlyRecapRowProps> = ({
     absencesRecap,
     year,
     month,
     day
   }) => {
 
+  const [isOpen, setIsOpen] = useState(false)
+
     let dday = day < 10 ? `0${day}` : day;
-    const item = absencesRecap.find(item => item.date === `${year}-${month}-${dday}`);
+    let item;
+    try{
+        item = absencesRecap.find(item => item.date === `${year}-${month}-${dday}`);
+    }catch {
+        item = absencesRecap
+    }
+
     let absenceCode;
     let absencejustifiedTime;
     let absenceDescription;
@@ -44,6 +53,8 @@ const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
       const {data, error} = useRequest(`/absences/${item.id}`);
       if (error) return (<div>Impossibile caricare la situazione annuale</div>);
       if (!data) return <React.Suspense fallback={<Spinner />} />
+
+      console.log("DATA RECAP", data);
 
       absenceDescription = data.absenceType.description;
       absenceData = DateUtility.formatDate(data.date);
@@ -75,7 +86,7 @@ const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
                                           groupVerified = true;
                                           description = <>
                                                         <span>{replacingGroup.description}</span>
-                                                        <a href="@{AbsenceGroups.groupStatus('groupAbsenceTypeId':group.id, 'personId':_person.id, 'from':_absence.getAbsenceDate().format())}"> Riepilogo <i class="fa fa-external-link" aria-hidden="true"></i></a><br/>
+                                                        <a href="@{AbsenceGroups.groupStatus('groupAbsenceTypeId':group.id, 'personId':_person.id, 'from':_absence.getAbsenceDate().format())}"> Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i></a><br/>
                                                         </>
                         {/* 	            #{secure.check 'AbsenceGroups.edit'} */}
                         {/* 	            <span class="fa-stack fa-lg"><i class="fa fa-paper-plane-o fa-stack-1x"></i></span> */}
@@ -83,7 +94,7 @@ const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
                         {/* 	            #{/secure.check} */}
                                         !groupVerified ?
                                           groupVerifiedLink = <>
-                                                              <a href="@{AbsenceGroups.groupStatus('groupAbsenceTypeId':group.id, 'personId':_person.id, 'from':_absence.getAbsenceDate().format())}"> Riepilogo <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                              <a href="@{AbsenceGroups.groupStatus('groupAbsenceTypeId':group.id, 'personId':_person.id, 'from':_absence.getAbsenceDate().format())}"> Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i></a>
                                                               </>
                                          : groupVerifiedLink = ""
 
@@ -102,13 +113,16 @@ const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
       }
     }
 
-    return(<>
-            <td key={`td-${month}-${dday}`}>
-            <div key={`div-${month}-${dday}`} data-tooltip-id={`tip-${month}-${dday}`} data-for={`tip-${month}-${dday}`}>
-            {absenceCode}
+    if (!absenceCode)
+    { return (<></>)}
 
+    return(<>
+            <div data-tooltip-id="tooltip-absencecode"
+            onMouseEnter={() => setIsOpen(true)} onClick={() => setIsOpen(false)}>
+            {absenceCode}
             </div>
-             <Tooltip id={`tip-${month}-${dday}`} className="tooltip-white">
+
+             <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={isOpen}>
                  	<p>
                      <span className="tooltip-icon-black"><FontAwesomeIcon icon={faPaperPlane}/></span>
                      <strong className="text-success"> Il codice {absenceCode} verrà inviato ad attestati.</strong>
@@ -126,9 +140,9 @@ const AbsenceRecapRow: React.FC<CalcAccRowProps> = ({
                    	{hasGroupsElem}
                   </ul>
              </Tooltip>
-            </td>
+
             </>
     );
 }
 
-export default AbsenceRecapRow
+export default AbsenceYearlyRecapRow

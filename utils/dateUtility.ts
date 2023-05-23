@@ -10,12 +10,28 @@ class DateUtility {
         return periodType == 'year' ? 'anno' : 'mese'
     }
 
+    static getMonthName(month: number) {
+      const date = new Date();
+      date.setMonth(month - 1); // Imposta il mese nell'oggetto Date (i mesi in JavaScript sono indicizzati da 0 a 11)
+      const monthName = date.toLocaleString('it-IT', { month: 'long' }); // Ottieni il nome del mese
+      return monthName;
+    }
+
     static formatDateShort(date : Date) {
         return moment(date).locale('it-IT').format('DD ddd');
     }
 
+    static formatDateDay(date : Date) {
+        return moment(date).locale('it-IT').format('DD');
+    }
+
     static formatDate(date : Date) {
         return moment(date).locale('it-IT').format('DD/MM/YYYY');
+    }
+
+    static getLastDayOfMonth(month : number, year : number) {
+        var d = new Date(year, month, 0);
+        return DateUtility.formatDateDay(d);
     }
 
     static fromMinuteToHourMinute(minute : number) {

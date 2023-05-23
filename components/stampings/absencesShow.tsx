@@ -1,21 +1,34 @@
 import { Absence } from "../../types/absence";
 import { PersonDayRecap } from "../../types/personDayRecap";
 import { StampingTemplate } from "../../types/stampingTemplate";
+import AbsenceYearlyRecapRow from "../absences/absenceYearlyRecapRow";
 
 interface AbsencesShowProps {
-    absences: Absence[]
+    absences: Absence[];
+    year: integer;
+    month: string;
+    day: string;
 }
 
 const AbsencesShow: React.FC<AbsencesShowProps> = ({
-    absences
+    absences,
+    year,
+    month,
+    day
   }) => {
-    return (
+
+  let loop = absences.map((absence) => (
         <>
-        {absences.map((absence) => (
-            <span key={absence.id}>{absence.code}</span>
-        ))}
+        <span>
+         <AbsenceYearlyRecapRow key={`${month}-${day}`} absencesRecap={absence} year={year} month={month} day={day}/>
+         </span>
         </>
-    )
+                         ))
+
+  return (<>
+  {loop}
+  </>
+          );
 }
 
 export default AbsencesShow

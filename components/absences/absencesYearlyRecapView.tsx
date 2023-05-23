@@ -1,14 +1,13 @@
 import { Col, Container, Row } from "react-bootstrap";
-import AbsencesTable from "./absencesTable";
+import AbsencesYearlyTable from "./absencesYearlyTable";
 
-interface AbsencesRecapViewProps {
+interface AbsencesYearlyRecapViewProps {
         absencesRecap: Absence[];
         year: integer
 }
 
-const AbsencesRecapView: React.FC<AbsencesRecapProps> = ({
+const AbsencesYearlyRecapView: React.FC<AbsencesYearlyRecapViewProps> = ({
     absencesRecap,
-    month,
     year
   }) => {
 
@@ -22,7 +21,7 @@ const AbsencesRecapView: React.FC<AbsencesRecapProps> = ({
                       <h2>Assenze Annuali {year}</h2>
                       <br/>
                   </div>
-                  <AbsencesTable absencesRecap={absencesRecap} year={year} />
+                  <AbsencesYearlyTable absencesRecap={absencesRecap} year={year} />
             </Col>
             <Col sm={2} />
           </Row>
@@ -31,4 +30,4 @@ const AbsencesRecapView: React.FC<AbsencesRecapProps> = ({
   );
 }
 
-export default AbsencesRecapView
+export default AbsencesYearlyRecapView
