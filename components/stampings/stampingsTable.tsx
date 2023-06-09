@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
 import AbsencesShow from "./absencesShow";
@@ -6,6 +6,8 @@ import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
 import DateUtility from "../../utils/dateUtility";
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 
 interface StampingsTableProps {
     monthRecap: MonthRecap;
@@ -18,8 +20,15 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     year,
     month
   }) => {
-    return (
-        <Table id="tabellonetimbrature" bordered hover>
+
+    const [tooltipContent, setTooltipContent] = useState('');
+    const [showTooltip, setShowTooltip] = useState(true);
+
+    return (<>
+           <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} effect="solid" clickable={true}>
+             {tooltipContent}
+           </Tooltip>
+            <Table id="tabellonetimbrature" bordered hover>
             <caption className="sr-only">Riepilogo mensile </caption>
             <thead>
             <tr>
@@ -58,7 +67,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         <th className="invisible"></th>
 
                         <td className="assenza default-single">
-                            <AbsencesShow absences={pdr.personDay.absences} year={year} month={month} day={DateUtility.formatDateDay(pdr.personDay.date)} />
+                            <AbsencesShow absences={pdr.personDay.absences} year={year} month={month} day={DateUtility.formatDateDay(pdr.personDay.date)} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip} />
                         </td>
                         
                         <StampingsTemplate personDayRecap={pdr} />
@@ -74,6 +83,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             }
             </tbody>
         </Table>
+        </>
     );
 }
 

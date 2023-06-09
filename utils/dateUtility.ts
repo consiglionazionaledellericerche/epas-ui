@@ -21,12 +21,25 @@ class DateUtility {
         return moment(date).locale('it-IT').format('DD ddd');
     }
 
+    static formatDateYear(date : Date) {
+        return moment(date).locale('it-IT').format('YYYY');
+    }
+
+    static formatDateMonth(date : Date) {
+        return moment(date).locale('it-IT').format('MM');
+    }
+
     static formatDateDay(date : Date) {
         return moment(date).locale('it-IT').format('DD');
     }
 
     static formatDate(date : Date) {
         return moment(date).locale('it-IT').format('DD/MM/YYYY');
+    }
+
+    static formatDateLocal(date : Date) {
+        //return moment(date).locale('it-IT').format('DD-MM-YYYY');
+        return moment(date).format('YYYY-MM-DD')
     }
 
     static getLastDayOfMonth(month : number, year : number) {
@@ -89,29 +102,71 @@ class DateUtility {
     return "-" + hourTime;
   }
 
-    static fromMinuteToHour(minute : number, amountType : string) {
-        if (minute == 0) {
-          return "0 ore";
-        }
-        let string = "";
-        let positiveMinute = minute;
-        if (minute < 0) {
-          //string = string + "-";
-          positiveMinute = minute * -1;
-        }
-        let hours : number = Math.trunc(positiveMinute / this.MINUTE_IN_HOUR);
-        let minutes : number = positiveMinute % this.MINUTE_IN_HOUR;
-
-        if (hours > 0 && minutes > 0) {
-          string = hours + " ore " + minutes + " minuti";
-        } else if (hours > 0) {
-          string = hours + " ore";
-        } else if (minutes > 0) {
-          string = minutes + " minuti";
-        }
-
-        return string;
+  static fromMinuteToHour(minute : number, amountType : string) {
+      if (minute == 0) {
+        return "0 ore";
       }
+      let string = "";
+      let positiveMinute = minute;
+      if (minute < 0) {
+        //string = string + "-";
+        positiveMinute = minute * -1;
+      }
+      let hours : number = Math.trunc(positiveMinute / this.MINUTE_IN_HOUR);
+      let minutes : number = positiveMinute % this.MINUTE_IN_HOUR;
+
+      if (hours > 0 && minutes > 0) {
+        string = hours + " ore " + minutes + " minuti";
+      } else if (hours > 0) {
+        string = hours + " ore";
+      } else if (minutes > 0) {
+        string = minutes + " minuti";
+      }
+
+      return string;
+    }
+
+  static formatAmount(amount : number, amountType : string) {
+    if (amountType == null) {
+      return "";
+    }
+    let format = "";
+    if (amountType == "units") {
+      if (amount == 0) {
+        return "0 giorni"; // giorno lavorativo";
+      }
+      let units = amount / 100;
+      let percent = amount % 100;
+      let label = " giorni lavorativi";
+      if (units == 1) {
+        label = " giorno lavorativo";
+      }
+      if (units > 0 && percent > 0) {
+        return units + label + " + " + percent + "% di un giorno lavorativo";
+      } else if (units > 0) {
+        return units + label;
+      } else if (percent > 0) {
+        return percent + "% di un giorno lavorativo";
+      }
+      return (amount / 100) + " giorni";
+    }
+    if (amountType == "minutes") {
+      if (amount == 0) {
+        return "0 minuti";
+      }
+      let hours = amount / 60; //since both are ints, you get an int
+      let minutes = amount % 60;
+
+      if (hours > 0 && minutes > 0) {
+        format = hours + " ore " + minutes + " minuti";
+      } else if (hours > 0) {
+        format = hours + " ore";
+      } else if (minutes > 0) {
+        format = minutes + " minuti";
+      }
+    }
+    return format;
+  }
 
 }
 

@@ -23,8 +23,6 @@ function Absences() {
 
   const parameters = personId ? `id=${personId}&beginDate=${beginDate}&endDate=${endDate}` : `beginDate=${beginDate}&endDate=${endDate}`
 
-  console.log('parameters', parameters);
-
   if (typeof window === 'undefined') {
     return <React.Suspense fallback={<Spinner />} />
   } else {

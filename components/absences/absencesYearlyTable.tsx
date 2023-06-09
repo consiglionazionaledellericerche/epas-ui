@@ -1,9 +1,10 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
-import AbsenceYearlyRecapRow from "./absenceYearlyRecapRow";
+import AbsencePopOver from "./absencePopOver";
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import { useState } from 'react';
 
 interface AbsencesYearlyTableProps {
     absencesRecap: Absence[];
@@ -22,8 +23,15 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
      {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
      {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
 
+  const [tooltipContent, setTooltipContent] = useState('');
+  const [showTooltip, setShowTooltip] = useState(true);
+
     return (
-        <Table id="assenzeannuali" className="table table-bordered table-hover table-condensed">
+    <>
+       <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} effect="solid" clickable={true}>
+         {tooltipContent}
+       </Tooltip>
+        <Table id="assenzeannuali" className="table table-bordered table-hover table-condensed" >
             <caption className="sr-only">Assenze Annuali</caption>
             <thead>
             <tr className="warning">
@@ -42,17 +50,19 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
             <tr key={`tr-${month.name}`}>
             <td key={month.name}>{month.name}</td>
               {days.map((day) => (
-                        <td key={`td-${month}-${day}`}>
-                        <a href="#" onClick={(e) => e.preventDefault()}>
-                          <AbsenceYearlyRecapRow key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day}/>
-                        </a>
-                        </td>
+              <td key={`td-${month}-${day}`}>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+              <AbsencePopOver showGroup={true} key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
+              </a>
+              </td>
 
               ))}
             </tr>
             ))}
             </tbody>
         </Table>
+
+       </>
     );
 }
 

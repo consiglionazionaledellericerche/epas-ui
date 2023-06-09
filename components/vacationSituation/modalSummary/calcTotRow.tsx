@@ -14,8 +14,6 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
     subperiod
   }) => {
 
-    console.log("subperiod", subperiod);
-
     let spanPostPartum;
     let tdPostPartum;
     let dataContent=`Utilizzando ulteriori ${subperiod.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${subperiod.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`

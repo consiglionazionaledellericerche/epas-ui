@@ -21,8 +21,6 @@ const AbsencesMonthlyRecapView: React.FC<AbsencesMonthlyRecapViewProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [parameters, setParameters] = useState("");
 
-   console.log("absencesRecap monthName", monthName);
-
    let content;
    if (absencesRecap.length <= 0){
       content = <div><p>Nessuna assenza da visualizzare per il mese selezionato.</p></div>
