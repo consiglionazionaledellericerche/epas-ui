@@ -10,14 +10,16 @@ function SelectPeriod() {
 
     const currentDate = useContext(CurrentDateContext)
 
-    const setContextMonth = React.useCallback((month) => {
-        currentDate.setDateP(currentDate.year, month)
-              setMonth(month)
+    const setContextMonth = React.useCallback((month, year) => {
+        currentDate.setDateP(year, month)
+        setMonth(month)
+        setYear(year)
     }, []);
 
-    const setContextYear = React.useCallback((year) => {
-        currentDate.setDateP(year, currentDate.month)
-              setYear(year)
+    const setContextYear = React.useCallback((month, year) => {
+        currentDate.setDateP(year, month)
+        setMonth(month)
+        setYear(year)
     }, []);
 
 
@@ -33,8 +35,8 @@ function SelectPeriod() {
     return (
         <>
           <ArrowLink month={month} year={year} setContextDate={setContextDate} direction={"left"} />
-          <MonthSelect month={month} setContextMonth={setContextMonth} />
-          <YearSelect year={year} setContextYear={setContextYear} />
+          <MonthSelect month={month} year={year} setContextMonth={setContextMonth} />
+          <YearSelect month={month} year={year} setContextYear={setContextYear} />
           <ArrowLink month={month} year={year} setContextDate={setContextDate} direction={"right"} />
         </>
     )

@@ -8,31 +8,33 @@ import { Spinner } from 'react-bootstrap'
 import { useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from './api/auth/[...nextauth]'
-import MonthRecapView from '../components/monthRecap/monthRecapView'
+import AbsencesMonthlyRecapView from '../components/absences/absencesMonthlyRecapView'
+import DateUtility from "../utils/dateUtility";
 
-function Stampings() {
+function Absences() {
   const router = useRouter()
-  let month_router = router.query.month;
-  let year_router = router.query.year;
-  let personId = router.query.personId;
+  let personId = router.query["personId"]
   const currentDate = useContext(CurrentDateContext)
 
   const { data: session, status } = useSession()
 
-  const year = year_router ? year_router : currentDate.year
-  const month = month_router ? month_router : currentDate.month
+  const year = currentDate.year
+  const month = currentDate.month
 
-  const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
+  const parameters = personId ? `id=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
+
+  console.log('parameters', parameters);
 
   if (typeof window === 'undefined') {
     return <React.Suspense fallback={<Spinner />} />
   } else {
-    const {data, error} = useRequest('/monthrecaps', parameters);
-    if (error) return (<div>Impossibile caricare la situazione mensile</div>);
+    const {data, error} = useRequest('/absences/absenceTypeInMonth', parameters);
+    if (error) return (<div>Impossibile caricare la situazione annuale</div>);
     if (!data) return <React.Suspense fallback={<Spinner />} />
 
+
     return (
-        <MonthRecapView monthRecap={data} month={month} year={year} />
+    <AbsencesMonthlyRecapView absencesRecap={data} year={year} month={month} />
     )
   }
 
@@ -41,9 +43,8 @@ function Stampings() {
 export async function getServerSideProps({ req, res }) {
   return {
     props: {
-      session: await getServerSession(req, res, authOptions),
+      session: await getServerSession(req, res, authOptions)
     }
   }
 }
-
-export default Stampings
+export default Absences

@@ -602,3 +602,34 @@ a#web-stamping-btn {
 }
 
 /***************************/
+.borderCollie {
+border:1px solid red;
+
+}
+
+.tooltip-white {
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+.webui-popover {
+z-index:9999 !important;
+    position: absolute;
+   min-width: 50px;
+       min-height: 32px;
+       padding: 1px;
+       text-align: left;
+       white-space: normal;
+       background-color: #fff;
+       background-clip: padding-box;
+       border: 1px solid #ccc;
+       border: 1px solid rgba(0,0,0,.2);
+       border-radius: 6px;
+       -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+       box-shadow: 0 5px 10px rgba(0,0,0,.2)
+}
+
+
+.tooltip-icon-black {
+  color: rgb(0, 0, 0) !important;
+}

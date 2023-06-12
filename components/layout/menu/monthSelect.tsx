@@ -2,7 +2,7 @@ import { useContext, useState, useCallback } from "react";
 import { Form } from "react-bootstrap";
 import React from 'react'
 
-function MonthSelect({month, setContextMonth}) {
+function MonthSelect({month, year, setContextMonth}) {
 
     let monthsMap = [
         [1, "Gennaio"], [2, "Febbraio"],
@@ -19,7 +19,7 @@ function MonthSelect({month, setContextMonth}) {
                 className="badge-select"
                     value={month}
                     onChange={e => {
-                                    setContextMonth(parseInt(e.target.value));
+                                    setContextMonth(parseInt(e.target.value), year);
                               }}
                     >
                     {monthsMap.map((monthTuple, index) => (

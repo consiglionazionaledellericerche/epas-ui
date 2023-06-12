@@ -20,8 +20,6 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
     subperiod
   }) => {
 
-    console.log("subperiod", subperiod);
-
     let spanContractEnd;
 
     let dataContentContractEnd = `Dal ${DateUtility.formatDate(subperiod.contractEndFirstYearInPeriod)} potrai usufruire anticipatamente di tutti i giorni maturati fino alla fine di questo anno.`;
