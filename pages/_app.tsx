@@ -1,5 +1,6 @@
-import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import '../styles/globals.css'
+import '../styles/epas.css'
 
 import { SSRProvider} from 'react-bootstrap/'
 import { SessionProvider } from "next-auth/react"

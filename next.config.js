@@ -15,7 +15,7 @@ const nextConfig = {
       },
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8080/:path*' // Proxy to Backend
+        destination: process.env.EPAS_SERVICE // Proxy to Backend
       },
     ]
   }
