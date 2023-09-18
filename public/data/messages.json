@@ -6,5 +6,12 @@
   "specified_minutes": "Specificare ore e minuti",
   "all_day_limit": "Niente ma scala una giornata dal limite",
   "specified_minutes_limit": "Niente ma scala i minuti dal limite",
-  "complete_day_and_add_overtime": "Completa il giorno e permette ore in più"
+  "complete_day_and_add_overtime": "Completa il giorno e permette ore in più",
+  "competencesApproved": "Le competenze per questo mese sono state approvate",
+  "competencesToBeApproved": "Le competenze per questo mese sono da approvare",
+  "removeApprovation": "Rimuovi approvazione",
+  "approve": "Approva competenze",
+  "allValidShifts": "Tutti i turni risultano validi",
+  "notAllValidShifts": "Uno o più turni risultano non validi",
+  "warningShifts": "Alcuni turni hanno riduzioni d'orario"
 }
