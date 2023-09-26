@@ -23,16 +23,14 @@ const AbsencesShow: React.FC<AbsencesShowProps> = ({
   }) => {
 
   let loop = absences.map((absence) => (
-        <>
-        <span>
-         <AbsencePopOver showGroup={true}  key={`${month}-${day}`} absencesRecap={absence} year={year} month={month} day={day}  setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
-         </span>
-        </>
+        <span key={`absence-popover-${month}-${day}-${absence.id}`}>
+          <AbsencePopOver showGroup={true} absencesRecap={absence} year={year} month={month} day={day}  setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
+        </span>
   ))
 
   return (<>
             {loop}
-            </>
+          </>
           );
 }
 
