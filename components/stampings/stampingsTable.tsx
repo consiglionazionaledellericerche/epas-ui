@@ -40,7 +40,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
 
                 {
                 [...Array(monthRecap.numberOfInOut),].map((value: undefined, index: number) => (
-                    <React.Fragment key={index+1}>
+                    <React.Fragment key={`stampings-${index+1}`}>
                     <th className="group-left">{index+1}<sup>a</sup> <br/>entrata</th>
                     <th className="group-right">{index+1}<sup>a</sup> <br/>uscita</th>
                     </React.Fragment>
@@ -57,12 +57,12 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             </thead>
             <tbody>
             {monthRecap.daysRecap?.map((pdr) => (
-                    <tr key={pdr.personDay.date} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
+                    <tr key={`tr-${pdr.personDay.date}`} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
                         <td className={pdr.personDay.holiday ? 'festivi' : 'capitalized'}>
                             {DateUtility.formatDateShort(pdr.personDay.date)}
                         </td>
 
-                        <MealTicketShow id="MealTicketShow" personDayRecap={pdr} />
+                        <MealTicketShow personDayRecap={pdr} />
 
                         <th className="invisible"></th>
 
