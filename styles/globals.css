@@ -66,16 +66,6 @@ div.accordion-body h4 {
   padding-bottom: 0.1em;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
-}
-
 .well {
   min-height: 20px;
   padding: 19px;
