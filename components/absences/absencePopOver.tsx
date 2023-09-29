@@ -113,14 +113,14 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
                                                               </>
                                          : groupVerifiedLink = ""
 
-                                        return (  <>
+                                        return (  <span key="{`$row-res-${dday.id}`}">
                                                   {description}
                                                   {groupVerifiedLink}
-                                                  </>
+                                                  </span>
                                         )
                         })
         hasGroupsElem = <>
-                          <li key={`group-${item.code}`} className="list-group-item">
+                          <li key={`group-${item.code}-${day}`} className="list-group-item">
                             <strong>Gruppo</strong><br/>
                             {rowRes}
                           </li>
@@ -134,7 +134,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
                          <strong className="text-success"> Il codice {absenceCode} verrà inviato ad attestati.</strong>
                       </p>
                       <ul className="list-group">
-                        <li key={`list-group-${absenceCode}`} className="list-group-item">
+                        <li key={`list-group-${absenceCode}-${day}`} className="list-group-item">
                           <strong>Codice</strong> <strong>{absenceCode}</strong><br/>
                           <strong>Descrizione</strong> {absenceDescription}<br/>
                           <strong>Data</strong> {absenceData}<br/>
