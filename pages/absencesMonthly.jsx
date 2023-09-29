@@ -27,16 +27,14 @@ function Absences() {
 
   if (typeof window === 'undefined') {
     return <React.Suspense fallback={<Spinner />} />
-  } else {
-    const {data, error} = useRequest('/absences/absenceTypeInMonth', parameters);
-    if (error) return (<div>Impossibile caricare la situazione annuale</div>);
-    if (!data) return <React.Suspense fallback={<Spinner />} />
-
-
-    return (
-    <AbsencesMonthlyRecapView absencesRecap={data} year={year} month={month} />
-    )
   }
+  const {data, error} = useRequest('/absences/absenceTypeInMonth', parameters);
+  if (error) return (<div>Impossibile caricare la situazione annuale</div>);
+  if (!data) return <React.Suspense fallback={<Spinner />} />
+
+  return (
+  <AbsencesMonthlyRecapView absencesRecap={data} year={year} month={month} />
+  )
 
 }
 

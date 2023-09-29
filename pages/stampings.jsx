@@ -26,15 +26,14 @@ function Stampings() {
 
   if (typeof window === 'undefined') {
     return <React.Suspense fallback={<Spinner />} />
-  } else {
-    const {data, error} = useRequest('/monthrecaps', parameters);
-    if (error) return (<div>Impossibile caricare la situazione mensile</div>);
-    if (!data) return <React.Suspense fallback={<Spinner />} />
-
-    return (
-        <MonthRecapView monthRecap={data} month={month} year={year} />
-    )
   }
+  const {data, error} = useRequest('/monthrecaps', parameters);
+  if (error) return (<div>Impossibile caricare la situazione mensile</div>);
+  if (!data) return <React.Suspense fallback={<Spinner />} />
+
+  return (
+      <MonthRecapView monthRecap={data} month={month} year={year} />
+  )
 
 }
 
