@@ -18,7 +18,8 @@ const nextConfig = {
         destination: process.env.EPAS_SERVICE // Proxy to Backend
       },
     ]
-  }
+  },
+  output: 'standalone'
 }
 
 module.exports = nextConfig
