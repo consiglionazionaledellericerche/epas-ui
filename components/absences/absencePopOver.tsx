@@ -13,15 +13,15 @@ import { useState } from 'react';
 
 library.add(faPaperPlane);
 
-function doesNotStartWithZero(variable) {
+function doesNotStartWithZero(variable:number) {
   return variable.toString()[0] !== '0';
 }
 
 interface AbsencePopOverProps {
-    absencesRecap: Absence[];
-    year: integer;
+    absencesRecap;
+    year: number;
     month: string;
-    day: integer;
+    day: number;
     showGroup: boolean;
     setShowTooltip;
     setTooltipContent
@@ -39,7 +39,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
-    let dday = day < 10 & doesNotStartWithZero(day) ? `0${day}` : day;
+    let dday = day < 10 && doesNotStartWithZero(day) ? `0${day}` : day;
     let item;
 
     try{

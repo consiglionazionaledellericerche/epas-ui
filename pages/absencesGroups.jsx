@@ -1,9 +1,10 @@
+import { useRequest } from "../request/useRequest"
 import { useRouter } from 'next/router'
 
 import React, { useContext, useState, useEffect } from 'react'
 
 import { CurrentDateContext, CurrentDateProvider } from '../contexts/currentDateContext'
-import { useRequest } from "../request/useRequest"
+
 import { Spinner } from 'react-bootstrap'
 import { useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
@@ -107,9 +108,9 @@ function AbsencesGroups() {
                                   {Object.entries(absencePeriod.daysInPeriod).map(([date, dp]) => (
                                     <React.Fragment key={dp.day}>
                                         {dp.rowRecap.map((rowRecap) => (
-                                        <tr className={rowRecap.beforeInitialization ? "bg-grey" : ""}>
-                                          <td key={rowRecap.id}>{rowRecap.date ? DateUtility.formatDate(rowRecap.date) : ""}</td>
-                                          <td key={rowRecap.id}>
+                                        <tr key={rowRecap.id} className={rowRecap.beforeInitialization ? "bg-grey" : ""}>
+                                          <td>{rowRecap.date ? DateUtility.formatDate(rowRecap.date) : ""}</td>
+                                          <td>
                                           <a href="#" onClick={(e) => e.preventDefault()}>
                                           <AbsencePopOver showGroup={false} key={rowRecap.id}
                                                                 absencesRecap={rowRecap.absence}
@@ -153,7 +154,7 @@ function AbsencesGroups() {
     })
 
     let groupOption = <>
-    {data.groups.map((g) => <option value={g.id}>{g.description}</option>)}
+    {data.groups.map((g) => <option key={g.id} value={g.id}>{g.description}</option>)}
     </>
 
     return (<>

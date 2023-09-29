@@ -31,7 +31,7 @@ const DateUse: React.FC<DateUseProps> = ({
                 {
                   data.absencesUsed?.map((absence) => {
                   return (
-                      <tr>
+                      <tr key={absence}>
                          <td data-order="{absence.personDay.date}">{DateUtility.formatDate(absence.personDay.date)}</td>
                          <td>{absence.absenceType.code}</td>
                          <td>{absence.absenceType.description}</td>
