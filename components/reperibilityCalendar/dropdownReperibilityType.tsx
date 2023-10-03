@@ -46,7 +46,7 @@ const DropdownReperibilityType = ({ onChange }) => {
         .catch((error) => {
           console.error('Errore nella chiamata API:', error);
         });
-    }, [apiUrl]);
+    }, [apiUrl, accessToken]);
 
   const handleSelectChange = (option) => {
     setSelectedOption(option);

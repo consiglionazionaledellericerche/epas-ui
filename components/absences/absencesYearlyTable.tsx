@@ -6,6 +6,36 @@ import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 import { useState } from 'react';
 
+function doesNotStartWithZero(variable:number) {
+  return variable.toString()[0] !== '0';
+}
+
+function getTdElem(day, year, month, setTooltipContent, setShowTooltip, absencesRecap) {
+    let dday = day < 10 && doesNotStartWithZero(day) ? `0${day}` : day;
+    let item;
+
+    try{
+        item = absencesRecap.find(item => item.date === `${year}-${month.id}-${dday}`);
+    }catch {
+        item = absencesRecap;
+    }
+
+    if (!item  || item ===null){
+      return (<div></div>);
+    }
+    else {
+       return (<a href="#" onClick={(e) => e.preventDefault()}>
+               <AbsencePopOver showGroup={true}
+               key={`${month}-${day}`}
+               absencesRecap={absencesRecap}
+               item={item}
+               day={day}
+               setTooltipContent={setTooltipContent}
+               setShowTooltip={setShowTooltip} />
+               </a>);
+    }
+}
+
 interface AbsencesYearlyTableProps {
     absencesRecap: Absence[];
     year: integer;
@@ -51,9 +81,7 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
             <td key={month.name}>{month.name}</td>
               {days.map((day) => (
               <td key={`td-${month}-${day}`}>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-              <AbsencePopOver showGroup={true} key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
-              </a>
+              {getTdElem(day, year, month, setTooltipContent, setShowTooltip, absencesRecap)}
               </td>
 
               ))}

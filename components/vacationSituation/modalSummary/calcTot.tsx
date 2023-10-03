@@ -18,8 +18,8 @@ const CalcTot: React.FC<CalcTotProps> = ({
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
-	     I giorni totali di maturazione per l'anno {data.year} sono <strong>{data.accruedDayTotal}</strong>.<br/>
-	     { !data.postPartumisEmpty ? (<span>Dai giorni dell'anno sono sottratti <strong>{data.postPartumSize}</strong>
+	     I giorni totali di maturazione per l&#39;anno {data.year} sono <strong>{data.accruedDayTotal}</strong>.<br/>
+	     { !data.postPartumisEmpty ? (<span>Dai giorni dell&#39;anno sono sottratti <strong>{data.postPartumSize}</strong>
 	                                  giorni di assenza usufruiti che non contribuiranno alla maturazione.</span>)  : ''
         }
 	     </p>
@@ -30,7 +30,7 @@ const CalcTot: React.FC<CalcTotProps> = ({
            <th>Data di Maturazione</th>
            <th>Maturati</th>
            <th>Progressione</th>
-           <th>Giorni nell'anno</th>
+           <th>Giorni nell&#39;anno</th>
            { !data.postPartumisEmpty ? <th>Giorni riduzione</th> :''}
          </tr>
          </thead>

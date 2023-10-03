@@ -10,27 +10,27 @@ function SelectPeriod() {
 
     const currentDate = useContext(CurrentDateContext)
 
+    const [year, setYear] = useState(currentDate.year)
+    const [month, setMonth] = useState(currentDate.month)
+
     const setContextMonth = React.useCallback((month, year) => {
         currentDate.setDateP(year, month)
         setMonth(month)
         setYear(year)
-    }, []);
+    }, [currentDate, setMonth, setYear]);
 
     const setContextYear = React.useCallback((month, year) => {
         currentDate.setDateP(year, month)
         setMonth(month)
         setYear(year)
-    }, []);
+    }, [currentDate,  setMonth, setYear]);
 
 
     const setContextDate = React.useCallback((month, year) => {
           currentDate.setDateP(year, month)
           setMonth(month)
           setYear(year)
-    }, []);
-
-    const [year, setYear] = useState(currentDate.year)
-    const [month, setMonth] = useState(currentDate.month)
+    }, [currentDate, setMonth, setYear]);
 
     return (
         <>

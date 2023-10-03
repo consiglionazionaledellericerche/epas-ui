@@ -11,9 +11,6 @@ function YearSelect({year, month, setContextYear}) {
     const { data: session, status } = useSession()
     const parameters = "";
 
-    if (typeof window === 'undefined') {
-      return <React.Suspense fallback={<Spinner />} />
-    }
    const {data, error} = useRequest('/init/yearsdropdown', parameters);
    if (error) return (<div>Impossibile caricare la situazione mensile</div>);
    if (!data) return <React.Suspense fallback={<Spinner />} />

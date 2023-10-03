@@ -24,9 +24,6 @@ function Stampings() {
 
   const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
 
-  if (typeof window === 'undefined') {
-    return <React.Suspense fallback={<Spinner />} />
-  }
   const {data, error} = useRequest('/monthrecaps', parameters);
   if (error) return (<div>Impossibile caricare la situazione mensile</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />

@@ -44,10 +44,8 @@ function AbsencesGroups() {
 
   const parameters = personId ? `id=${personId}&from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}` : `from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}`
 
-  if (typeof window === 'undefined') {
-    return <React.Suspense fallback={<Spinner />} />
-  }
   const {data, error} = useRequest('/absencesGroups/groupStatus', parameters);
+
   if (error) return (<div>Impossibile caricare la situazione delle assenze</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />
 

@@ -37,7 +37,7 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
         <br/>
         <ul className="list-group">
           {recapData.workDaysReperibilityCalculatedCompetences?.map(recap => (
-          <li className={classNameRecap1}>
+          <li key={`li-${recap.fullname}-1`} className={classNameRecap1}>
             {recap.fullname} <span className="label label-info pull-right">{recap.count}</span>
           </li>
           ))}
@@ -47,7 +47,7 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
         <br/>
         <ul className="list-group">
           {recapData.holidaysReperibilityCalculatedCompetences?.map(recap => (
-          <li className={classNameRecap2}>
+          <li key={`li-${recap.fullname}-2`} className={classNameRecap2}>
             {recap.fullname} <span className="label label-danger pull-right">{recap.count}</span>
           </li>
           ))}
