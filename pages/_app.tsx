@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../styles/globals.css'
 import '../styles/epas.css'
 
-import { SSRProvider} from 'react-bootstrap/'
 import { SessionProvider } from "next-auth/react"
 
 import type { AppProps } from 'next/app'
@@ -37,7 +36,6 @@ export default function App({ Component, pageProps: { session, ...pageProps }}: 
 
   return (
   <SessionProvider session={session}>
-    <SSRProvider>
         <SWRConfig value={{
                            fetcher: async (url) => {
                                const res = await fetch(url, {
@@ -55,7 +53,6 @@ export default function App({ Component, pageProps: { session, ...pageProps }}: 
             </Layout>
           </CurrentDateProvider>
         </SWRConfig>
-    </SSRProvider>
   </SessionProvider>
   )
 }
