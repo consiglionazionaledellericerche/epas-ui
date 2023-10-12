@@ -6,34 +6,33 @@ import React from 'react'
 
 import Link from 'next/link';
 
-function ArrowLink({year, month, direction, setContextDate}) {
+function ArrowLink({year, month, direction, setContextDate}: { year: number, month: number, direction: string, setContextDate: Function }) {
 
-   year =  parseInt(year)
-   month =  parseInt(month)
+   let yearN =  year
+   let monthN =  month
 
     function handleClick() {
         if (direction == 'left'){
-          if (month == 1)
+          if (monthN == 1)
           {
-            month = 12
-            year = year -1
+            monthN = 12
+            yearN = yearN -1
           }
           else {
-            month = month -1
+            monthN = monthN -1
           }
         }
         else {
-          if (month == 12)
+          if (monthN == 12)
           {
-            month = 1
-            year = year + 1
+            monthN = 1
+            yearN = yearN + 1
           }
           else {
-            month = month + 1
+            monthN = monthN + 1
           }
         }
-
-        setContextDate(month, year)
+        setContextDate(monthN, yearN)
       }
 
     return (

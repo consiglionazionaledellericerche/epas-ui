@@ -1,9 +1,10 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 import CalcAccRow from "./calcAccRow";
+import {VacationSummary} from "../../../types/vacationSummary";
 
 interface CalcAccProps {
-    data;
+    data: VacationSummary;
 }
 
 const CalcAcc: React.FC<CalcAccProps> = ({

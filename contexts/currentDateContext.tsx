@@ -1,15 +1,22 @@
 import { createContext, useState } from 'react'
 
-// Create Context object.
-const CurrentDateContext = createContext()
+// Definisci il contesto
+export interface CurrentDateContextType {
+  year: number;
+  month: number;
+  setDateP: (year: number, month: number) => void;
+}
 
-const CurrentDateProvider = ({ children }) => {
+// Create Context object.
+const CurrentDateContext = createContext<CurrentDateContextType | undefined>(undefined);
+
+const CurrentDateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const cd = new Date()
   const [year, setYear] = useState(cd.getFullYear())
   const [month, setMonth] = useState(cd.getMonth() + 1)
 
-  const setDateP = (getyear, getmonth) => {
+  const setDateP = (getyear: number, getmonth: number) => {
     setYear(getyear);
     setMonth(getmonth);
   };

@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 
 // Definisci un nome per il componente OauthButton
-const OauthButton = React.forwardRef(function OauthButton(
-  { onClick, href },
-  ref
-) {
+const OauthButton = React.forwardRef(function OauthButton(ref) {
   function handleClick() {
     signIn("keycloak", { callbackUrl: "/stampings" });
   }
@@ -25,10 +23,7 @@ const OauthButton = React.forwardRef(function OauthButton(
   );
 });
 
-// Assegna un nome al componente LoginOauth
-LoginOauth.displayName = "LoginOauth";
-
-const LoginOauth = ({ children }) => {
+const LoginOauth = () => {
   const [initialRenderComplete, setInitialRenderComplete] = useState(false);
 
   useEffect(() => {
@@ -46,5 +41,8 @@ const LoginOauth = ({ children }) => {
     </div>
   );
 };
+// Assegna un nome al componente LoginOauth
+LoginOauth.displayName = "LoginOauth";
+
 
 export default LoginOauth;

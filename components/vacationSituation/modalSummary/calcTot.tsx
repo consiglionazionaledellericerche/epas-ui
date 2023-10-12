@@ -2,13 +2,14 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import CalcTotRow from "./calcTotRow";
 import { useState, useEffect } from 'react';
-import { getServerSession } from "next-auth/next"
-import { useSession } from "next-auth/react"
-import { useRequest } from "../../../request/useRequest"
-import { Spinner } from 'react-bootstrap'
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+import { useRequest } from "../../../request/useRequest";
+import { Spinner } from 'react-bootstrap';
+import {VacationSummary} from "../../../types/vacationSummary";
 
 interface CalcTotProps {
-    data;
+    data: VacationSummary;
 }
 
 const CalcTot: React.FC<CalcTotProps> = ({

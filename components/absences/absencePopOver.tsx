@@ -7,24 +7,22 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRequest } from "../../request/useRequest";
-import messages from '../../public/data/messages.json';
 import DateUtility from "../../utils/dateUtility";
 import { useState } from 'react';
+import { AbsenceShow } from "../../types/absenceShow";
+import {useTranslations} from 'next-intl';
 
 library.add(faPaperPlane);
 
-
 interface AbsencePopOverProps {
-    absencesRecap;
     day: number;
     showGroup: boolean;
-    setShowTooltip;
-    setTooltipContent;
-    item;
+    setShowTooltip: Function;
+    setTooltipContent: Function;
+    item: AbsenceShow;
 }
 
 const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
-    absencesRecap,
     day,
     showGroup,
     setShowTooltip,
@@ -32,8 +30,9 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
     item
   }) => {
 
-  const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
 
+    const t = useTranslations('Message');
 
     let absenceCode;
     let absencejustifiedTime;
@@ -54,7 +53,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
 
     absenceDescription = data.absenceType.description;
     absenceData = DateUtility.formatDate(data.date);
-    absenceJustifiedType = messages[data.justifiedType];
+    absenceJustifiedType = t(data.justifiedType);
 
     if (data.justifiedTime) {
       absenceJustifiedTimeElem = <>
@@ -75,10 +74,10 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
     }
 
     if (data.absenceType.hasGroups && showGroup) {
-      let groupVerified = false
-      let description = ''
-      let groupVerifiedLink = ''
-      let rowRes = data.replacingAbsencesGroup?.map((replacingGroup) => {
+      let groupVerified = false;
+      let description;
+      let groupVerifiedLink;
+      let rowRes = data.replacingAbsencesGroup?.map((replacingGroup:any) => {
                                         let query = {
                                                       pathname: '/absencesGroups',
                                                       query: { groupAbsenceTypeId: replacingGroup.id, personId: data.personDay.personId, from:DateUtility.formatDateLocal(data.date) }

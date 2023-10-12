@@ -6,7 +6,7 @@ import { useRequest } from "../../../request/useRequest"
 import { Spinner } from 'react-bootstrap'
 
 
-function YearSelect({year, month, setContextYear}) {
+function YearSelect({year, month, setContextYear}: { year: number, month: number, setContextYear: Function }) {
 
     const { data: session, status } = useSession()
     const parameters = "";
@@ -25,7 +25,7 @@ function YearSelect({year, month, setContextYear}) {
                     setContextYear(month, parseInt(e.target.value));
                 }}
                 >
-                {data.years.map((year, index) => (
+                {data.years.map((year: number, index: number) => (
                         <option key={index} value={year}>{year}</option>
                 ))}
             </Form.Select>

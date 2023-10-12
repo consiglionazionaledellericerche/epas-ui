@@ -16,10 +16,13 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
     let res;
     let withLimit;
 
-    let init;
-    let toUse;
+    let init: React.ReactNode | null = null;
+    let toUse: React.ReactNode | null = null;
 
     res = periodChain.periods?.map((absencePeriod) => {
+
+       let keyDesc = "absenceDescription$" + DateUtility.formatDate(absencePeriod.from)+"$"+DateUtility.formatDate(absencePeriod.to);
+       let keyLimit = "absenceLimit$" +DateUtility.formatDate(absencePeriod.from)+"$"+DateUtility.formatDate(absencePeriod.to);
 
       absencePeriod.takableWithLimit ? (
               withLimit = <>
@@ -61,9 +64,6 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
            </strong>
            </>
        ) : ( toUse = '' )
-
-       let keyDesc = "absenceDescription$" + absencePeriod.groupAbsenceType.description;
-       let keyLimit = "absenceLimit$" + absencePeriod.groupAbsenceType.description;
 
         return(
           <>

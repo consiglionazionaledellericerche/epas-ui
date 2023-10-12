@@ -7,9 +7,9 @@ import VacationPeriodTable from "./vacationPeriodTable";
 import VacationModal from "./vacationModal";
 
 
-interface VacationSituationView {
-        year: int;
-        month: int;
+interface VacationSituationProps {
+        year: number;
+        month: number;
         data: VacationData
 }
 

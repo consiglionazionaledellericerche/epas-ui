@@ -1,4 +1,4 @@
-import { VacationSituations } from "./vacationSituations"
+import { VacationSituation } from "./vacationSituation"
 import { PeriodChain } from "./periodChain"
 import {Contract} from "./contract"
 
@@ -7,7 +7,7 @@ export type VacationData = {
     topQualification: boolean
     year: number
     month: number
-    vacationSituations: VacationSituations
+    vacationSituations: VacationSituation[]
     // tipo da creare
     contracts: Contract[]
     // tipo da creare

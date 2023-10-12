@@ -1,36 +1,48 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import MonthSelect from './monthSelect'
 import YearSelect from './yearSelect'
 import ArrowLink from './arrowLink'
 import React from 'react'
 
-import { CurrentDateContext, CurrentDateProvider } from '../../../contexts/currentDateContext';
+import { CurrentDateContext, CurrentDateProvider, CurrentDateContextType } from '../../../contexts/currentDateContext';
 
 function SelectPeriod() {
+    const currentDate = useContext(CurrentDateContext) as CurrentDateContextType | undefined;
 
-    const currentDate = useContext(CurrentDateContext)
+    const [year, setYear] = useState(currentDate ? currentDate.year : 0);
+    const [month, setMonth] = useState(currentDate ? currentDate.month : 0);
 
-    const [year, setYear] = useState(currentDate.year)
-    const [month, setMonth] = useState(currentDate.month)
-
-    const setContextMonth = React.useCallback((month, year) => {
-        currentDate.setDateP(year, month)
-        setMonth(month)
-        setYear(year)
-    }, [currentDate, setMonth, setYear]);
-
-    const setContextYear = React.useCallback((month, year) => {
-        currentDate.setDateP(year, month)
-        setMonth(month)
-        setYear(year)
-    }, [currentDate,  setMonth, setYear]);
+    useEffect(() => {
+        if (currentDate) {
+            setYear(currentDate.year);
+            setMonth(currentDate.month);
+        }
+    }, [currentDate]);
 
 
-    const setContextDate = React.useCallback((month, year) => {
-          currentDate.setDateP(year, month)
-          setMonth(month)
-          setYear(year)
-    }, [currentDate, setMonth, setYear]);
+    const setContextMonth = React.useCallback((selectedMonth: number, selectedYear: number) => {
+        if (currentDate) {
+          currentDate.setDateP(selectedYear, selectedMonth);
+          setMonth(selectedMonth);
+          setYear(selectedYear);
+        }
+    }, [currentDate]);
+
+    const setContextYear = React.useCallback((selectedMonth: number, selectedYear: number) => {
+        if (currentDate) {
+          currentDate.setDateP(selectedYear, selectedMonth);
+          setMonth(selectedMonth);
+          setYear(selectedYear);
+        }
+    }, [currentDate]);
+
+    const setContextDate = React.useCallback((selectedMonth: number, selectedYear: number) => {
+        if (currentDate) {
+          currentDate.setDateP(selectedYear, selectedMonth);
+          setMonth(selectedMonth);
+          setYear(selectedYear);
+        }
+    }, [currentDate]);
 
     return (
         <>

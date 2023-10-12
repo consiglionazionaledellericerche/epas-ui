@@ -5,8 +5,9 @@ import Button from 'react-bootstrap/Button';
 interface VacationSummaryRowProps {
     vacationSummary: VacationSummary;
     param: string;
-    setModal;
-    setParameters;
+    setModal: Function;
+    setParameters: Function;
+    setTitleModal: Function;
 }
 
 const VacationSummaryRow: React.FC<VacationSummaryRowProps> = ({

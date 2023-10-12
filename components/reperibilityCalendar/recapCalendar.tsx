@@ -1,14 +1,17 @@
 import React from "react";
 import { Col, Row } from 'react-bootstrap';
-import messages from '../../public/data/messages.json';
+import {useTranslations} from 'next-intl';
+import { RecapReperibility } from "../../types/recapReperibility";
 
 interface RecapCalendarProps {
-    recapData;
+    recapData: RecapReperibility;
 }
 
 const RecapCalendar: React.FC<RecapCalendarProps> = ({
     recapData
   }) => {
+
+    const t = useTranslations('Message');
 
     let classNameApproved1 = recapData?.reperibilityTypeMonth?.approved ? "list-group-item-warning":"list-group-item-info"
     let classNameApproved2 = recapData?.reperibilityTypeMonth?.approved ? "list-group-item-warning":"list-group-item-danger"
@@ -17,11 +20,11 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
     let divApproved = recapData?.reperibilityTypeMonth?.approved ? (
                         <>
                         <div>
-                        <em className="text-muted">{messages["competencesApproved"]}</em>
+                        <em className="text-muted">{t("competencesApproved")}</em>
                       </div>
                       <br/></>) :
                         (<><div>
-                          <em className="text-muted">{messages["competencesToBeApproved"]}</em>
+                          <em className="text-muted">{t("competencesToBeApproved")}</em>
                         </div>
                         <br/></>);
     return(
@@ -33,7 +36,7 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
                                           height: "auto",
                                           maxHeight: "-webkit-fill-available"
                                         }}>
-        <h3>Giorni di {recapData.reperibility?.monthlyCompetenceType.name} feriale validi</h3>
+        <h3>Giorni di {recapData.reperibility?.monthlyCompetenceType?.name} feriale validi</h3>
         <br/>
         <ul className="list-group">
           {recapData.workDaysReperibilityCalculatedCompetences?.map(recap => (
@@ -43,7 +46,7 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
           ))}
         </ul>
         <br/>
-        <h3>Giorni di {recapData.reperibility?.monthlyCompetenceType.name} festiva validi</h3>
+        <h3>Giorni di {recapData.reperibility?.monthlyCompetenceType?.name} festiva validi</h3>
         <br/>
         <ul className="list-group">
           {recapData.holidaysReperibilityCalculatedCompetences?.map(recap => (

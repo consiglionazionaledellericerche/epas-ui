@@ -3,13 +3,14 @@ import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import { AbsenceType } from "../../types/absenceType";
 
 interface AbsencesMonthlyTableProps {
-    absencesRecap;
-    year: integer;
-    month: integer;
-    setModal;
-    setParameters;
+    absencesRecap: AbsenceType[];
+    year: number;
+    month: number;
+    setModal: Function;
+    setParameters: Function;
 }
 
 const AbsencesMonthlyTable: React.FC<AbsencesMonthlyTableProps> = ({
@@ -20,7 +21,7 @@ const AbsencesMonthlyTable: React.FC<AbsencesMonthlyTableProps> = ({
     setParameters
   }) => {
 
-    function setModalParam(code, month, year){
+    function setModalParam(code: string | undefined, month:number, year:number){
       setModal(true);
       let param = "code="+code+"&year="+year+"&month="+month;
       setParameters(param);
