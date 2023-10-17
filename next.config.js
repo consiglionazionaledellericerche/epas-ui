@@ -6,6 +6,7 @@ const nextConfig = {
       NEXTAUTH_URL: process.env.NEXTAUTH_URL,
       OAUTH_LOGIN: process.env.OAUTH_LOGIN,
       LDAP_LOGIN: process.env.LDAP_LOGIN,
+      EPAS_HELPDESK_SERVICE: process.env.EPAS_HELPDESK_SERVICE,
     },
   reactStrictMode: true,
   swcMinify: true,

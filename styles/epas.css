@@ -633,3 +633,19 @@ z-index:9999 !important;
 .tooltip-icon-black {
   color: rgb(0, 0, 0) !important;
 }
+
+.custom-modal {
+  max-width: 800px; /* Imposta la larghezza massima della modale */
+}
+
+.centered-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+.centered-modal .modal-dialog {
+  max-width: none;
+  width: auto;
+}
