@@ -12,28 +12,31 @@ import dotenv from 'dotenv/config';
 class FeedbackModal  extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {screenshot: [],
-                  show:false,
-                  title: "",
-                  url: process.env.EPAS_HELPDESK_SERVICE,
+    console.log("props", props);
+    this.state = {screenshot: "",
+                  show: props.tmpshow,
+                  url: process.env.EPAS_HELPDESK_SERVICE+'/send',
                   selectedCategory:"",
                   categories:[{'label':'Problemi Tecnici - Epas', 'value':'Problemi Tecnici - Epas'},
                                {'label':'Problemi Amministrativi - Epas', 'value':'Problemi Amministrativi - Epas'}],
-                  dataToSend:{}}
+                  dataToSend:{},
+                  accessToken:null}
   }
 
   async componentDidUpdate(propsPrecedenti) {
     if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
-      this.setState({'data': null,
-      'show':true,
-      'title':'',
-      'screenshot':this.props.screenshot,
-      'dataToSend':this.props.dataToSend})
+      this.setState({
+      show: this.props.tmpshow,
+      title:'',
+      screenshot:this.props.screenshot,
+      dataToSend:this.props.dataToSend,
+      accessToken:this.props.accessToken})
     }
   }
 
   handleClose = () => {
     this.setState ({'show': false})
+    this.props.close();
   }
 
   handleDescriptionChange = (e) => {
@@ -48,26 +51,39 @@ class FeedbackModal  extends React.Component {
 
   handleSubmit = () => {
     const { description, selectedCategory } = this.state;
-    this.state.dataToSend.screenshot = [this.state.screenshot]
+    this.state.dataToSend.img = this.state.screenshot.replace("data:image/png;base64,","")
     this.state.dataToSend.note = this.state.description
     this.state.dataToSend.category = this.state.selectedCategory
 
+    let headersJson = {'Accept': 'application/json',
+                       'Content-Type': 'application/json'}
+    if (this.state.dataToSend.session === null) {
+      this.state.dataToSend.session={"user": ""};
+
+    } else {
+    let new_session = this.state.dataToSend.session;
+      new_session.user = this.state.dataToSend.session.user.name;
+      this.state.dataToSend.session = new_session;
+      headersJson = {'Accept': 'application/json',
+                     'Content-Type': 'application/json',
+                     Authorization: 'Bearer '+this.state.accessToken}
+    }
+
     fetch(this.state.url, {
       method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: {'Accept': 'application/json',
+                                      'Content-Type': 'application/json'},
       body: JSON.stringify(this.state.dataToSend) // Converte l'oggetto JavaScript in una stringa JSON
     })
       .then(response => {
         if (!response.ok) {
+        console.log("response no ok", response)
           throw new Error('Errore nella richiesta PUT');
         }
-        return response.json();
       })
       .then(data => {
         console.log('Richiesta PUT completata con successo:', data);
+        this.handleClose()
       })
       .catch(error => {
         console.error('Errore durante la richiesta PUT:', error);
@@ -78,7 +94,6 @@ class FeedbackModal  extends React.Component {
  render() {
     return (
               <Modal
-                      tmpshow= {this.props.tmpshow.toString()}
                       show={this.state.show}
                       onHide={this.handleClose}
                       cancel={this.state.close}
@@ -121,11 +136,11 @@ class FeedbackModal  extends React.Component {
                       <br/>
                       <div>
                         <h6>Screenshot Catturato:</h6>
-                        <img src={this.state.screenshot} alt="Screenshot" style={{ width: '400px', height: '250px' }} />
+                        <img src={this.state.screenshot} alt="Screenshot" style={{ width: '400px', height: '300px' }} />
                       </div>
                       </Modal.Body>
                       <Modal.Footer>
-                        <Button onClick={this.props.close}>Cancel</Button>
+                        <Button onClick={this.handleClose}>Cancel</Button>
                         <Button onClick={this.handleSubmit}>Invia</Button>
                       </Modal.Footer>
                     </Modal>

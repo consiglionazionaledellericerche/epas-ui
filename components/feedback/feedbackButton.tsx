@@ -7,14 +7,16 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const FeedbackButton = () => {
   const [screenshot, setScreenshot] = useState(null);
-  const [titleModal, setTitleModal] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [parameters, setParameters] = useState("");
-
-  let feedbackInstance = null;
 
   const navigatorData = navigator;
   const { data: session, status } = useSession()
+  const accessToken = session != null ? session.accessToken: "";
+
+  let plugins = [];
+  for (const plugin of navigator.plugins) {
+    plugins.push(plugin.name);
+  }
 
   let dataToSend = {'session':session,
                     'url':window.location.href,
@@ -26,14 +28,13 @@ const FeedbackButton = () => {
                                 "onLine": navigatorData.onLine,
                                 "platform": navigatorData.platform,
                                 "userAgent": navigatorData.userAgent,
-                                "plugins": navigatorData.plugins},
-                    'screenshot':""}
+                                "plugins": plugins},
+                    'img':null}
 
   const captureScreenshot = async () => {
     const bodyScreen = await html2canvas(document.body);
-    const screenshotData = bodyScreen.toDataURL()
     const screenshotData64 = bodyScreen.toDataURL('image/png')
-    setScreenshot(screenshotData);
+    setScreenshot(screenshotData64);
     setShowModal(true);
   };
 
@@ -43,12 +44,15 @@ const FeedbackButton = () => {
 
   return (
   <>
-    <FeedbackModal title={titleModal}
+    <FeedbackModal
     tmpshow={showModal}
-    close={() => setShowModal(false)}
-    parameters={parameters}
+    close={() => {
+                    setShowModal(false);
+                    setScreenshot(null); // Resetta lo screenshot quando la modale viene chiusa
+                  }}
     screenshot={screenshot}
-    dataToSend={dataToSend} />
+    dataToSend={dataToSend}
+    accessToken = {accessToken}/>
     &nbsp;&nbsp;
     <button onClick={handleFeedbackClick}><FontAwesomeIcon icon={faEnvelope} /> Invia segnalazione</button>
     </>
