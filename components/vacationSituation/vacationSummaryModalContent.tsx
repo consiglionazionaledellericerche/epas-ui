@@ -6,10 +6,11 @@ import DateUse from './modalSummary/dateUse'
 import DateReduction from './modalSummary/dateReduction'
 import CalcTot  from './modalSummary/calcTot'
 import CalcAcc  from './modalSummary/calcAcc'
+import {PersonVacationSummary} from "../../types/personVacationSummary"
 
 interface VacationSummaryModalContentProps {
-  data;
-  parameters;
+  data: PersonVacationSummary;
+  parameters:string;
 }
 
 const VacationSummaryModalContent: React.FC<VacationSummaryModalContentProps> = ({
@@ -25,22 +26,22 @@ parameters
               className="mb-3"
             >
               <Tab eventKey="infoTot" title="Riepilogo">
-                <InfoTot data={data}/>
+                <InfoTot data={data.vacationSummary}/>
               </Tab>
               <Tab eventKey="dateUse" title="Date Utilizzo">
-                <DateUse data={data}/>
+                <DateUse data={data.vacationSummary}/>
               </Tab>
-              {!data.postPartumisEmpty ? (
+              {!data.vacationSummary.postPartumisEmpty ? (
                 <Tab eventKey="dateReduction" title="Date Riduzione">
-                  <DateReduction data={data}/>
+                  <DateReduction data={data.vacationSummary}/>
                 </Tab>
               ) : ('')}
 
               <Tab eventKey="calcTot" title="Calcolo Giorni Totali">
-                <CalcTot data={data}/>
+                <CalcTot data={data.vacationSummary}/>
               </Tab>
               <Tab eventKey="calcAcc" title="Calcolo Giorni Maturati">
-                  <CalcAcc data={data}/>
+                  <CalcAcc data={data.vacationSummary}/>
               </Tab>
               </Tabs>
             </>

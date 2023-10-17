@@ -1,10 +1,46 @@
 import { VacationSummary } from "./vacationSummary"
+import { Contract } from "./contract"
 
 export type VacationSituation = {
-    personId: number
-    year: number
-    date: Date
-    lastYear: VacationSummary
-    currentYear: VacationSummary
-    permissions: VacationSummary
-}
+    /**
+     *
+     * @type {number}
+     * @memberof VacationSituationDto
+     */
+    personId?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof VacationSituationDto
+     */
+    year?: number;
+    /**
+     *
+     * @type {Date}
+     * @memberof VacationSituationDto
+     */
+    date?: Date;
+    /**
+     *
+     * @type {ContractShowDto}
+     * @memberof VacationSituationDto
+     */
+    contract: Contract;
+    /**
+     *
+     * @type {VacationSummaryTerseDto}
+     * @memberof VacationSituationDto
+     */
+    lastYear: VacationSummary;
+    /**
+     *
+     * @type {VacationSummaryTerseDto}
+     * @memberof VacationSituationDto
+     */
+    currentYear: VacationSummary;
+    /**
+     *
+     * @type {VacationSummaryTerseDto}
+     * @memberof VacationSituationDto
+     */
+    permissions: VacationSummary;}

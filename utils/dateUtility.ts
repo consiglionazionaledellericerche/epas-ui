@@ -17,29 +17,53 @@ class DateUtility {
       return monthName;
     }
 
-    static formatDateShort(date : Date) {
-        return moment(date).locale('it-IT').format('DD ddd');
+    static formatDateShort(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD ddd');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateYear(date : Date) {
-        return moment(date).locale('it-IT').format('YYYY');
+    static formatDateYear(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('YYYY');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateMonth(date : Date) {
-        return moment(date).locale('it-IT').format('MM');
+    static formatDateMonth(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('MM');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateDay(date : Date) {
-        return moment(date).locale('it-IT').format('DD');
+    static formatDateDay(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD');
+        } else {
+          return "";
+        }
     }
 
-    static formatDate(date : Date) {
-        return moment(date).locale('it-IT').format('DD/MM/YYYY');
+    static formatDate(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD/MM/YYYY');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateLocal(date : Date) {
+    static formatDateLocal(date : Date | undefined) {
         //return moment(date).locale('it-IT').format('DD-MM-YYYY');
-        return moment(date).format('YYYY-MM-DD')
+        if (date) {
+          return moment(date).format('YYYY-MM-DD')
+        } else {
+          return "";
+        }
     }
 
     static getLastDayOfMonth(month : number, year : number) {

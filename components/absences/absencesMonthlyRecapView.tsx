@@ -4,11 +4,12 @@ import DateUtility from "../../utils/dateUtility";
 import AbsencesMonthlyTable from "./absencesMonthlyTable";
 import AbsencesMonthlyModal from "./absencesMonthlyModal";
 import { useState } from 'react';
+import { AbsenceType } from "../../types/absenceType";
 
 interface AbsencesMonthlyRecapViewProps {
-        absencesRecap: Absence[];
+        absencesRecap: AbsenceType[];
         month: string
-        year: integer;
+        year: number;
 }
 
 const AbsencesMonthlyRecapView: React.FC<AbsencesMonthlyRecapViewProps> = ({
@@ -16,8 +17,8 @@ const AbsencesMonthlyRecapView: React.FC<AbsencesMonthlyRecapViewProps> = ({
     month,
     year
   }) => {
-
-  const monthName = DateUtility.getMonthName(month);
+  const monthNumber = parseInt(month, 10);
+  const monthName = DateUtility.getMonthName(monthNumber);
   const [showModal, setShowModal] = useState(false);
   const [parameters, setParameters] = useState("");
 
@@ -36,7 +37,7 @@ const AbsencesMonthlyRecapView: React.FC<AbsencesMonthlyRecapViewProps> = ({
                       <h2>Assenze Mensili {monthName} {year}</h2>
                       <AbsencesMonthlyModal tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
                       <br/>
-                      <AbsencesMonthlyTable absencesRecap={absencesRecap} setModal={setShowModal} setParameters={setParameters} year={year} month={month} />
+                      <AbsencesMonthlyTable absencesRecap={absencesRecap} setModal={setShowModal} setParameters={setParameters} year={year} month={monthNumber} />
                   </div>
             </Col>
             <Col sm={2} />

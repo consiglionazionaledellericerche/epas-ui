@@ -17,11 +17,6 @@ function Reperibility() {
 
   const { data: session, status } = useSession()
 
-//   const year = currentDate.year
-//   const month = currentDate.month
-//
-//   const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
-//
   const {data, error} = useRequest('/reperibilitycalendar/show');
   if (error) return <div>Impossibile caricare la situazione annuale</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />

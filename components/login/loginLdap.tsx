@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-const LoginLdap = ({ children }) => {
+const LoginLdap = () => {
   return (<>
           <div>
           <h3>inserisci le credenziali</h3>

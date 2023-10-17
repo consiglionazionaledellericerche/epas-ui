@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useRouter } from 'next/router';
 import LoginOauth from './loginOauth';
 import LoginLdap from './loginLdap';
 
-const LoginTabbed = ({ children }) => {
+const LoginTabbed = () => {
   const router = useRouter();
   const activeTab = router.query.tab || 'loginOauth';
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Col, Container, Row } from 'react-bootstrap';
 import FullCalendar from "@fullcalendar/react";
+import Calendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import itLocale from '@fullcalendar/core/locales/it'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
@@ -9,24 +10,54 @@ import Alert from "sweetalert2";
 import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { getSession } from 'next-auth/react';
-import messages from '../../public/data/messages.json';
 import ReperibilityWorkers from './reperibilityWorkers';
 import RecapCalendar from './recapCalendar';
 import DropdownReperibilityType from './dropdownReperibilityType';
+import {useTranslations} from 'next-intl';
+import { CustomSession } from "../../types/customSession";
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 
-function renderEventContent(eventInfo) {
+
+interface eventElem {
+  title: string,
+  personReperibilityDayId: string,
+  textColor: string,
+  borderColor: string,
+  eventColor: string,
+  personId: number,
+}
+interface eventInfoType {
+  event : eventElem
+}
+
+interface CalendarViewProps {
+  reperibilityID: number
+}
+interface CalendarViewState { calendarEvents: any
+                               reperibilityWorkers: any,
+                               recap: any,
+                               componentDidMountExecuted: boolean,
+                               isUpdating: boolean,
+                               reperibilities: any,
+                               startDate: string,
+                               endDate: string,
+                               isReload:boolean,
+                               reperibilityId:number,
+                              }
+function renderEventContent(eventInfo: eventInfoType) {
 //console.log('renderEventContent', eventInfo.event);
   //*********** 2023-09-12
   //togliere il commento quando si vuole aprire anche in modifica, adesso calendario in sola lettura
   //*************************
   let classFCEvent = "" //"fc-event fc-event-draggable"
+        //groupid={eventInfo.event.personId}
 
   return (
     <>
       <span  className={classFCEvent}
         title={eventInfo.event.title}
         id={eventInfo.event.personReperibilityDayId}
-        groupid={eventInfo.event.personId}
         key={eventInfo.event.personId}
         style={{color:eventInfo.event.textColor, backgroundColor: eventInfo.event.borderColor, borderColor:eventInfo.event.borderColor}}
         color={eventInfo.event.eventColor}
@@ -37,11 +68,11 @@ function renderEventContent(eventInfo) {
   )
 }
 
-class CalendarView extends React.Component {
+class CalendarView extends Component<CalendarViewProps, CalendarViewState> {
 
-  calendarRef = React.createRef();
+  calendarRef: React.RefObject<FullCalendar> = React.createRef();
 
-  constructor(props) {
+  constructor(props:CalendarViewProps) {
     super(props);
     this.state = { calendarEvents: [],
                    reperibilityWorkers: [],
@@ -49,8 +80,8 @@ class CalendarView extends React.Component {
                    componentDidMountExecuted: false,
                    isUpdating: false,
                    reperibilities: {},
-                   startDate: null,
-                   endDate: null,
+                   startDate: "",
+                   endDate: "",
                    isReload:false,
                    reperibilityId:props.reperibilityID,
                   };
@@ -58,9 +89,7 @@ class CalendarView extends React.Component {
   /**
    * adding dragable properties to external events through javascript
    */
-  async componentDidUpdate(prevProps, prevState) {
-  //console.log("componentDidUpdate prevState.componentDidMountExecuted>>> ", prevState.componentDidMountExecuted);
-
+  async componentDidUpdate(prevProps:CalendarViewProps, prevState:CalendarViewState) {
     if (!this.state.isUpdating) {
       this.setState({ isUpdating: true });
 
@@ -93,20 +122,24 @@ class CalendarView extends React.Component {
     }
   }
 
-  handleChange = (name, value) => {
-    this.setState({ [name]: value });
-  };
+handleChange = (name: string, value: string) => {
+  this.setState((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+};
 
-handleDropdownChange = async (selectedOption) => {
-    //console.log('Opzione selezionata:', selectedOption);
+handleDropdownChange = async (selectedOption: {label:string, value:number}) => {
     this.setState({ reperibilityId: selectedOption.value });
     await this.callAPI();
   };
 
 async callAPI() {
-    const session = await getSession();
-    //console.log("callAPI this.state",this.state);
-    const accessToken = session.accessToken;
+    const session = await getSession() as CustomSession;
+    let accessToken = null;
+    if (session) {
+      accessToken = session.accessToken;
+    }
     let startDate = this.state.startDate;
     let endDate = this.state.endDate;
     let parameters = "start="+startDate+"&end="+endDate;
@@ -126,9 +159,6 @@ async callAPI() {
             this.setState({'reperibilities': data, reperibilityId: data.reperibilitySelected.id});
 
         });
-
-    //let reperibilityId = this.state.reperibilityId;
-    //console.log("reperibilityId",reperibilityId);
 
     parameters = "reperibility="+reperibilityId+"&start="+startDate+"&end="+endDate;
 
@@ -172,30 +202,23 @@ async callAPI() {
       .catch(error => console.error("unable to achive this", error))
         .then(data => {
             this.setState({'recap': data, componentDidMountExecuted: true})
-            //console.log("<<<<<reperibilitycalendar recap>>>>", this.state);
         });
-
-        //console.log("this.state.recap", this.state.recap);
-
 };
 
-  handleNextButtonClick = () => {
-    // Personalizza l'azione del pulsante "Next" qui
-    //console.log('Hai cliccato su "Next"!');
-    // Esegui l'azione predefinita per avanzare al mese successivo
+  handleNextButtonClick: () => void = () => {
     this.setState({ isUpdating:false, isReload:false });
-    this.calendarRef.current.getApi().next();
+    if (this.calendarRef.current && this.calendarRef.current.getApi) {
+        this.calendarRef.current.getApi().next();
+    }
   };
-  handlePrevButtonClick = () => {
-      // Personalizza l'azione del pulsante "Next" qui
-      //console.log('Hai cliccato su "Prev"!');
-      // Esegui l'azione predefinita per avanzare al mese successivo
+  handlePrevButtonClick: () => void = () => {
       this.setState({ isUpdating:false, isReload:false });
-      this.calendarRef.current.getApi().prev();
-    };
+      if (this.calendarRef.current && this.calendarRef.current.getApi) {
+          this.calendarRef.current.getApi().prev();
+      }
+  };
 
   render() {
-    const { isEditForm, formTitle } = this.state;
     return (
     <>
       <Container fluid>
@@ -259,23 +282,16 @@ async callAPI() {
               eventContent={renderEventContent}
               showNonCurrentDates={false}
               datesSet={(arg) => {
-                              //console.log('datesSet', this.state,"THIS STATE", `    ${arg.start}  ${arg.end}`); // ending visible date
-
                                 let dateStart = new Date(arg.start);
                                 let year = dateStart.getFullYear();
                                 let month = (dateStart.getMonth() + 1).toString().padStart(2, '0'); // Aggiunge lo zero iniziale se necessario
                                 let day = dateStart.getDate().toString().padStart(2, '0'); // Aggiunge lo zero iniziale se necessario
                                 let startDate = `${year}-${month}-${day}`;
-
                                 let dateEnd = new Date(arg.end);
                                 let endDate = dateEnd.toISOString().substring(0, 10);
-                                //console.log('startDate', startDate);
-                                //console.log('endDate', endDate);
                                 if (!this.state.isUpdating && this.state.startDate !== startDate) {
                                     this.setState({ startDate: startDate, endDate: endDate });
-                                    //console.log('this.state', this.state);
                                 }
-
                                 if (!this.state.isReload){
                                   this.setState({ isReload:true, startDate:startDate, endDate: endDate });
                                   this.callAPI();
@@ -291,105 +307,85 @@ async callAPI() {
     );
   }
 
-  handleEventNew = async (eventDropInfo) => {
+  handleEventNew = async (eventDropInfo:any) => {
     // Get the dropped event's information
       const { event } = eventDropInfo;
-
       // Update the event's start time to match the new dropped time
       event.setStart(eventDropInfo.start);
-
       // Update the state with the modified calendarEvents array
       this.setState((prevState) => {
-        const updatedEvents = prevState.calendarEvents.map((calEvent) =>
+        const updatedEvents = prevState.calendarEvents.map((calEvent:any) =>
           calEvent.id === event.id ? event : calEvent
         );
-
         return { calendarEvents: updatedEvents };
       });
 
-      // You can also add any additional logic you need here
-      //console.log('Evento handleEventNew:', eventDropInfo.event);
-      //let personId = eventDropInfo.event._def.sourceId;
       let personId=eventDropInfo.event.id;
       let start=eventDropInfo.event.startStr;
       let reperibilityId = 14;
 
       const parameters = "reperibility=14&date="+start+"&personId="+personId;
-      //console.log('parameters:', parameters);
-      const session = await getSession();
-      const accessToken = session.accessToken
-
+      const session = await getSession() as CustomSession;
+      let accessToken = null;
+      if (session) {
+        accessToken = session.accessToken;
+      }
       const url = '/api/rest/v4/reperibilitycalendar/';
-      //console.log('url:', url);
-
-          fetch(url, {
-              method: 'PUT',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  Authorization: 'Bearer '+accessToken
-              },
-              data: {
-                      "personId": personId,
-                      "reperibilityId": reperibilityId,
-                      "date": start
-                    }
-          }).then(response => response.json())
-            .catch(error => console.error("unable to achive this", error))
-              .then(data => {
-              //console.log("handleEventNew reperibilityWorkers data >>> ", data);
-                  this.setState({isUpdating: false, componentDidMountExecuted: true})
-                  window.location.reload();
-              });
-
+      fetch(url, {
+          method: 'PUT',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer '+accessToken
+          },
+          body: JSON.stringify({
+                  "personId": personId,
+                  "reperibilityId": reperibilityId,
+                  "date": start
+                })
+      }).then(response => response.json())
+        .catch(error => console.error("unable to achive this", error))
+        .then(data => {
+            this.setState({isUpdating: false, componentDidMountExecuted: true})
+            window.location.reload();
+        });
   };
 
-  handleEventDrop = async (eventDropInfo) => {
+  handleEventDrop = async (eventDropInfo:any) => {
     // Get the dropped event's information
       const { event } = eventDropInfo;
-
       // Update the event's start time to match the new dropped time
       event.setStart(eventDropInfo.start);
-
       // Update the state with the modified calendarEvents array
       this.setState((prevState) => {
-        const updatedEvents = prevState.calendarEvents.map((calEvent) =>
+        const updatedEvents = prevState.calendarEvents.map((calEvent:any) =>
           calEvent.id === event.id ? event : calEvent
         );
-
         return { calendarEvents: updatedEvents };
       });
-
       // You can also add any additional logic you need here
-      //console.log('Evento spostato:', eventDropInfo.event);
-      //let personId = eventDropInfo.event._def.sourceId;
       let eventId=eventDropInfo.event.id;
       let start=eventDropInfo.event.startStr;
       const date = new Date(start);
-      //console.log(start, `    ${date.toLocaleDateString()}`);
-
       const parameters = "newDate="+start;
-      //console.log('parameters:', parameters);
-      const session = await getSession();
-      const accessToken = session.accessToken
-
+      const session = await getSession() as CustomSession;
+      let accessToken = null;
+      if (session) {
+        accessToken = session.accessToken;
+      }
       const url = '/api/rest/v4/reperibilitycalendar/patch/'+eventId+'?'+parameters;
-      //console.log('url:', url);
-
-          fetch(url, {
-              method: 'PATCH',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  Authorization: 'Bearer '+accessToken
-              }
-          }).then(response => response.json())
-            .catch(error => console.error("unable to achive this", error))
-              .then(data => {
-              //console.log("handleEventDrop reperibilityWorkers data >>> ", data);
-                  this.setState({isUpdating: false, componentDidMountExecuted: true})
-              });
-
+      fetch(url, {
+          method: 'PATCH',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer '+accessToken
+          }
+      }).then(response => response.json())
+        .catch(error => console.error("unable to achive this", error))
+        .then(data => {
+            this.setState({isUpdating: false, componentDidMountExecuted: true})
+        });
   };
 
 //   handleEventClick = (eventClick) => {
@@ -431,13 +427,12 @@ async callAPI() {
 //   }
 }
 
-
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
   return {
     props: {
       session: await getServerSession(req, res, authOptions)
-    }
-  }
+    },
+  };
 }
 
 export default CalendarView;

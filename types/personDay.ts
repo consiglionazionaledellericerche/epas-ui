@@ -1,7 +1,7 @@
-import { Absence } from "./absence"
+import { AbsenceShow } from "./absenceShow"
 
 export type PersonDay = {
-    absences: Absence[]
+    absences: AbsenceShow[]
     approvedOnHoliday: number
     approvedOutOpening: number
     consideredExitingNow: boolean

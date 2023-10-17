@@ -4,9 +4,10 @@ import DateUtility from "../../../utils/dateUtility";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import {VacationSummary} from "../../../types/vacationSummary";
 
 interface InfoTotProps {
-    data;
+    data: VacationSummary;
 }
 
 const InfoTot: React.FC<InfoTotProps> = ({

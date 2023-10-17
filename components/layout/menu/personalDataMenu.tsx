@@ -7,7 +7,7 @@ function PersonalDataMenu() {
 
   let userLogon;
   const { data: session, status } = useSession()
-    if(session) {
+    if(session && session.user) {
       userLogon = session.user.name;
     }
 

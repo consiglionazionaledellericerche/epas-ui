@@ -11,8 +11,8 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 interface StampingsTableProps {
     monthRecap: MonthRecap;
-    year: integer;
-    month: integer;
+    year: number;
+    month: number;
 }
 
 const StampingsTable: React.FC<StampingsTableProps> = ({
@@ -25,7 +25,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [showTooltip, setShowTooltip] = useState(true);
 
     return (<>
-           <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} effect="solid" clickable={true}>
+           <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
              {tooltipContent}
            </Tooltip>
             <Table id="tabellonetimbrature" bordered hover>

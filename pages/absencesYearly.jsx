@@ -23,17 +23,13 @@ function Absences() {
 
   const parameters = personId ? `id=${personId}&beginDate=${beginDate}&endDate=${endDate}` : `beginDate=${beginDate}&endDate=${endDate}`
 
-  if (typeof window === 'undefined') {
-    return <React.Suspense fallback={<Spinner />} />
-  } else {
-    const {data, error} = useRequest('/absences/absencesInPeriod', parameters);
-    if (error) return (<div>Impossibile caricare la situazione annuale</div>);
-    if (!data) return <React.Suspense fallback={<Spinner />} />
+  const {data, error} = useRequest('/absences/absencesInPeriod', parameters);
+  if (error) return (<div>Impossibile caricare la situazione annuale</div>);
+  if (!data) return <React.Suspense fallback={<Spinner />} />
 
-    return (
-    <AbsencesYearlyRecapView absencesRecap={data} year={year} />
-    )
-  }
+  return (
+  <AbsencesYearlyRecapView absencesRecap={data} year={year} />
+  )
 
 }
 
