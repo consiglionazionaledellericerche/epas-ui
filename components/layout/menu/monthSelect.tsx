@@ -2,7 +2,7 @@ import { useContext, useState, useCallback } from "react";
 import { Form } from "react-bootstrap";
 import React from 'react'
 
-function MonthSelect({month, year, setContextMonth}) {
+function MonthSelect({month, year, setContextMonth}: { month: number, year: number, setContextMonth: Function }) {
 
     let monthsMap = [
         [1, "Gennaio"], [2, "Febbraio"],

@@ -1,6 +1,21 @@
 import React from 'react';
 
-function PersonItem({ person }) {
+interface EventColor {
+                       backgroundColor: string,
+                       textColor: string,
+                       borderColor: string
+                     }
+interface PersonEvent {
+                       eventColor: EventColor,
+                       className: string,
+                       personId: string,
+                       toJson: string,
+                       mobile: string,
+                       email: string,
+                       title: string
+                     }
+
+function PersonItem({ person }: { person: PersonEvent }) {
   const listItemStyle = {
     color: person.eventColor.textColor,
     backgroundColor: person.eventColor.backgroundColor,

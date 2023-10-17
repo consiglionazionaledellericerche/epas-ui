@@ -2,13 +2,14 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import CalcTotRow from "./calcTotRow";
 import { useState, useEffect } from 'react';
-import { getServerSession } from "next-auth/next"
-import { useSession } from "next-auth/react"
-import { useRequest } from "../../../request/useRequest"
-import { Spinner } from 'react-bootstrap'
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+import { useRequest } from "../../../request/useRequest";
+import { Spinner } from 'react-bootstrap';
+import {VacationSummary} from "../../../types/vacationSummary";
 
 interface CalcTotProps {
-    data;
+    data: VacationSummary;
 }
 
 const CalcTot: React.FC<CalcTotProps> = ({
@@ -18,8 +19,8 @@ const CalcTot: React.FC<CalcTotProps> = ({
     return(
     <>
 	     <p>Sono stati calcolati <strong>{data.total}</strong> giorni totali.<br/>
-	     I giorni totali di maturazione per l'anno {data.year} sono <strong>{data.accruedDayTotal}</strong>.<br/>
-	     { !data.postPartumisEmpty ? (<span>Dai giorni dell'anno sono sottratti <strong>{data.postPartumSize}</strong>
+	     I giorni totali di maturazione per l&#39;anno {data.year} sono <strong>{data.accruedDayTotal}</strong>.<br/>
+	     { !data.postPartumisEmpty ? (<span>Dai giorni dell&#39;anno sono sottratti <strong>{data.postPartumSize}</strong>
 	                                  giorni di assenza usufruiti che non contribuiranno alla maturazione.</span>)  : ''
         }
 	     </p>
@@ -30,7 +31,7 @@ const CalcTot: React.FC<CalcTotProps> = ({
            <th>Data di Maturazione</th>
            <th>Maturati</th>
            <th>Progressione</th>
-           <th>Giorni nell'anno</th>
+           <th>Giorni nell&#39;anno</th>
            { !data.postPartumisEmpty ? <th>Giorni riduzione</th> :''}
          </tr>
          </thead>

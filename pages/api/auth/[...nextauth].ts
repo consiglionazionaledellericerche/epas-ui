@@ -1,13 +1,18 @@
 import NextAuth, { NextAuthOptions} from "next-auth"
 import KeycloakProvider from "next-auth/providers/keycloak";
+import dotenv from 'dotenv';
+dotenv.config();
+
+const CLIENTID = process.env.CLIENTID || "";
+const CLIENTSECRET = process.env.CLIENTSECRET || "";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   // https://next-auth.js.org/configuration/providers/oauth
   providers: [
     KeycloakProvider({
-      clientId: process.env.CLIENTID,
-      clientSecret: process.env.CLIENTSECRET,
+      clientId: CLIENTID,
+      clientSecret: CLIENTSECRET,
       wellKnown:"https://auth.iit.cnr.it/auth/realms/testing/.well-known/uma2-configuration",
       issuer : "https://auth.iit.cnr.it/auth/realms/testing",
     })
@@ -16,9 +21,12 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, user, token }) {
       if (token) {
-            session.accessToken = token.access_token;
-            session.refreshToken = token.refresh_token;
-            session.user = token.user;
+          session = Object.assign({}, session, {accessToken: token.access_token,
+          refreshToken:token.refresh_token,
+          user:token.user});
+//             session.accessToken = token.access_token;
+//             session.refreshToken = token.refresh_token;
+//             session.user = token.user;
       }
       return session
     },

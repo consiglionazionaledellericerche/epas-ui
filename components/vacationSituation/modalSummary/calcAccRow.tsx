@@ -10,10 +10,10 @@ import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { useRequest } from "../../../request/useRequest"
 import { Spinner } from 'react-bootstrap'
-import { CalcAccRowElem} from './calcAccRowElem'
+import {AbsenceSubPeriod} from "../../../types/absenceSubPeriod";
 
 interface CalcAccRowProps {
-    subperiod;
+    subperiod: AbsenceSubPeriod;
 }
 
 const CalcAccRow: React.FC<CalcAccRowProps> = ({
@@ -36,7 +36,7 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
                </>)
                : spanContractEnd = ''
 
-     subperiod.subDayToFixPostPartum > 0 ? (
+     subperiod.subDayToFixPostPartum && subperiod.subDayToFixPostPartum > 0 ? (
       spanPostPartum = <>
               <span className="text-warning">
               <FontAwesomeIcon icon={faExclamationTriangle} data-tooltip-id="dataContentPostPartumTooltip" data-tooltip-content={dataContentPostPartum} />
@@ -45,7 +45,7 @@ const CalcAccRow: React.FC<CalcAccRowProps> = ({
               </>)
        : spanPostPartum = ''
 
-      subperiod.subDayPostPartum > 0 ? (
+      subperiod.subDayPostPartum && subperiod.subDayPostPartum > 0 ? (
              tdPostPartum = <>
                   {subperiod.subDayPostPartum}
                   ({subperiod.subDayPostPartumProgression})

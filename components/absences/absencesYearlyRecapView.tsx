@@ -1,9 +1,10 @@
 import { Col, Container, Row } from "react-bootstrap";
 import AbsencesYearlyTable from "./absencesYearlyTable";
+import { AbsenceShow } from "../../types/absenceShow";
 
 interface AbsencesYearlyRecapViewProps {
-        absencesRecap: Absence[];
-        year: integer
+        absencesRecap: AbsenceShow[];
+        year: number
 }
 
 const AbsencesYearlyRecapView: React.FC<AbsencesYearlyRecapViewProps> = ({

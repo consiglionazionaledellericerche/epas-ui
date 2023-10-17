@@ -1,10 +1,10 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-import { contracts } from "../../types/Contract";
+import { Contract } from "../../types/contract";
 import DateUtility from "../../utils/dateUtility";
 
 interface VacationPeriodTableProps {
-    contracts: Contract;
+    contracts: Contract[];
 }
 
 const VacationPeriodTable: React.FC<VacationPeriodTableProps> = ({
