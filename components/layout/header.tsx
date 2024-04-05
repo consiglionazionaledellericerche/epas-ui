@@ -1,3 +1,4 @@
+import React from 'react'
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Head from 'next/head';
@@ -12,8 +13,11 @@ import SelectPeriod from './menu/selectPeriod'
 import dotenv from 'dotenv/config';
 
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
+interface HeaderProps {
+    title?: string
+}
 
-function Header() {
+const  Header: React.FC<HeaderProps> = ({ title }) => {
   const { data: session, status } = useSession()
   const loading = status === "loading"
 
@@ -43,8 +47,9 @@ function Header() {
   }
 
   return (<div>
-  <Head>
-  </Head>
+  <Head >
+  <title>{title}</title>
+    </Head >
     <header className="bg-primary bg-gradient">
     <Navbar expand="lg" className="fixed-top">
         <Navbar.Brand className="text-white" href="#home">ePAS</Navbar.Brand>
@@ -55,4 +60,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Header
