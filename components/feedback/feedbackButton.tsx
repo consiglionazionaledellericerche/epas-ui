@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const FeedbackButton = () => {
-  const [screenshot, setScreenshot] = useState(null);
+  const [screenshot, setScreenshot] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const navigatorData = navigator;
   const { data: session, status } = useSession()
-  const accessToken = session != null ? session.accessToken: "";
+  const accessToken:string  = session != null ? session.accessToken || '' : "";
 
   let plugins = [];
   for (const plugin of navigator.plugins) {
@@ -48,11 +48,12 @@ const FeedbackButton = () => {
     tmpshow={showModal}
     close={() => {
                     setShowModal(false);
-                    setScreenshot(null); // Resetta lo screenshot quando la modale viene chiusa
+                    setScreenshot(''); // Resetta lo screenshot quando la modale viene chiusa
                   }}
     screenshot={screenshot}
     dataToSend={dataToSend}
-    accessToken = {accessToken}/>
+    accessToken={accessToken}
+    />
     &nbsp;&nbsp;
     <button onClick={handleFeedbackClick}><FontAwesomeIcon icon={faEnvelope} /> Invia segnalazione</button>
     </>
