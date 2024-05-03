@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
 import AbsencesShow from "./absencesShow";
+import AbsenceModal  from "./modal/absenceModal";
 import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
@@ -21,10 +22,26 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     month
   }) => {
 
+    const [titleModal, setTitleModal] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [parameters, setParameters] = useState("");
+
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
 
+    function setModalParam(pdr){
+      let day = DateUtility.formatDateDay(pdr.personDay.date);
+      console.log("setModalParam",day,month,year);
+      let date = DateUtility.textToDate(day,month-1,year);
+      console.log("setModalParam date",date);
+      let id = pdr.personDay.personId;
+      setShowModal(true);
+      setParameters("id="+id+"&from="+date);
+      setTitleModal("");
+    }
+
     return (<>
+           <AbsenceModal title={titleModal} tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
            <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
              {tooltipContent}
            </Tooltip>
@@ -67,7 +84,25 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         <th className="invisible"></th>
 
                         <td className="assenza default-single">
-                            <AbsencesShow absences={pdr.personDay.absences} year={year} month={month} day={DateUtility.formatDateDay(pdr.personDay.date)} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip} />
+                        {
+                         pdr.personDay.absences.length != 0 ?
+                        (
+                          <>
+                          <AbsencesShow absences={pdr.personDay.absences}
+                          year={year}
+                          month={month}
+                          day={DateUtility.formatDateDay(pdr.personDay.date)}
+                          setTooltipContent={setTooltipContent}
+                          setShowTooltip={setShowTooltip} />
+                          </>
+                        ):
+                        (
+                        <>
+                          <a id="new-abscence-code" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam(pdr)}>
+                            __
+                          </a>
+                          </>
+                        )}
                         </td>
                         
                         <StampingsTemplate personDayRecap={pdr} />

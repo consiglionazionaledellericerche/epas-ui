@@ -71,6 +71,12 @@ class DateUtility {
         return DateUtility.formatDateDay(d);
     }
 
+    static textToDate(day : number, month : number, year : number) {
+        console.log("textToDate",day,month,year);
+        var d = new Date(year, month, day);
+        return DateUtility.formatDateLocal(d);
+    }
+
     static fromMinuteToHourMinute(minute : number) {
         if (minute == 0) {
           return "00:00";
