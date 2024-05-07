@@ -8,7 +8,7 @@ import { authOptions } from '../../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import DateUtility from "../../../utils/dateUtility";
 import { AbsenceForm } from "../../../types/absenceForm";
-import AbsenceModalContent from "./absenceModalContent";
+import AbsenceModalTab from "./absenceModalTab";
 import { CustomSession } from "../../../types/customSession";
 
 interface AbsenceModalProps {
@@ -80,13 +80,13 @@ console.log("this.props.parameters", this.props.parameters);
                       onHide={this.handleClose}
                       cancel={this.state.close}
                       size="xl"
-                      aria-labelledby="modal-vacation-info"
+                      aria-labelledby="modal-absence-info"
                     >
                       <Modal.Header closeButton>
                         <Modal.Title>{this.state.title}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                         {this.state.show ? <AbsenceModalContent data={this.state.data} parameters={this.props.parameters} /> : ''}
+                         {this.state.show ? <AbsenceModalTab data={this.state.data} parameters={this.props.parameters} /> : ''}
                       </Modal.Body>
                       <Modal.Footer>
                         <Button onClick={this.handleClose}>Cancel</Button>
