@@ -1,13 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useRequest } from "../../../request/useRequest"
-import { getServerSession } from "next-auth/next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from '../../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import DateUtility from "../../../utils/dateUtility";
-import { AbsenceForm } from "../../../types/absenceForm";
 import AbsenceModalTab from "./absenceModalTab";
 import { CustomSession } from "../../../types/customSession";
 
@@ -15,94 +10,86 @@ interface AbsenceModalProps {
   title: string,
   tmpshow: boolean,
   close: Function,
-  parameters: string
+  parameters: any
 }
 
 interface AbsenceModalState {
   title: string,
   show: boolean,
   data: any,
-  close: boolean
 }
 
-class AbsenceModal extends React.Component<AbsenceModalProps, AbsenceModalState> {
-  constructor(props:AbsenceModalProps) {
-    super(props);
-    this.state = { data: [], show:false, title: "", close:true};
-  }
+const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, parameters }) => {
+  const [show, setShow] = useState(false);
+  const [data, setData] = useState<any>(null);
 
-  async componentDidUpdate(propsPrecedenti: VacationModalProps) {
-    if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
-      if (this.props.tmpshow){
-        const parameters = this.props.parameters
+  useEffect(() => {
+    if (tmpshow) {
+      const fetchData = async () => {
         const session = await getSession() as CustomSession;
         let accessToken = null;
         if (session) {
           accessToken = session.accessToken;
         }
 
-        const url = '/api/rest/v4/absencesGroups/groupsForCategory?'+parameters;
+        const queryString = Object.entries(parameters)
+          .map(([key, value]) => `${key}=${value}`)
+          .join('&');
 
-        fetch(url, {
+        const url = '/api/rest/v4/absencesGroups/groupsForCategory?' + queryString;
+        try {
+          const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer '+accessToken
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + accessToken
             }
-        }).then(response => response.json())
-          .catch(error => console.error("unable to achive this", error))
-            .then(data => {
-                let person = data.person.surname + " " + data.person.name;
-                let title = "Nuovo codice assenza in data "+DateUtility.formatDate(data.from)+" per "+person;
-                console.log("data", data);
-                this.setState({'data': data, 'show':true, 'title':title})
-            });
+          });
+          const data = await response.json();
+          let person = data.person.surname + " " + data.person.name;
+          let title = "Nuovo codice assenza in data " + DateUtility.formatDate(data.from) + " per " + person;
+          console.log("person>>>");
+          setData(data);
+          setShow(true);
+        } catch (error) {
+          console.error("Unable to fetch data", error);
         }
-        else {
-          this.setState({'data': [], 'show':false, 'title':""})
-        }
+      };
+      fetchData();
+    } else {
+      setShow(false);
+      setData(null);
     }
+  }, [tmpshow, parameters]);
+
+  const handleClose = () => {
+    setShow(false);
+    close();
   }
 
-  handleClose = () => {
-    this.setState ({'show': false})
-    this.props.close();
-  }
- render() {
-
-console.log("data", this.state.data);
-console.log("this.props.parameters", this.props.parameters);
-    return (
-              <Modal
-                      tmpshow= {this.props.tmpshow.toString()}
-                      show={this.state.show}
-                      onHide={this.handleClose}
-                      cancel={this.state.close}
-                      size="xl"
-                      aria-labelledby="modal-absence-info"
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>{this.state.title}</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                         {this.state.show ? <AbsenceModalTab data={this.state.data} parameters={this.props.parameters} /> : ''}
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button onClick={this.handleClose}>Cancel</Button>
-                      </Modal.Footer>
-                    </Modal>
-    );
-  }
-
-}
-
-export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
-  return {
-    props: {
-      session: await getServerSession(req, res, authOptions)
-    },
-  };
+  return (
+    <Modal
+      tmpshow={tmpshow.toString()}
+      show={show}
+      onHide={handleClose}
+      size="xl"
+      aria-labelledby="modal-absence-info"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {show && <AbsenceModalTab data={data}
+        parameters={parameters}
+        tabName={data.categoryTabSelected.name}
+        tabsVisible={data.tabsVisibile} />}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleClose}>Cancel</Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }
 
 export default AbsenceModal;

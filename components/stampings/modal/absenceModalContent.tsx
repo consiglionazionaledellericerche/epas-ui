@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import DropdownGroupType from "./dropdownGroupType";
-import DropdownAbsenceType from "./dropdownAbsenceType";
+import DropDownElement from "./dropDownElement";
 import { AbsenceForm } from "../../../types/absenceForm";
 
 const customStyles: Styles = {
@@ -20,11 +19,13 @@ const customStyles: Styles = {
 interface AbsenceModalContentProps {
   data: AbsenceForm;
   parameters: string;
+  handleDropdownChange: (elementOption: { value: any; label: any; from:string; }) => void;
 }
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
 data,
-parameters
+parameters,
+handleChange
   }) => {
 
      let alldaySelected = (data?.justifiedTypeSelected == "all_day" ||
@@ -35,15 +36,35 @@ parameters
     const [endDate, setEndDate] = useState(data.to);
 
     const handleEndDateChange = (event) => {
+    console.log('handleEndDateChange', handleEndDateChange);
       setEndDate(event.target.value);
+      handleChange({'value':event.target.value, 'from':'ENDATE'});
     };
+    const handleGrouptypeChange = (selectOption) => {
+      selectOption['cleanAll'] = true;
+      handleChange(selectOption);
+    };
+
+    useEffect(() => {
+    setEndDate(data.to);
+    console.log('cambio endate')
+    }, [data]);
+
+    let justifiedTypeChoice = data.hasJustifiedTypeChoice ? (<>
+                                                          <div className="form-group">
+                                                              <label className="col-sm-2 control-label">Tempo giustificato</label>
+                                                               <div className="col-sm-6" style={{ display: 'inline-block' }}>
+                                                                  <DropDownElement typeElem="JUSTIFYTYPE" data={data} onChange={handleChange}/>
+                                                              </div>
+                                                          </div>
+                                                          </>) : "";
 
    return(
           <>
             <div className="form-group">
                 <label className="col-sm-2 control-label">Tipologia Assenza</label>
                  <div className="col-sm-6" style={{ display: 'inline-block' }}>
-                    <DropdownGroupType data={data}/>
+                    <DropDownElement typeElem="GROUPABS" data={data} onChange={handleGrouptypeChange}/>
                 </div>
             </div>
             <div className="form-group">
@@ -62,11 +83,14 @@ parameters
             <div className="form-group">
                 <label className="col-sm-2 control-label">Codice Assenza</label>
                  <div className="col-sm-6" style={{ display: 'inline-block' }}>
-                    <DropdownAbsenceType data={data}/>
+                    <DropDownElement typeElem="ABSENCE" data={data} onChange={handleChange}/>
                 </div>
             </div>
+            {justifiedTypeChoice}
         </>
    );
 }
 
-export default AbsenceModalContent
+export default AbsenceModalContent;
+
+

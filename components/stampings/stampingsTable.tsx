@@ -24,7 +24,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
 
     const [titleModal, setTitleModal] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [parameters, setParameters] = useState("");
+    const [parameters, setParameters] = useState({});
 
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
@@ -36,7 +36,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
       console.log("setModalParam date",date);
       let id = pdr.personDay.personId;
       setShowModal(true);
-      setParameters("id="+id+"&from="+date);
+      setParameters({'id':id, 'from':date});
       setTitleModal("");
     }
 
