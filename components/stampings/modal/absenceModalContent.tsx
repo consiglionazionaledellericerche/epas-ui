@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import DropDownElement from "./dropDownElement";
+import SimulationDataTable from "./simulationDataTable";
 import { AbsenceForm } from "../../../types/absenceForm";
+import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
 
 const customStyles: Styles = {
   option: (provided, state) => ({
@@ -18,12 +20,14 @@ const customStyles: Styles = {
 
 interface AbsenceModalContentProps {
   data: AbsenceForm;
+  simData: AbsenceFormSimulationResponse;
   parameters: string;
   handleDropdownChange: (elementOption: { value: any; label: any; from:string; }) => void;
 }
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
 data,
+simData,
 parameters,
 handleChange
   }) => {
@@ -36,19 +40,13 @@ handleChange
     const [endDate, setEndDate] = useState(data.to);
 
     const handleEndDateChange = (event) => {
-    console.log('handleEndDateChange', handleEndDateChange);
+      console.log('handleEndDateChange', handleEndDateChange);
       setEndDate(event.target.value);
       handleChange({'value':event.target.value, 'from':'ENDATE'});
     };
     const handleGrouptypeChange = (selectOption) => {
-      selectOption['cleanAll'] = true;
       handleChange(selectOption);
     };
-
-    useEffect(() => {
-    setEndDate(data.to);
-    console.log('cambio endate')
-    }, [data]);
 
     let justifiedTypeChoice = data.hasJustifiedTypeChoice ? (<>
                                                           <div className="form-group">
@@ -58,6 +56,21 @@ handleChange
                                                               </div>
                                                           </div>
                                                           </>) : "";
+
+    let timeChoice = data.hasHourMinutesChoice ? (<>
+                                                <div className="form-group">
+                                                    <label className="col-sm-2 control-label">Ore</label>
+                                                     <div className="col-sm-6" style={{ display: 'inline-block' }}>
+                                                        <DropDownElement typeElem="HOUR" data={data} onChange={handleChange}/>
+                                                    </div>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label className="col-sm-2 control-label">Minuti</label>
+                                                     <div className="col-sm-6" style={{ display: 'inline-block' }}>
+                                                        <DropDownElement typeElem="MINUTE" data={data} onChange={handleChange}/>
+                                                    </div>
+                                                </div>
+                                                 </>) : "";
 
    return(
           <>
@@ -87,6 +100,8 @@ handleChange
                 </div>
             </div>
             {justifiedTypeChoice}
+            {timeChoice}
+            <SimulationDataTable data={simData} />
         </>
    );
 }

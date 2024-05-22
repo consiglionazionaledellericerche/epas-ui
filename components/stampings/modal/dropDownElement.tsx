@@ -119,7 +119,37 @@ useEffect(() => {
         from: typeElem
       };
     }
-  }
+  } else if (typeElem === "HOUR") {
+       if (data.selectableHours.length > 0) {
+         let options = data.selectableHours.map((item) => ({
+           value: item,
+           label: item,
+           from: typeElem
+         }));
+         formattedOptions = [{ options: options }];
+
+         selectedOption = {
+           value: data.hours,
+           label: data.hours,
+           from: typeElem
+         };
+       }
+     } else if (typeElem === "MINUTE") {
+         if (data.selectableMinutes.length > 0) {
+           let options = data.selectableMinutes.map((item) => ({
+             value: item,
+             label: item,
+             from: typeElem
+           }));
+           formattedOptions = [{ options: options }];
+
+           selectedOption = {
+             value: data.minutes,
+             label: data.minutes,
+             from: typeElem
+           };
+         }
+     }
 
   if (formattedOptions) {
     setOptions(formattedOptions);

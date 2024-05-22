@@ -1,108 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { useRequest } from "../../../request/useRequest"
-import { getServerSession } from "next-auth/next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from '../../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import AbsenceModalContent from "./absenceModalContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { AbsenceForm } from "../../../types/absenceForm";
-import DateUtility from "../../../utils/dateUtility";
+import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
+import { fetchData, simulateData } from './apiUtils';
 
 interface AbsenceModalTabProps {
   tabName: string;
-  tabsVisible:Object;
-  data: AbsenceForm,
-  parameters: any
+  tabsVisible: Object;
+  data: AbsenceForm;
+  simData: AbsenceFormSimulationResponse;
+  parameters: any;
 }
 
 const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   tabName,
   tabsVisible,
   data,
+  simData,
   parameters
 }) => {
   const [selectedTab, setSelectedTab] = useState(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
   const [dataTab, setDataTab] = useState(data);
-  const element =(<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
+  const [simDataTab, setSimDataTab] = useState(simData);
+  const element = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
   const [params, setParams] = useState({});
-
   const [newParams, setNewParams] = useState({});
 
   const handleChange = (element) => {
-    console.log("element",element, );
-    if ('cleanAll' in element && element['cleanAll'] ) {
-        delete newParams['absenceTypeCode'];
+    console.log("element", element);
+    if (element['absenceTypeCode'] === undefined) {
+      delete newParams['absenceTypeCode'];
     }
     console.log('dataTab', dataTab);
 
-    if (!('groupAbsenceTypeName' in element)) {
-            newParams['groupAbsenceTypeName'] = dataTab.groupSelected?.name;
-        }
-    if (!('absenceTypeCode' in element)) {
-            newParams['absenceTypeCode'] = dataTab.absenceTypeSelected?.code;
-        }
-    if (element.from == 'ABSENCE'){
-        newParams['absenceTypeCode'] = element.value;
+    newParams['id'] = parameters.id;
+    newParams['from'] = parameters.from;
+    newParams['category'] = selectedTab;
+    newParams['switchGroup'] = false;
+
+    if (!('groupAbsenceTypeName' in element) && dataTab.groupSelected) {
+      newParams['groupAbsenceTypeName'] = dataTab.groupSelected?.name;
     }
-    else if (element.from == 'GROUPABS'){
-        newParams['groupAbsenceTypeName'] = element.value;
+    if (!('absenceTypeCode' in element) && dataTab.absenceTypeSelected) {
+      newParams['absenceTypeCode'] = dataTab.absenceTypeSelected.code;
     }
-    else if (element.from == 'JUSTIFYTYPE'){
-    }
-    else if (element.from == 'ENDATE'){
+    if (element.from === 'ABSENCE') {
+      newParams['absenceTypeCode'] = element.value;
+    } else if (element.from === 'GROUPABS') {
+      newParams['groupAbsenceTypeName'] = element.value;
+      newParams['switchGroup'] = true;
+    } else if (element.from === 'JUSTIFYTYPE') {
+      newParams['justifiedTypeName'] = element.value;
+    } else if (element.from === 'HOUR') {
+      newParams['hours'] = element.value;
+    } else if (element.from === 'MINUTE') {
+      newParams['minute'] = element.value;
+    } else if (element.from === 'ENDATE') {
       newParams['to'] = element.value;
     }
-    console.log("newParams",newParams);
+    console.log("newParams", newParams);
 
-    fetchData(newParams);
+    fetchData(newParams, setDataTab, false, false);
   }
-  console.log("selectedTab", selectedTab);
 
-  const fetchData = async (params) => {
-    const session = await getSession() as CustomSession;
-    let accessToken = null;
-    if (session) {
-      accessToken = session.accessToken;
-    }
-
+  useEffect(() => {
     params['id'] = parameters.id;
     params['from'] = parameters.from;
     params['category'] = selectedTab;
-
-    const queryString = Object.entries(params)
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&');
-    const url = '/api/rest/v4/absencesGroups/groupsForCategory?'+queryString;
-    console.log("URL", url);
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + accessToken
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Errore durante la richiesta API');
-      }
-      const data = await response.json();
-      // Aggiorna i dati con i nuovi dati ottenuti dall'API
-      setDataTab(data);
-    } catch (error) {
-      console.error("unable to achieve this", error);
-    }
-  };
+    fetchData(params, setDataTab, false, false);
+  }, [selectedTab]);
 
   useEffect(() => {
-    fetchData(parameters);
-  }, [selectedTab]);
+    if (dataTab) {
+      simulateData(dataTab, setSimDataTab);
+    }
+  }, [dataTab]);
 
   const handleTabChange = (tabName: string) => {
     console.log("handleTabChange");
@@ -121,7 +99,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
         {visibleTabs.map((elem) => {
           return (
             <Tab key={elem.name} eventKey={elem.name} title={elem.description}>
-              <AbsenceModalContent data={dataTab} parameters={parameters} handleChange={handleChange}/>
+              <AbsenceModalContent data={dataTab} simData={simDataTab} parameters={parameters} handleChange={handleChange} />
             </Tab>
           );
         })}
