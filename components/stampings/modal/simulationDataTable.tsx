@@ -1,12 +1,18 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
+import 'react-tooltip/dist/react-tooltip.css';
+import {Tooltip} from 'react-tooltip';
 import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
 import DateUtility from "../../../utils/dateUtility";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AbsencePopOver from "../../absences/absencePopOver";
+import { useState } from 'react';
+import {useTranslations} from 'next-intl';
 
 library.add(faCheck);
+library.add(faTimes);
 
 interface SimulationDataTableProps {
     data: AbsenceFormSimulationResponse;
@@ -15,68 +21,17 @@ interface SimulationDataTableProps {
 const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
     data
   }) => {
-/*
-      #{list items:insertReport.insertTemplateRows, as:'templateRow' }
-        <tr
-             #{if templateRow.onlyNotOnHoliday()} class="text-muted" #{/if}
-             #{elseif templateRow.beforeInitialization} class="bg-grey" #{/elseif}
-             #{elseif templateRow.absenceErrors} class="bg-danger"#{/elseif}
-             #{elseif templateRow.absenceErrors.empty} *{ class="bg-success" }* #{/elseif}
-          >
-          <td data-order="${templateRow.date}">
-            ${templateRow.date.format()}
-          </td>
-          <td>
-            #{if templateRow.absence}
-	          #{absences.absence-popover absence:templateRow.absence, groupSelected:templateRow.groupAbsenceType /}
-	        #{/if}
-          </td>
 
-          <td>
-            #{if templateRow.onlyNotOnHoliday()} Giorno festivo ignorato #{/if}
-            #{elseif templateRow.absenceErrors}
+    const trans = useTranslations('Message');
+    const [tooltipContent, setTooltipContent] = useState('');
+    const [showTooltip, setShowTooltip] = useState(true);
 
-              *{ popover degli errori dell'assenza }*
-              %{id = insertReport.insertTemplateRows.indexOf(templateRow); }%
-              <span webui-popover-hover data-url="#pop${id}">
-                <i class="fa fa-times text-danger" aria-hidden="true"></i> <em class="text-danger">Mostra i dettagli</em>
-              </span>
-              <div class="webui-popover-content" id="pop${id}">
-              #{list items:templateRow.absenceErrors, as:'absenceError'}
-                &{absenceError.absenceProblem}
-                #{list items:absenceError.conflictingAbsences, as:'conflictingAbsence'}
-                  <strong>${conflictingAbsence.absenceType.code}</strong>
-                #{/list}
-              #{/list}
-              </div>
+    const [tooltipError, setTooltipError] = useState('');
+    const [showTooltipError, setShowTooltipError] = useState(true);
 
-            #{/elseif}
-            #{else} <i class="fa fa-check text-success" aria-hidden="true"></i> #{/else}
-
-            #{if templateRow.absenceWarnings}
-              #{list items:templateRow.absenceWarnings, as:'absenceWarning'}
-                <span class="label label-warning">&{absenceWarning.absenceProblem}</span>
-              #{/list}
-            #{/if}
-          </td>
-
-          #{if insertReport.usableColumn}
-            <td>${templateRow.usableLimit}</td>
-            <td>${templateRow.usableTaken}</td>
-          #{/if}
-           #{if insertReport.complationColumn}
-            <td>${templateRow.consumedComplationBefore}</td>
-            <td>${templateRow.consumedComplationAbsence}</td>
-            <td>${templateRow.consumedComplationNext}</td>
-          #{/if}
-
-        </tr>
-      #{/list}
-      */
-
-      if (!data) {
-        return "";
-      }
+    if (!data) {
+      return "";
+    }
 
     let usableCols = data.usableColumn ? (<>
                                          <th>Limite Utilizzabile</th>
@@ -141,17 +96,54 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
           }
 
           if (row.absence){
-           popupAbsence = row.absence.code;
-           } else {
-           popupAbsence = "";
+             let day = DateUtility.formatDateDay(row.date);
+             let month = DateUtility.formatDateMonth(row.date);
+             popupAbsence = <>
+                            <a href="#" onClick={(e) => e.preventDefault()}>
+                              <AbsencePopOver showGroup={true}
+                              key={`${month}-${day}`}
+                              item={row.absence}
+                              day={day}
+                              setTooltipContent={setTooltipContent}
+                              setShowTooltip={setShowTooltip} />
+                            </a>
+                            </>;
            }
 
            if (row.onlyNotOnHoliday){
             esito = "Giorno festivo ignorato";
-            } else if (row.absenceErrors) {
-            esito = "popup errori";
+            } else if (row.absenceErrors.length>0) {
+            let conflicts ;
+            let errors = row.absenceErrors.map((err)=>{
+                        conflicts = err.conflictingAbsences.map((conflict)=>{
+                                   return <strong>{conflict.absenceType.code}</strong>
+                                   });
+                        return <strong>{trans(err.absenceProblem)}</strong>
+            });
+            let tooltipContentError = (
+                <>
+                    {errors}<br/>{conflicts}
+                </>
+            );
+
+              esito = (<>
+                    <div
+                                data-tooltip-id="tooltip-error"
+                                onMouseEnter={() => {
+                                    setTooltipError(tooltipContentError);
+                                    setShowTooltipError(true);
+                                }}
+                                onClick={() => setShowTooltipError(false)}
+                            >
+                            <span className="text-danger"><FontAwesomeIcon icon={faTimes}/></span>
+                            <em className="text-danger" >Mostra i dettagli</em>
+
+                            </div>
+                    </>);
             } else {
-              esito = <span className="text-success"><FontAwesomeIcon icon={faCheck}/></span>;
+              esito = <>
+                      <span className="text-success"><FontAwesomeIcon icon={faCheck}/></span>
+                      </>
             }
            if (row.absenceWarnings){
             esitoWarn = row.absenceWarnings.map((warn) => {
@@ -168,7 +160,6 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
             else {
               tdUsable = "";
             }
-
 
             if (row.complationColumn) {
               tdComplation = <>
@@ -194,7 +185,13 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
 
     return(<>
     <br/><br/>
-      <Table className="table table-condensed table-bordered">
+    <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
+       {tooltipContent}
+     </Tooltip>
+     <Tooltip id="tooltip-error" className="tooltip-white webui-popover" isOpen={showTooltipError} clickable={true}>
+        {tooltipError}
+      </Tooltip>
+     <Table className="table table-condensed table-bordered">
       <thead>
       <tr>
         <th>Data</th>
@@ -208,6 +205,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
       {rowsDetails}
       </tbody>
       </Table>
+
       <br/>
       {messageSuccess}
       {messageReplacing}
