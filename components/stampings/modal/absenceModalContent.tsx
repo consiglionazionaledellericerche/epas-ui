@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import DropDownElement from "./dropDownElement";
 import SimulationDataTable from "./simulationDataTable";
 import { AbsenceForm } from "../../../types/absenceForm";
 import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+library.add(faCheck);
 
 const customStyles: Styles = {
   option: (provided, state) => ({
@@ -23,13 +29,15 @@ interface AbsenceModalContentProps {
   simData: AbsenceFormSimulationResponse;
   parameters: string;
   handleDropdownChange: (elementOption: { value: any; label: any; from:string; }) => void;
+  handleSaveData: () => void;
 }
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
 data,
 simData,
 parameters,
-handleChange
+handleChange,
+handleSaveData
   }) => {
 
      let alldaySelected = (data?.justifiedTypeSelected == "all_day" ||
@@ -40,7 +48,6 @@ handleChange
     const [endDate, setEndDate] = useState(data.to);
 
     const handleEndDateChange = (event) => {
-      console.log('handleEndDateChange', handleEndDateChange);
       setEndDate(event.target.value);
       handleChange({'value':event.target.value, 'from':'ENDATE'});
     };
@@ -102,6 +109,9 @@ handleChange
             {justifiedTypeChoice}
             {timeChoice}
             <SimulationDataTable data={simData} />
+            <p className="center">
+            <Button onClick={handleSaveData}><FontAwesomeIcon icon={faCheck}/>&nbsp;Inserisci</Button>
+            </p>
         </>
    );
 }

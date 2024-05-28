@@ -84,7 +84,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
     let tdUsable;
     let tdComplation;
 
-    let rowsDetails = data.insertTemplateRows.map((row) => {
+    let rowsDetails = data.insertTemplateRows?.map((row) => {
           if (row.onlyNotOnHoliday) {
             classTr = "text-muted";
           }
@@ -115,7 +115,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
             } else if (row.absenceErrors.length>0) {
             let conflicts ;
             let errors = row.absenceErrors.map((err)=>{
-                        conflicts = err.conflictingAbsences.map((conflict)=>{
+                        conflicts = err.conflictingAbsences?.map((conflict)=>{
                                    return <strong>{conflict.absenceType.code}</strong>
                                    });
                         return <strong>{trans(err.absenceProblem)}</strong>
@@ -146,7 +146,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
                       </>
             }
            if (row.absenceWarnings){
-            esitoWarn = row.absenceWarnings.map((warn) => {
+            esitoWarn = row.absenceWarnings?.map((warn) => {
                           return <span className="label label-warning">&{warn.absenceProblem}</span>
                         })
             }

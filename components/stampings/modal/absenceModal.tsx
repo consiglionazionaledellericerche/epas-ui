@@ -56,7 +56,9 @@ const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, para
         simData={simData}
         parameters={parameters}
         tabName={data.categoryTabSelected.name}
-        tabsVisible={data.tabsVisibile} />}
+        tabsVisible={data.tabsVisibile}
+        handleClose={handleClose}
+        />}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleClose}>Cancel</Button>

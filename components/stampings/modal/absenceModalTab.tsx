@@ -3,11 +3,12 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { getSession } from 'next-auth/react';
 import AbsenceModalContent from "./absenceModalContent";
+import FindCodeContent from "./findCodeContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { AbsenceForm } from "../../../types/absenceForm";
 import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import { fetchData, simulateData } from './apiUtils';
+import { fetchData, simulateData, saveData } from './apiUtils';
 
 interface AbsenceModalTabProps {
   tabName: string;
@@ -15,6 +16,7 @@ interface AbsenceModalTabProps {
   data: AbsenceForm;
   simData: AbsenceFormSimulationResponse;
   parameters: any;
+  handleClose: () => void;
 }
 
 const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
@@ -22,22 +24,21 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   tabsVisible,
   data,
   simData,
-  parameters
+  parameters,
+  handleClose
 }) => {
   const [selectedTab, setSelectedTab] = useState(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
   const [dataTab, setDataTab] = useState(data);
   const [simDataTab, setSimDataTab] = useState(simData);
-  const element = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
+  const titleFindCode = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
   const [params, setParams] = useState({});
   const [newParams, setNewParams] = useState({});
 
   const handleChange = (element) => {
-    console.log("element", element);
     if (element['absenceTypeCode'] === undefined) {
       delete newParams['absenceTypeCode'];
     }
-    console.log('dataTab', dataTab);
 
     newParams['id'] = parameters.id;
     newParams['from'] = parameters.from;
@@ -64,16 +65,16 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     } else if (element.from === 'ENDATE') {
       newParams['to'] = element.value;
     }
-    console.log("newParams", newParams);
-
     fetchData(newParams, setDataTab, false, false);
   }
 
   useEffect(() => {
+  if (selectedTab !== 'FIND_CODE'){
     params['id'] = parameters.id;
     params['from'] = parameters.from;
     params['category'] = selectedTab;
     fetchData(params, setDataTab, false, false);
+   }
   }, [selectedTab]);
 
   useEffect(() => {
@@ -82,29 +83,34 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     }
   }, [dataTab]);
 
-  const handleTabChange = (tabName: string) => {
-    console.log("handleTabChange");
-    setParams({});
+  const handleTabChange = (tabName: string, params={}) => {
+    setParams(params);
     setSelectedTab(tabName);
+  };
+
+  const handleSaveData = () => {
+    if (dataTab) {
+      saveData(dataTab, handleClose);
+    }
   };
 
   return (
     <>
       <Tabs
-        defaultActiveKey={selectedTab}
+        activeKey={selectedTab}
         id="absenceTabs"
         className="mb-3"
-        onSelect={handleTabChange}
+        onSelect={(k) => handleTabChange(k)}
       >
         {visibleTabs.map((elem) => {
           return (
             <Tab key={elem.name} eventKey={elem.name} title={elem.description}>
-              <AbsenceModalContent data={dataTab} simData={simDataTab} parameters={parameters} handleChange={handleChange} />
+              <AbsenceModalContent data={dataTab} simData={simDataTab} parameters={parameters} handleChange={handleChange} handleSaveData={handleSaveData} />
             </Tab>
           );
         })}
-        <Tab eventKey="FIND_CODE" title={element}>
-          Ricerca Codici
+        <Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
+          <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
         </Tab>
       </Tabs>
     </>
