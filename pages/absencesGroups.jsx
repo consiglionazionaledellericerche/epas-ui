@@ -44,6 +44,7 @@ function AbsencesGroups() {
 
   const parameters = personId ? `id=${personId}&from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}` : `from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}`
 
+  console.log("absencegroup params", parameters);
   const {data, error} = useRequest('/absencesGroups/groupStatus', parameters);
 
   if (error) return (<div>Impossibile caricare la situazione delle assenze</div>);
@@ -74,7 +75,7 @@ function AbsencesGroups() {
                                                                      </> : ""
 
                        absencePeriod.takableWithLimit ? elemThree = <>
-                                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Rimangono
+                                 <i className="fa fa-exclamation-circle" aria-hidden="true"></i> Rimangono
                                  <strong> <span className="text-success">{DateUtility.formatAmount(absencePeriod.remainingAmount, absencePeriod.takeAmountType)}</span> </strong>
                                  da utilizzare entro il <strong className="text-success">{DateUtility.formatDate(absencePeriod.to)}</strong>
                                  </> : ""
@@ -110,13 +111,12 @@ function AbsencesGroups() {
                                         <td>{rowRecap.date ? DateUtility.formatDate(rowRecap.date) : ""}</td>
                                         <td>
                                         <a href="#" onClick={(e) => e.preventDefault()}>
-                                        <AbsencePopOver showGroup={false} key={rowRecap.id}
-                                                              absencesRecap={rowRecap.absence}
-                                                              year={DateUtility.formatDateYear(rowRecap.date)}
-                                                              month={DateUtility.formatDateMonth(rowRecap.date)}
-                                                              day={DateUtility.formatDateDay(rowRecap.date)}
-                                                              setTooltipContent={setTooltipContent}
-                                                              setShowTooltip={setShowTooltip}/>
+                                        <AbsencePopOver showGroup={false}
+                                                        key={rowRecap.id}
+                                                        item={rowRecap.absence}
+                                                        day={DateUtility.formatDateDay(rowRecap.date)}
+                                                        setTooltipContent={setTooltipContent}
+                                                        setShowTooltip={setShowTooltip}/>
                                         </a>
                                         </td>
                                         {absencePeriod.takableWithLimit ? <td>{rowRecap.usableLimit}</td>: ""}
