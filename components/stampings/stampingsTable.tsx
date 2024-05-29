@@ -29,10 +29,10 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
 
-    function setModalParam(pdr){
+    function setModalParam(pdr:any){
       let day = DateUtility.formatDateDay(pdr.personDay.date);
       console.log("setModalParam",day,month,year);
-      let date = DateUtility.textToDate(day,month-1,year);
+      let date = DateUtility.textToDate(parseInt(day),month-1,year);
       console.log("setModalParam date",date);
       let id = pdr.personDay.personId;
       setShowModal(true);

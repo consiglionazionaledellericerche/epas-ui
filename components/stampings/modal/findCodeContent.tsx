@@ -39,22 +39,22 @@ handleTabChange
     const columns = [
         {
           name: 'Codice',
-          selector: (row: DataType) => row.code,
+          selector: (row: any) => row.code,
           sortable: true,
         },
         {
           name: 'Tipologia',
-          selector: (row: DataType) => row.defaultTakableGroup,
+          selector: (row: any) => row.defaultTakableGroup,
           sortable: true,
         },
         {
           name: 'Descrizione',
-          selector: (row: DataType) => row.description,
+          selector: (row: any) => row.description,
           sortable: true,
         },
         {
           name: 'Seleziona',
-          cell: (row: DataType) => (
+          cell: (row: any) => (
                 <button onClick={() => handleTabChange(row.categoryTabName, parameters)}>Seleziona</button>
               ),
               ignoreRowClick: true,
