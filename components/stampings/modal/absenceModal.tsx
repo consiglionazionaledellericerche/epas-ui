@@ -33,7 +33,7 @@ const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, para
       setShow(false);
       setData(null);
     }
-  }, [tmpshow, parameters]);
+  }, [tmpshow, parameters, data]);
 
   const handleClose = () => {
     setShow(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getSession } from 'next-auth/react';
-import { CustomSession } from '../../../types/customSession';
+import { CustomSession } from '../../types/customSession';
 import { Spinner } from 'react-bootstrap';
 import { Tooltip } from 'react-tooltip';
 import Link from 'next/link';
@@ -15,19 +15,19 @@ import { useTranslations } from 'next-intl';
 library.add(faPaperPlane);
 
 interface AbsencePopOverProps {
-    day: number;
+    day: number|string;
+    absElem: any;
     showGroup: boolean;
-    setShowTooltip: (show: boolean) => void;
-    setTooltipContent: (content: React.ReactNode) => void;
-    item: AbsenceShow;
+    setShowTooltip: any
+    setTooltipContent: any;
 }
 
 const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
     day,
+    absElem,
     showGroup,
     setShowTooltip,
-    setTooltipContent,
-    item
+    setTooltipContent
 }) => {
     const [data, setData] = useState<AbsenceShow | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,39 +36,41 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            if ('absenceType' in item) {
-                setData(item);
+            if ('absenceType' in absElem) {
+                setData(absElem);
                 setIsLoading(false);
             } else {
-                const session = await getSession();
-                let accessToken = session?.accessToken || null;
+                const session = await getSession() as CustomSession;
+                let accessToken = session ? session.accessToken : null;
+
                 try {
-                    const response = await fetch(`/api/rest/v4/absences/${item.id}`, {
+                    console.log("abs", absElem.id);
+                    let idItem = absElem.id;
+                    const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
                         method: 'GET',
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${accessToken}`,
-                        },
+                        }
                     });
 
                     if (!response.ok) {
                         throw new Error('Errore durante la richiesta API');
                     }
 
-                    const data = await response.json();
+                    const data: AbsenceShow = await response.json();
                     setData(data);
                 } catch (error) {
-                    setError(error);
+                    setError(error as Error);
                     console.error("unable to achieve this", error);
                 }
-
                 setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [item]);
+    }, [absElem]);
 
     if (isLoading) {
         return <Spinner animation="border" />;
@@ -82,7 +84,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
         return <div>Errore!</div>;
     }
 
-    const absenceCode = item.code;
+    const absenceCode = absElem.code;
     const absenceDescription = data.absenceType?.description;
     const absenceData = DateUtility.formatDate(data.date);
     const absenceJustifiedType = t(data.justifiedType);
@@ -127,7 +129,6 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
                 <span key={`row-res-${replacingGroup.id}`}>
                     <span>{replacingGroup.description}</span>
                     <Link href={query} passHref>
-                        {/* Remove <a> tag */}
                         Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i>
                     </Link>
                 </span>
@@ -135,7 +136,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
         });
 
         hasGroupsElem = (
-            <li key={`group-${item.code}-${day}`} className="list-group-item">
+            <li key={`group-${absElem.code}-${day}`} className="list-group-item">
                 <strong>Gruppo</strong><br/>
                 {rowRes}
             </li>
