@@ -423,7 +423,7 @@ body.modal-open #wrapper{
 
 .modal-backdrop,
 .modal-backdrop.fade.in{
-	opacity: 0.3;
+	opacity: 0.3 !important;
 	filter: alpha(opacity=70);
 	background: black;
 	/*background: rgba(0, 51, 128, 0.57);*/

@@ -21,6 +21,8 @@ function getTdElem(day: number, year: number, month: string, setTooltipContent: 
         item = null;
     }
 
+    console.log("qbsenceYear>>>> ", item);
+
     if (!item  || item ===null){
       return (<div></div>);
     }
