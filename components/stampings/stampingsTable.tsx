@@ -111,7 +111,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
 
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
 
-                        <td>{pdr.wttd.workingTimeType?.description}</td>
+                        <td>{pdr.wttd && pdr.wttd.workingTimeType ? pdr.wttd.workingTimeType.description : ""}</td>
                     </tr>
                     )
                 )
