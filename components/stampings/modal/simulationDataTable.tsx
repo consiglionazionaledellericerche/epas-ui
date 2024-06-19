@@ -101,7 +101,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
              popupAbsence = <>
                             <a href="#" onClick={(e) => e.preventDefault()}>
                               <AbsencePopOver showGroup={true}
-                              key={`${month}-${day}`}
+                              key={`popup-${month}-${day}`}
                               item={row.absence}
                               day={day}
                               setTooltipContent={setTooltipContent}
@@ -173,7 +173,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({
             }
 
           return (
-            <tr className={classTr}>
+            <tr className={classTr} key={`tr-${DateUtility.formatDate(row.date)}`}>
               <td>{DateUtility.formatDate(row.date)}</td>
               <td>{popupAbsence}</td>
               <td>{esito} {esitoWarn}</td>

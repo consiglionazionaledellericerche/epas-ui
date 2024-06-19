@@ -58,7 +58,7 @@ handleTabChange
                 <button onClick={() => handleTabChange(row.categoryTabName, parameters)}>Seleziona</button>
               ),
               ignoreRowClick: true,
-              allowOverflow: true,
+              allowoverflow: true,
               button: true,
             },
    ];

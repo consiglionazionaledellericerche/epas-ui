@@ -9,6 +9,35 @@ const buildQueryString = (params) => {
     .join('&');
 };
 
+export const secureCheck = async (params, setShowFindCodeTab) => {
+  const session = await getSession();
+  let accessToken = session?.accessToken || null;
+
+  const queryString = buildQueryString(params);
+  const url = `/api/rest/v4/absencesGroups/secureCheck?${queryString}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore durante la richiesta API');
+    }
+
+    const data = await response.json();
+    console.log("RESULT API", data);
+    setShowFindCodeTab(data);
+  } catch (error) {
+    console.error("unable to achieve this", error);
+  }
+};
+
 // Funzione per fetchData
 export const fetchData = async (params, setDataTab, setShow, setTitle) => {
   const session = await getSession();

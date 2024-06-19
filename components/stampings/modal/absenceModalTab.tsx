@@ -17,6 +17,7 @@ interface AbsenceModalTabProps {
   simData: AbsenceFormSimulationResponse;
   parameters: any;
   handleClose: () => void;
+  showFindCodeTab: boolean;
 }
 
 const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
@@ -25,7 +26,8 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   data,
   simData,
   parameters,
-  handleClose
+  handleClose,
+  showFindCodeTab
 }) => {
   const [selectedTab, setSelectedTab] = useState(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
@@ -94,6 +96,10 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     }
   };
 
+//   let findCodeTab = showFindCodeTab ? <><Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
+//                      <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
+//                      </Tab></> : "";
+
   return (
     <>
       <Tabs
@@ -109,9 +115,10 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
             </Tab>
           );
         })}
-        <Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
-          <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
-        </Tab>
+
+        {showFindCodeTab ? (<Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
+                              <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
+                              </Tab>):""}
       </Tabs>
     </>
   );

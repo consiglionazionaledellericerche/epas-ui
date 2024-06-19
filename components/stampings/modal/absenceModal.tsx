@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import AbsenceModalTab from "./absenceModalTab";
-import { fetchData, simulateData } from './apiUtils';
+import { fetchData, simulateData, secureCheck } from './apiUtils';
 
 interface AbsenceModalProps {
   title: string,
@@ -19,6 +19,7 @@ interface AbsenceModalState {
 
 const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, parameters }) => {
   const [show, setShow] = useState(false);
+  const [showFindCodeTab, setShowFindCodeTab] = useState(false);
   const [data, setData] = useState<any>(null);
   const [simData, setSimData] = useState<any>(null);
   const [titleModal, setTitle] = useState(title);
@@ -26,6 +27,12 @@ const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, para
 
   useEffect(() => {
     if (tmpshow) {
+    console.log("data>>>>>", data);
+      let params = {'method':'GET',
+                'path':'/rest/v4/absencesGroups/findCode',
+                'target':'Office',
+                'id':parameters['id']};
+      secureCheck(params, setShowFindCodeTab);
       fetchData(parameters, setData, setShow, setTitle);
       simulateData(data, setSimData);
 
@@ -58,6 +65,7 @@ const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, para
         tabName={data.categoryTabSelected.name}
         tabsVisible={data.tabsVisibile}
         handleClose={handleClose}
+        showFindCodeTab={showFindCodeTab}
         />}
       </Modal.Body>
       <Modal.Footer>
