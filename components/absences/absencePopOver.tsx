@@ -93,7 +93,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
     if (data.justifiedTime) {
         absenceJustifiedTimeElem = (
             <>
-                <strong>Tipo Giustificazione</strong> {DateUtility.fromMinuteToHourMinute(data.justifiedTime)} <br/>
+                <strong>Tempo Specificato</strong> {DateUtility.fromMinuteToHourMinute(data.justifiedTime)} <br/>
             </>
         );
     }
