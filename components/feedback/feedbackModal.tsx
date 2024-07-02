@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+
 import Image from "next/image";
 import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
@@ -9,9 +10,9 @@ import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import dotenv from 'dotenv/config';
-
 
 interface FeedbackModalProps {
   tmpshow: boolean;
@@ -51,6 +52,7 @@ class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalSta
   }
 
   async componentDidUpdate(propsPrecedenti:any) {
+
     if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
       this.setState({
       show: this.props.tmpshow,
@@ -93,6 +95,7 @@ class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalSta
     let new_session = this.state.dataToSend.session;
       new_session.user = this.state.dataToSend.session.user.name;
       session = new_session;
+
       headersJson = {'Accept': 'application/json',
                      'Content-Type': 'application/json',
                      'Authorization': 'Bearer '+this.state.accessToken}
@@ -161,6 +164,7 @@ class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalSta
                               onChange={this.handleCategoryChange}
                         >
                           <option value="">Seleziona una categoria</option>
+
                           {this.state.categories?.map((category:any) => (
                             <option key={category.value} value={category.value}>
                               {category.label}
@@ -191,5 +195,4 @@ export async function getServerSideProps({ req, res }: { req: NextApiRequest, re
     },
   };
 }
-
 export default FeedbackModal;
