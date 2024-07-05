@@ -1,9 +1,12 @@
 import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Image from 'react-bootstrap/Image';
+
+import Image from "next/image";
 import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -12,18 +15,33 @@ import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import dotenv from 'dotenv/config';
 
 interface FeedbackModalProps {
-  tmpshow: boolean,
+  tmpshow: boolean;
+  close: () => void;
+    screenshot: string;
+    dataToSend:any;
+    accessToken:string|null;
+}
+interface FeedbackModalState {
   screenshot: string,
-  dataToSend: object,
-  accessToken: string,
-  close: any
+  show: boolean,
+  close: () => void,
+  url: string,
+  selectedCategory:string,
+  categories:any,
+  dataToSend:any,
+  accessToken:string|null,
+  title:string|null,
+  description:string
 }
 
-class FeedbackModal  extends React.Component<FeedbackModalProps, any> {
-  constructor(props:FeedbackModalProps) {
+class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalState>  {
+  constructor(props:any) {
     super(props);
     console.log("props", props);
     this.state = {screenshot: "",
+                  title:"",
+                  description:"",
+                  close: props.close,
                   show: props.tmpshow,
                   url: process.env.EPAS_HELPDESK_SERVICE+'/send',
                   selectedCategory:"",
@@ -33,7 +51,8 @@ class FeedbackModal  extends React.Component<FeedbackModalProps, any> {
                   accessToken:null}
   }
 
-  async componentDidUpdate(propsPrecedenti: any) {
+  async componentDidUpdate(propsPrecedenti:any) {
+
     if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
       this.setState({
       show: this.props.tmpshow,
@@ -49,49 +68,49 @@ class FeedbackModal  extends React.Component<FeedbackModalProps, any> {
     this.props.close();
   }
 
-  handleDescriptionChange = (e: any) => {
+  handleDescriptionChange = (e:any) => {
     const description = e.target.value;
     this.setState({'description':description});
   }
 
-  handleCategoryChange = (e: any) => {
+  handleCategoryChange = (e:any) => {
     const selectedCategory = e.target.value;
     this.setState({'selectedCategory':selectedCategory});
   }
 
   handleSubmit = () => {
-    const {description, selectedCategory } = this.state;
-      const screenshot = this.state.screenshot.replace("data:image/png;base64,","");
-      this.setState({
-            dataToSend: {img: screenshot,
-                        note: this.state.description,
-                        category: this.state.selectedCategory
-                        }
-      });
+    const { description, selectedCategory } = this.state;
+    let img = this.state.screenshot.replace("data:image/png;base64,","");
+    let note = this.state.description;
+    let category = this.state.selectedCategory;
 
-    let headersJson = {'Accept': 'application/json',
-                       'Content-Type': 'application/json',
-                       'Authorization': ''}
+    let session;
+
+    let headersJson;
     if (this.state.dataToSend.session === null) {
-          this.setState({
-            dataToSend: {session: {"user": ""}}
-          });
-
+    headersJson = {'Accept': 'application/json',
+                   'Content-Type': 'application/json'}
+      session = {"user": ""};
     } else {
     let new_session = this.state.dataToSend.session;
       new_session.user = this.state.dataToSend.session.user.name;
-          this.setState({
-            dataToSend: {session: new_session}
-          });
+      session = new_session;
+
       headersJson = {'Accept': 'application/json',
                      'Content-Type': 'application/json',
                      'Authorization': 'Bearer '+this.state.accessToken}
     }
 
+    this.setState({'dataToSend':{
+                                  'img':img,
+                                  'note':note,
+                                  'category':category,
+                                  'session':session}});
+
     fetch(this.state.url, {
       method: 'PUT',
       headers: {'Accept': 'application/json',
-                                      'Content-Type': 'application/json'},
+                 'Content-Type': 'application/json'},
       body: JSON.stringify(this.state.dataToSend) // Converte l'oggetto JavaScript in una stringa JSON
     })
       .then(response => {
@@ -145,7 +164,8 @@ class FeedbackModal  extends React.Component<FeedbackModalProps, any> {
                               onChange={this.handleCategoryChange}
                         >
                           <option value="">Seleziona una categoria</option>
-                          {this.state.categories?.map((category: any) => (
+
+                          {this.state.categories?.map((category:any) => (
                             <option key={category.value} value={category.value}>
                               {category.label}
                             </option>
@@ -171,7 +191,7 @@ class FeedbackModal  extends React.Component<FeedbackModalProps, any> {
 export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
   return {
     props: {
-      session: await getServerSession(req, res, authOptions)
+      session: await getServerSession(req, res, authOptions),
     },
   };
 }

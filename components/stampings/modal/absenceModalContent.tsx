@@ -12,23 +12,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 library.add(faCheck);
 
-const customStyles: Styles = {
-  option: (provided, state) => ({
-    ...provided,
-    fontSize: '14px', // Dimensione del testo
-  }),
-  groupHeading: (provided, state) => ({
-    ...provided,
-    fontSize: '14px', // Dimensione del testo più grande per l'optgroup
-    fontWeight: 'bold', // Grassetto per l'optgroup
-  }),
-};
-
 interface AbsenceModalContentProps {
   data: AbsenceForm;
   simData: AbsenceFormSimulationResponse;
   parameters: string;
-  handleDropdownChange: (elementOption: { value: any; label: any; from:string; }) => void;
+  handleChange: (elementOption: { value: any; label: any; from:string; }) => void;
   handleSaveData: () => void;
 }
 
@@ -44,14 +32,25 @@ handleSaveData
                          data?.justifiedTypeSelected == "assign_all_day") ? true : false;
      let specifiedMinuteSelected = (data?.justifiedTypeSelected == "specified_minutes") ? true : false;
 
-    const [startDate, setStartDate] = useState(data.from);
-    const [endDate, setEndDate] = useState(data.to);
+//     const [startDate, setStartDate] = useState(data.from);
+//     const [endDate, setEndDate] = useState(data.to);
 
-    const handleEndDateChange = (event) => {
+  const [startDate, setStartDate] = useState<Date | undefined>(data.from);
+  const [endDate, setEndDate] = useState<Date | undefined>(data.to);
+
+  const formatDate = (date: Date | undefined): string => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+    const handleEndDateChange = (event:any) => {
       setEndDate(event.target.value);
-      handleChange({'value':event.target.value, 'from':'ENDATE'});
+      handleChange({'value':event.target.value, 'label':event.target.label, 'from':'ENDATE'});
     };
-    const handleGrouptypeChange = (selectOption) => {
+    const handleGrouptypeChange = (selectOption:any) => {
       handleChange(selectOption);
     };
 
@@ -90,13 +89,13 @@ handleSaveData
             <div className="form-group">
               <label htmlFor="startDate" className="col-sm-2 control-label">Da</label>
               <div className="col-sm-6"  style={{ display: 'inline-block' }}>
-                <input type="date" id="startDate" className="form-control" disabled value={startDate} />
+                <input type="date" id="startDate" className="form-control" disabled value={formatDate(startDate)} />
               </div>
             </div>
             <div className="form-group">
               <label htmlFor="endDate" className="col-sm-2 control-label">A</label>
               <div className="col-sm-6"  style={{ display: 'inline-block' }}>
-                <input type="date" id="endDate" className="form-control" value={endDate} disabled={alldaySelected}
+                <input type="date" id="endDate" className="form-control" value={formatDate(endDate)} disabled={alldaySelected}
                  onChange={handleEndDateChange} />
               </div>
             </div>

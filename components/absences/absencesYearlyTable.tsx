@@ -30,7 +30,7 @@ function getTdElem(day: number, year: number, month: string, setTooltipContent: 
        return (<a href="#" onClick={(e) => e.preventDefault()}>
                <AbsencePopOver showGroup={true}
                key={`${month}-${day}`}
-               item={item}
+               absElem={item}
                day={day}
                setTooltipContent={setTooltipContent}
                setShowTooltip={setShowTooltip} />

@@ -1,4 +1,5 @@
-import { AbsenceShowTerse } from "./absenceShowTerse"
+import { AbsenceShow } from "./absenceShow"
+import { AbsenceError } from "./absenceError"
 import { GroupAbsenceType } from "./groupAbsenceType"
 
 export type TemplateRow = {
@@ -10,10 +11,22 @@ export type TemplateRow = {
     date?: Date;
     /**
      *
-     * @type {AbsenceShowTerseDto}
+     * @type {Array<AbsenceErrorDto>}
      * @memberof TemplateRowDto
      */
-    absence?: AbsenceShowTerse;
+    absenceErrors?: Array<AbsenceError>;
+    /**
+     *
+     * @type {Array<AbsenceErrorDto>}
+     * @memberof TemplateRowDto
+     */
+    absenceWarnings?: Array<AbsenceError>;
+    /**
+     *
+     * @type {AbsenceShowDto}
+     * @memberof TemplateRowDto
+     */
+    absence?: AbsenceShow;
     /**
      *
      * @type {GroupAbsenceTypeDto}
@@ -26,6 +39,12 @@ export type TemplateRow = {
      * @memberof TemplateRowDto
      */
     beforeInitialization?: boolean;
+   /**
+    *
+    * @type {boolean}
+    * @memberof TemplateRowDto
+    */
+    onlyNotOnHoliday?: boolean;
     /**
      *
      * @type {boolean}
