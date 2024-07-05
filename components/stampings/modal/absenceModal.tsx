@@ -48,7 +48,7 @@ interface AbsenceModalState {
       setShow(false);
       setData(null);
     }
-  }, [tmpshow, parameters]);
+  }, [tmpshow, parameters, data]);
 
   const handleClose = () => {
     setShow(false);

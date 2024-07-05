@@ -25,7 +25,7 @@ const AbsencesShow: React.FC<AbsencesShowProps> = ({
   const intDay = parseInt(day, 10);
   let loop = absences.map((absence) => (
         <span key={`absence-popover-${month}-${day}-${absence.id}`}>
-          <AbsencePopOver showGroup={true} item={absence} day={intDay} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
+          <AbsencePopOver showGroup={true} absElem={absence} day={intDay} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
         </span>
   ))
 

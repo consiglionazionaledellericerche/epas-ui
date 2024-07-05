@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Select, { Styles } from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 import { useRequest } from "../../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { CustomSession } from "../../../types/customSession";
+import { AbsenceForm } from "../../../types/absenceForm";
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from '../../../pages/api/auth/[...nextauth]';
 import {useTranslations} from 'next-intl';
 
-const customStyles: Styles = {
-  option: (provided, state) => ({
+const customStyles: StylesConfig = {
+  option: (provided:any, state:any) => ({
     ...provided,
     fontSize: '14px', // Dimensione del testo
   }),
-  groupHeading: (provided, state) => ({
+  groupHeading: (provided:any, state:any) => ({
     ...provided,
     fontSize: '14px', // Dimensione del testo più grande per l'optgroup
     fontWeight: 'bold', // Grassetto per l'optgroup
@@ -37,8 +38,8 @@ typeElem,
 data,
 onChange
 }) => {
-  const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState<ModifiedSelectedOption | null>(null);
+  const [options, setOptions] = useState<any>([]);
+  const [selectedOption, setSelectedOption] = useState<any>(null);
   const t = useTranslations('Message');
 
 
@@ -47,7 +48,7 @@ useEffect(() => {
   let selectedOption;
 
   if (typeElem === "ABSENCE") {
-    if (data.absenceTypes.length > 0) {
+    if (data.absenceTypes && data.absenceTypes.length > 0) {
       let options = data.absenceTypes.map((item) => ({
         value: item.code,
         label: item.code + " - " + item.description,
@@ -86,7 +87,7 @@ useEffect(() => {
 
     }
   } else if (typeElem === "GROUPABS") {
-    if (Object.keys(data.groupsByCategory).length > 0) {
+    if (data.groupsByCategory && Object.keys(data.groupsByCategory).length > 0) {
       formattedOptions = Object.entries(data.groupsByCategory).map(
         ([category, values]) => ({
           label: category,
@@ -98,14 +99,16 @@ useEffect(() => {
         })
       );
 
+      let valueData = data.groupSelected ? data.groupSelected.name : "";
+      let descrData = data.groupSelected ? data.groupSelected.description : "";
       selectedOption = {
-        value: data.groupSelected.name,
-        label: data.groupSelected.description,
+        value: valueData,
+        label: descrData,
         from: typeElem
       };
     }
   } else if (typeElem === "JUSTIFYTYPE") {
-    if (data.justifiedTypes.length > 0) {
+    if (data.justifiedTypes && data.justifiedTypes.length > 0) {
       let options = data.justifiedTypes.map((item) => ({
         value: item,
         label: t(item),
@@ -113,14 +116,16 @@ useEffect(() => {
       }));
       formattedOptions = [{ options: options }];
 
+      let valueData = data.justifiedTypeSelected ? data.justifiedTypeSelected : "";
+
       selectedOption = {
-        value: data.justifiedTypeSelected,
-        label: t(data.justifiedTypeSelected),
+        value: valueData,
+        label: t(valueData),
         from: typeElem
       };
     }
   } else if (typeElem === "HOUR") {
-       if (data.selectableHours.length > 0) {
+       if (data.selectableHours && data.selectableHours.length > 0) {
          let options = data.selectableHours.map((item) => ({
            value: item,
            label: item,
@@ -128,14 +133,16 @@ useEffect(() => {
          }));
          formattedOptions = [{ options: options }];
 
+      let valueData = data.hours ? data.hours : "";
+
          selectedOption = {
-           value: data.hours,
-           label: data.hours,
+           value: valueData,
+           label: valueData,
            from: typeElem
          };
        }
      } else if (typeElem === "MINUTE") {
-         if (data.selectableMinutes.length > 0) {
+         if (data.selectableMinutes && data.selectableMinutes.length > 0) {
            let options = data.selectableMinutes.map((item) => ({
              value: item,
              label: item,
@@ -143,9 +150,11 @@ useEffect(() => {
            }));
            formattedOptions = [{ options: options }];
 
+            let valueData = data.minutes ? data.minutes : "";
+
            selectedOption = {
-             value: data.minutes,
-             label: data.minutes,
+             value: valueData,
+             label: valueData,
              from: typeElem
            };
          }
@@ -155,8 +164,9 @@ useEffect(() => {
     setOptions(formattedOptions);
     setSelectedOption(selectedOption);
   }
-
-}, [typeElem, data.absenceTypes, data.absenceTypeSelected, data.groupsByCategory, data.groupSelected, data.justifiedTypes, data.justifiedTypeSelected]);
+}, [typeElem, data.absenceTypes, data.absenceTypeSelected,
+ data.groupsByCategory, data.groupSelected, data.justifiedTypes,
+ data.justifiedTypeSelected, data, t]);
 
     const handleSelectChange = (selectedOption: any) => {
       onChange(selectedOption);

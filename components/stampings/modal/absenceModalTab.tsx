@@ -31,16 +31,16 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   showFindCodeTab,
   showForceInsert
 }) => {
-  const [selectedTab, setSelectedTab] = useState(tabName);
+  const [selectedTab, setSelectedTab] = useState<string | null | any>(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
   const [dataTab, setDataTab] = useState(data);
   const [simDataTab, setSimDataTab] = useState(simData);
   const titleFindCode = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
-  const [params, setParams] = useState({});
-  const [newParams, setNewParams] = useState({});
+  const [params, setParams] = useState<any>({});
+  const [newParams, setNewParams] = useState<any>({});
   const [forceInsert, setForceInsert] = useState(false);
 
-  const handleChange = (element) => {
+  const handleChange = (element:any) => {
     if (element['absenceTypeCode'] === undefined) {
       delete newParams['absenceTypeCode'];
     }
@@ -82,7 +82,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     params['category'] = selectedTab;
     fetchData(params, setDataTab, false, false);
    }
-  }, [selectedTab]);
+  }, [selectedTab, parameters,params]);
 
   useEffect(() => {
     if (dataTab) {
@@ -90,7 +90,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     }
   }, [dataTab]);
 
-  const handleTabChange = (tabName: string, params={}) => {
+  const handleTabChange = (tabName: string|null, params={}) => {
     setParams(params);
     setSelectedTab(tabName);
     setForceInsert(false);

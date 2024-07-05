@@ -3,26 +3,37 @@ import { CustomSession } from '../../../types/customSession';
 import DateUtility from "../../../utils/dateUtility";
 
 // Funzione per costruire la query string da un oggetto params
-const buildQueryString = (params) => {
+const buildQueryString = (params: Record<string, any>) => {
   return Object.entries(params)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .map(([key, value]) => {
+      // Controlla e converte il tipo del valore
+      let encodedValue;
+      if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+        encodedValue = encodeURIComponent(value);
+      } else {
+        encodedValue = encodeURIComponent(String(value));
+      }
+      return `${encodeURIComponent(key)}=${encodedValue}`;
+    })
     .join('&');
 };
 
+
+
 // Funzione per fetchData
-export const fetchData = async (params, setDataTab, setShow, setTitle) => {
-  const session = await getSession();
-  let accessToken = session?.accessToken || null;
-
+export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
   let forceInsert = null;
-
-  console.log("params>>> ", params);
 
   if ('forceInsert' in params) {
     forceInsert = params['forceInsert'];
     delete params['forceInsert'];
   }
-  console.log("forceInsert>>> ", forceInsert);
+
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
 
@@ -40,12 +51,9 @@ export const fetchData = async (params, setDataTab, setShow, setTitle) => {
       throw new Error('Errore durante la richiesta API');
     }
     const data = await response.json();
-    console.log("data1>>> ", data);
     if (forceInsert != null){
       data['forceInsert'] = forceInsert;
     }
-
-    console.log("data2>>> ", data);
     setDataTab(data);
     if (setShow !== false){
       let person = data.person.surname + " " + data.person.name;
@@ -59,13 +67,15 @@ export const fetchData = async (params, setDataTab, setShow, setTitle) => {
 };
 
 // Funzione per simulateData
-export const simulateData = async (dataTab, setSimDataTab) => {
+export const simulateData = async (dataTab:any, setSimDataTab:any) => {
   if (dataTab === null){
     return;
   }
-  const session = await getSession();
-  let accessToken = session?.accessToken || null;
-
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
   let params = {
     idPerson: dataTab?.person.id || null,
     from: dataTab?.from || null,
@@ -105,12 +115,15 @@ export const simulateData = async (dataTab, setSimDataTab) => {
 };
 
 // Funzione per simulateData
-export const saveData = async (dataTab, handleClose) => {
+export const saveData = async (dataTab:any, handleClose:any) => {
   if (dataTab === null){
     return;
   }
-  const session = await getSession();
-  let accessToken = session?.accessToken || null;
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
 
   let params = {
     idPerson: dataTab?.person.id || null,
@@ -150,9 +163,12 @@ export const saveData = async (dataTab, handleClose) => {
   }
 };
 
-export const fetchFindCode = async (params, setData, setLoading, setError, setTotalRows) => {
-  const session = await getSession();
-  let accessToken = session?.accessToken || null;
+export const fetchFindCode = async (params:any, setData:any, setLoading:any, setError:any, setTotalRows:any) => {
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
 
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/absencesGroups/findCode?${queryString}`;
