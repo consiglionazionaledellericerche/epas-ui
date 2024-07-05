@@ -34,7 +34,7 @@ handleTabChange
     // Effetto per chiamare l'API quando il componente viene montato
     useEffect(() => {
         fetchFindCode(parameters, setData, setLoading, setError, setTotalRows);
-    }, []);
+    }, [parameters]);
 
     const columns = [
         {

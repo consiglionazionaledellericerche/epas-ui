@@ -20,7 +20,7 @@ interface AbsenceModalContentProps {
   handleSaveData: () => void;
   showForceInsert: boolean;
   forceInsert: boolean;
-  setForceInsert: () => void;
+  setForceInsert: (value:boolean) => void;
 }
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
@@ -59,9 +59,9 @@ setForceInsert
       handleChange(selectOption);
     };
 
-    const handleCheckboxForceInsert = (event) => {
+    const handleCheckboxForceInsert = (event:any) => {
         setForceInsert(event.target.checked);
-        handleChange({'value':event.target.checked, 'from':'FORCEINSERT'});
+        handleChange({'label':'FORCEINSERT','value':event.target.checked, 'from':'FORCEINSERT'});
       };
 
     let justifiedTypeChoice = data.hasJustifiedTypeChoice ? (<>
@@ -92,7 +92,7 @@ setForceInsert
      <br/><br/>
      <div>
        <p className="alert alert-warning">
-        <strong>Attenzione:</strong> Forzando l'inserimento di un codice al momento del salvataggio
+        <strong>Attenzione:</strong> Forzando l&apos;inserimento di un codice al momento del salvataggio
            non verrà effettuato alcun tipo di controllo.
        </p>
      </div>
@@ -124,7 +124,7 @@ setForceInsert
                                                   <p className="alert alert-danger">
                                                       <FontAwesomeIcon icon={faExclamationTriangle} style={{ color: 'red', marginRight: '5px' }} size="2x" />
                                                       I gruppi riguardanti i codici malattia figli sono in fase di implementazione pertanto il controllo
-                                                     sul superamento dei limiti è disabilitato. L'implementazione verrà completata a breve.
+                                                     sul superamento dei limiti è disabilitato. L&apos;implementazione verrà completata a breve.
                                                   </p>
                                                 </div>
                                                 </>):"";

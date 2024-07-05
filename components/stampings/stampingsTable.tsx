@@ -33,28 +33,27 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [yearMonthSecureCheck, setYearMonthSecureCheck] = useState(false);
     const [personSecureCheck, setPersonSecureCheck] = useState(false);
     function setModalParam(pdr:any){
-      let day = DateUtility.formatDateDay(pdr.personDay.date);
-      console.log("setModalParam",day,month,year);
-      let date = DateUtility.textToDate(parseInt(day),month-1,year);
-      console.log("setModalParam date",date);
+      let dayDate = DateUtility.formatDateDay(pdr.personDay.date);
+      let dateFrom = DateUtility.textToDate(parseInt(dayDate),month-1,year);
       let id = pdr.personDay.personId;
-      let day = DateUtility.formatDateDay(pdr.personDay.date);
-      let date = DateUtility.textToDate(day,month-1,year);
-      let paramsSC = {'method':'GET',
+
+      let paramsSCYearMonth = {'method':'GET',
                     'path':'/rest/v4/absencesGroups/groupsForCategory',
                     'entityType':'YearMonth',
                     'id':id,
                     'year':year,
                     'month':month};
-      secureCheck(paramsSC, setYearMonthSecureCheck);
-      paramsSC = {'method':'GET',
+      secureCheck(paramsSCYearMonth, setYearMonthSecureCheck);
+
+      let paramsSCPerson = {'method':'GET',
                     'path':'/rest/v4/absencesGroups/groupsForCategory',
                     'entityType':'Person',
                     'id':id};
-      secureCheck(paramsSC, setPersonSecureCheck);
+      secureCheck(paramsSCPerson, setPersonSecureCheck);
+
       if (yearMonthSecureCheck && personSecureCheck){
           setShowModal(true);
-          setParameters({'id':id, 'from':date});
+          setParameters({'id':id, 'from':dateFrom});
           setTitleModal("");
       }
     }

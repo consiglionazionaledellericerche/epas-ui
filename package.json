@@ -32,9 +32,9 @@
     "react-select": "^5.8.0",
     "sweetalert2": "^11.6.13",
     "swr": "^2.2.5",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
     "react-data-table-component": "^7.6.2",
-    "react-tooltip": "^5.26.4",
+    "react-tooltip": "^5.26.4"
   },
   "devDependencies": {
     "@types/node": "20.12.4",

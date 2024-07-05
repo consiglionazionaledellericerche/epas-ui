@@ -3,13 +3,13 @@ import { CustomSession } from '../types/customSession';
 import DateUtility from "../utils/dateUtility";
 
 // Funzione per costruire la query string da un oggetto params
-const buildQueryString = (params) => {
+const buildQueryString = (params:{ [key: string]: string | number | boolean }) => {
   return Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&');
 };
 
-export const secureCheck = async (params, setMethod) => {
+export const secureCheck = async (params:any, setMethod:any) => {
   const session = await getSession();
   let accessToken = session?.accessToken || null;
 
