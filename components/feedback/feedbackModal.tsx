@@ -12,7 +12,6 @@ import dotenv from 'dotenv/config';
 class FeedbackModal  extends React.Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
     this.state = {screenshot: "",
                   show: props.tmpshow,
                   url: process.env.EPAS_HELPDESK_SERVICE+'/send',

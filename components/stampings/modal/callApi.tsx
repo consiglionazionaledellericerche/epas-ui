@@ -9,40 +9,20 @@ const buildQueryString = (params) => {
     .join('&');
 };
 
-export const secureCheck = async (params, setShowFindCodeTab) => {
-  const session = await getSession();
-  let accessToken = session?.accessToken || null;
-
-  const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/absencesGroups/secureCheck?${queryString}`;
-
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Errore durante la richiesta API');
-    }
-
-    const data = await response.json();
-    console.log("RESULT API", data);
-    setShowFindCodeTab(data);
-  } catch (error) {
-    console.error("unable to achieve this", error);
-  }
-};
-
 // Funzione per fetchData
 export const fetchData = async (params, setDataTab, setShow, setTitle) => {
   const session = await getSession();
   let accessToken = session?.accessToken || null;
 
+  let forceInsert = null;
+
+  console.log("params>>> ", params);
+
+  if ('forceInsert' in params) {
+    forceInsert = params['forceInsert'];
+    delete params['forceInsert'];
+  }
+  console.log("forceInsert>>> ", forceInsert);
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
 
@@ -59,8 +39,13 @@ export const fetchData = async (params, setDataTab, setShow, setTitle) => {
     if (!response.ok) {
       throw new Error('Errore durante la richiesta API');
     }
-
     const data = await response.json();
+    console.log("data1>>> ", data);
+    if (forceInsert != null){
+      data['forceInsert'] = forceInsert;
+    }
+
+    console.log("data2>>> ", data);
     setDataTab(data);
     if (setShow !== false){
       let person = data.person.surname + " " + data.person.name;
@@ -85,7 +70,7 @@ export const simulateData = async (dataTab, setSimDataTab) => {
     idPerson: dataTab?.person.id || null,
     from: dataTab?.from || null,
     categoryTabName: dataTab?.categoryTabSelected.name || null,
-    forceInsert: false,
+    forceInsert: dataTab?.forceInsert || false,
     to: dataTab?.to || null,
     recoveryDate: dataTab?.recoveryDate || null,
     justifiedTypeName: dataTab?.justifiedTypeSelected || null,

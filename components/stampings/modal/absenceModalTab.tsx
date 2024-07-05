@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { AbsenceForm } from "../../../types/absenceForm";
 import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import { fetchData, simulateData, saveData } from './apiUtils';
+import { fetchData, simulateData, saveData } from './callApi';
 
 interface AbsenceModalTabProps {
   tabName: string;
@@ -18,6 +18,7 @@ interface AbsenceModalTabProps {
   parameters: any;
   handleClose: () => void;
   showFindCodeTab: boolean;
+  showForceInsert: boolean;
 }
 
 const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
@@ -27,7 +28,8 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   simData,
   parameters,
   handleClose,
-  showFindCodeTab
+  showFindCodeTab,
+  showForceInsert
 }) => {
   const [selectedTab, setSelectedTab] = useState(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
@@ -36,6 +38,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   const titleFindCode = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
   const [params, setParams] = useState({});
   const [newParams, setNewParams] = useState({});
+  const [forceInsert, setForceInsert] = useState(false);
 
   const handleChange = (element) => {
     if (element['absenceTypeCode'] === undefined) {
@@ -66,6 +69,8 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
       newParams['minute'] = element.value;
     } else if (element.from === 'ENDATE') {
       newParams['to'] = element.value;
+    } else if (element.from === 'FORCEINSERT') {
+      newParams['forceInsert'] = element.value;
     }
     fetchData(newParams, setDataTab, false, false);
   }
@@ -88,6 +93,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   const handleTabChange = (tabName: string, params={}) => {
     setParams(params);
     setSelectedTab(tabName);
+    setForceInsert(false);
   };
 
   const handleSaveData = () => {
@@ -95,10 +101,6 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
       saveData(dataTab, handleClose);
     }
   };
-
-//   let findCodeTab = showFindCodeTab ? <><Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
-//                      <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
-//                      </Tab></> : "";
 
   return (
     <>
@@ -111,7 +113,14 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
         {visibleTabs.map((elem) => {
           return (
             <Tab key={elem.name} eventKey={elem.name} title={elem.description}>
-              <AbsenceModalContent data={dataTab} simData={simDataTab} parameters={parameters} handleChange={handleChange} handleSaveData={handleSaveData} />
+              <AbsenceModalContent data={dataTab}
+                                  simData={simDataTab}
+                                  parameters={parameters}
+                                  handleChange={handleChange}
+                                  handleSaveData={handleSaveData}
+                                  showForceInsert={showForceInsert}
+                                  forceInsert={forceInsert}
+                                  setForceInsert={setForceInsert} />
             </Tab>
           );
         })}

@@ -6,9 +6,9 @@ import DropDownElement from "./dropDownElement";
 import SimulationDataTable from "./simulationDataTable";
 import { AbsenceForm } from "../../../types/absenceForm";
 import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheck, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faCheck);
 
@@ -28,8 +28,11 @@ interface AbsenceModalContentProps {
   data: AbsenceForm;
   simData: AbsenceFormSimulationResponse;
   parameters: string;
-  handleDropdownChange: (elementOption: { value: any; label: any; from:string; }) => void;
+  handleChange: (elementOption: { value: any; label: any; from:string; }) => void;
   handleSaveData: () => void;
+  showForceInsert: boolean;
+  forceInsert: boolean;
+  setForceInsert: () => void;
 }
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
@@ -37,7 +40,10 @@ data,
 simData,
 parameters,
 handleChange,
-handleSaveData
+handleSaveData,
+showForceInsert,
+forceInsert,
+setForceInsert
   }) => {
 
      let alldaySelected = (data?.justifiedTypeSelected == "all_day" ||
@@ -47,13 +53,20 @@ handleSaveData
     const [startDate, setStartDate] = useState(data.from);
     const [endDate, setEndDate] = useState(data.to);
 
+
     const handleEndDateChange = (event) => {
       setEndDate(event.target.value);
       handleChange({'value':event.target.value, 'from':'ENDATE'});
     };
     const handleGrouptypeChange = (selectOption) => {
+      setForceInsert(false);
       handleChange(selectOption);
     };
+
+    const handleCheckboxForceInsert = (event) => {
+        setForceInsert(event.target.checked);
+        handleChange({'value':event.target.checked, 'from':'FORCEINSERT'});
+      };
 
     let justifiedTypeChoice = data.hasJustifiedTypeChoice ? (<>
                                                           <div className="form-group">
@@ -78,6 +91,47 @@ handleSaveData
                                                     </div>
                                                 </div>
                                                  </>) : "";
+
+    let forceInsertWarn = forceInsert ? (<>
+     <br/><br/>
+     <div>
+       <p className="alert alert-warning">
+        <strong>Attenzione:</strong> Forzando l'inserimento di un codice al momento del salvataggio
+           non verrà effettuato alcun tipo di controllo.
+       </p>
+     </div>
+     </>
+    ) : "";
+    let forceInsertElem = showForceInsert && (data.absenceTypeSelected && data.hasAbsenceTypeChoice) ? (
+    <>
+    <div className="form-group">
+        <label className="col-sm-2 control-label"></label>
+         <div className="col-sm-6" style={{ display: 'inline-block' }}>
+            <input
+                    name="forceInsert"
+                    type="checkbox"
+                    title="Forza Inserimento"
+                    aria-label="Forza Inserimento"
+                    checked={forceInsert}
+                    onChange={handleCheckboxForceInsert}
+                  />
+            <label htmlFor="forceInsert">&nbsp;Forza Inserimento</label>
+        </div>
+    </div>
+    {forceInsertWarn}
+    </>) : "";
+
+    let warningMalattiaFiglio = data?.groupSelected?.name.startsWith('MALATTIA_FIGLIO') ? (
+                                                <>
+                                                <br/><br/>
+                                                <div>
+                                                  <p className="alert alert-danger">
+                                                      <FontAwesomeIcon icon={faExclamationTriangle} style={{ color: 'red', marginRight: '5px' }} size="2x" />
+                                                      I gruppi riguardanti i codici malattia figli sono in fase di implementazione pertanto il controllo
+                                                     sul superamento dei limiti è disabilitato. L'implementazione verrà completata a breve.
+                                                  </p>
+                                                </div>
+                                                </>):"";
 
    return(
           <>
@@ -108,6 +162,8 @@ handleSaveData
             </div>
             {justifiedTypeChoice}
             {timeChoice}
+            {forceInsertElem}
+            {warningMalattiaFiglio}
             <SimulationDataTable data={simData} />
             <p className="center">
             <Button onClick={handleSaveData}><FontAwesomeIcon icon={faCheck}/>&nbsp;Inserisci</Button>

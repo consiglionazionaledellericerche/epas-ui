@@ -7,6 +7,7 @@ import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
 import DateUtility from "../../utils/dateUtility";
+import { secureCheck } from '../../utils/apiUtility';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -29,15 +30,30 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
 
+    const [yearMonthSecureCheck, setYearMonthSecureCheck] = useState(false);
+    const [personSecureCheck, setPersonSecureCheck] = useState(false);
+
     function setModalParam(pdr){
-      let day = DateUtility.formatDateDay(pdr.personDay.date);
-      console.log("setModalParam",day,month,year);
-      let date = DateUtility.textToDate(day,month-1,year);
-      console.log("setModalParam date",date);
       let id = pdr.personDay.personId;
-      setShowModal(true);
-      setParameters({'id':id, 'from':date});
-      setTitleModal("");
+      let day = DateUtility.formatDateDay(pdr.personDay.date);
+      let date = DateUtility.textToDate(day,month-1,year);
+      let paramsSC = {'method':'GET',
+                    'path':'/rest/v4/absencesGroups/groupsForCategory',
+                    'entityType':'YearMonth',
+                    'id':id,
+                    'year':year,
+                    'month':month};
+      secureCheck(paramsSC, setYearMonthSecureCheck);
+      paramsSC = {'method':'GET',
+                    'path':'/rest/v4/absencesGroups/groupsForCategory',
+                    'entityType':'Person',
+                    'id':id};
+      secureCheck(paramsSC, setPersonSecureCheck);
+      if (yearMonthSecureCheck && personSecureCheck){
+          setShowModal(true);
+          setParameters({'id':id, 'from':date});
+          setTitleModal("");
+      }
     }
 
     return (<>
