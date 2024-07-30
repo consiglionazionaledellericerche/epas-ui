@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
 import AbsencesShow from "./absencesShow";
-import AbsenceModal  from "./modal/absenceModal";
+import AbsenceModal from "./modal/absence/absenceModal";
+import StampingModal from "./modal/stamping/stampingModal";
 import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
@@ -22,26 +23,49 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     month
   }) => {
 
-    const [titleModal, setTitleModal] = useState("");
-    const [showModal, setShowModal] = useState(false);
-    const [parameters, setParameters] = useState({});
+    const [titleAbsenceModal, setAbsenceTitleModal] = useState("");
+    const [showAbsenceModal, setShowAbsenceModal] = useState(false);
+    const [parametersAbsence, setAbsenceParameters] = useState({});
+
+    const [titleStampingModal, setStampingTitleModal] = useState("");
+    const [showStampingModal, setShowStampingModal] = useState(false);
+    const [parametersStamping, setStampingParameters] = useState({});
 
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
 
-    function setModalParam(pdr:any){
+    function setModalParam(modalType:string, pdr:any){
       let day = DateUtility.formatDateDay(pdr.personDay.date);
-      console.log("setModalParam",day,month,year);
+      //console.log("setModalParam",day,month,year);
       let date = DateUtility.textToDate(parseInt(day),month-1,year);
-      console.log("setModalParam date",date);
+      //console.log("setModalParam date",date);
       let id = pdr.personDay.personId;
-      setShowModal(true);
-      setParameters({'id':id, 'from':date});
-      setTitleModal("");
+
+      if (modalType == 'Absence'){
+        setShowStampingModal(false);
+        setShowAbsenceModal(true);
+        setAbsenceParameters({'id':id, 'from':date});
+        setAbsenceTitleModal("");
+      }
+      else if (modalType == 'Stamping'){
+        setShowAbsenceModal(false);
+        setShowStampingModal(true);
+        setStampingParameters({'id':id, 'from':date});
+        setStampingTitleModal("");
+      }
     }
 
     return (<>
-           <AbsenceModal title={titleModal} tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
+           <AbsenceModal
+                       title={titleAbsenceModal}
+                       tmpshow={showAbsenceModal}
+                       close={() => setShowAbsenceModal(false)}
+                       parameters={parametersAbsence} />
+           <StampingModal
+                       title={titleStampingModal}
+                       tmpshow={showStampingModal}
+                       close={() => setShowStampingModal(false)}
+                       parameters={parametersStamping} />
            <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
              {tooltipContent}
            </Tooltip>
@@ -64,6 +88,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                     ))
                 }
 
+                <th className="group-single">Inserisci<br/>timbratura</th>
                 <th className="invisible"></th>
 
                 <th className="group-single">Tempo<br />lavoro</th>
@@ -98,7 +123,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         ):
                         (
                         <>
-                          <a id="new-abscence-code" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam(pdr)}>
+                          <a id="new-abscence-code" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam('Absence',pdr)}>
                             __
                           </a>
                           </>
@@ -106,7 +131,12 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         </td>
                         
                         <StampingsTemplate personDayRecap={pdr} />
+                        <td>
+                          <a id="new-stamping" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam('Stamping',pdr)}>
+                          +++
 
+                          </a>
+                        </td>
                         <td className="invisible"></td>
 
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />

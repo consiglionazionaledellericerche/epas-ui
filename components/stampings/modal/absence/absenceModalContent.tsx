@@ -4,8 +4,8 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import DropDownElement from "./dropDownElement";
 import SimulationDataTable from "./simulationDataTable";
-import { AbsenceForm } from "../../../types/absenceForm";
-import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
+import { AbsenceForm } from "../../../../types/absenceForm";
+import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,6 +19,11 @@ interface AbsenceModalContentProps {
   handleChange: (elementOption: { value: any; label: any; from:string; }) => void;
   handleSaveData: () => void;
 }
+const isValidDateFormat = (dateStr: string): boolean => {
+  // Controlla se dateStr è nel formato yyyy-mm-dd
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  return regex.test(dateStr);
+};
 
 const AbsenceModalContent: React.FC<AbsenceModalContentProps> = ({
 data,
@@ -32,14 +37,15 @@ handleSaveData
                          data?.justifiedTypeSelected == "assign_all_day") ? true : false;
      let specifiedMinuteSelected = (data?.justifiedTypeSelected == "specified_minutes") ? true : false;
 
-//     const [startDate, setStartDate] = useState(data.from);
-//     const [endDate, setEndDate] = useState(data.to);
-
   const [startDate, setStartDate] = useState<Date | undefined>(data.from);
   const [endDate, setEndDate] = useState<Date | undefined>(data.to);
 
   const formatDate = (date: Date | undefined): string => {
     if (!date) return '';
+    // Se la data è già una stringa nel formato yyyy-mm-dd, restituiscila così com'è
+    if (typeof date === 'string' && isValidDateFormat(date)) {
+      return date;
+    }
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');

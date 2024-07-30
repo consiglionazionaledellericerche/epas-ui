@@ -2,12 +2,12 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import 'react-tooltip/dist/react-tooltip.css';
 import {Tooltip} from 'react-tooltip';
-import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import DateUtility from "../../../utils/dateUtility";
+import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
+import DateUtility from "../../../../utils/dateUtility";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AbsencePopOver from "../../absences/absencePopOver";
+import AbsencePopOver from "../../../absences/absencePopOver";
 import { useState } from 'react';
 import {useTranslations} from 'next-intl';
 

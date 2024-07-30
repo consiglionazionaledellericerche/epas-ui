@@ -6,9 +6,9 @@ import AbsenceModalContent from "./absenceModalContent";
 import FindCodeContent from "./findCodeContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { AbsenceForm } from "../../../types/absenceForm";
-import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import { fetchData, simulateData, saveData } from './apiUtils';
+import { AbsenceForm } from "../../../../types/absenceForm";
+import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
+import { fetchData, simulateData, saveData } from '../apiUtils';
 
 interface AbsenceModalTabProps {
   tabName: string;
