@@ -19,15 +19,12 @@ const buildQueryString = (params: Record<string, any>) => {
 };
 
 
-// Funzione per fetchData
-export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+export const fetchData = async (setDataTab:any, setShow:any, setTitle:any, url:string, title:string) => {
   const session = await getSession()  as CustomSession;
   let accessToken = null;
   if (session) {
     accessToken = session.accessToken;
    }
-  const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
 
   try {
     const response = await fetch(url, {
@@ -45,15 +42,39 @@ export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitl
 
     const data = await response.json();
     setDataTab(data);
+    let dataFormat;
+
     if (setShow !== false){
+      if (data.from){
+        dataFormat = DateUtility.formatDate(data.from);
+      }
+      else {
+        dataFormat = DateUtility.formatDate(data.date);
+      }
       let person = data.person.surname + " " + data.person.name;
-      let title = "Nuovo codice assenza in data " + DateUtility.formatDate(data.from) + " per " + person;
-      setTitle(title);
+      let titleModal = title + dataFormat + " per " + person;
+      setTitle(titleModal);
       setShow(true);
     }
   } catch (error) {
     console.error("unable to achieve this", error);
   }
+}
+
+// Funzione per fetchDataAbsence
+export const fetchDataAbsence = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+  const queryString = buildQueryString(params);
+  const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
+  const title = "Nuovo codice assenza in data ";
+  fetchData(setDataTab, setShow, setTitle, url, title);
+};
+
+// Funzione per fetchDataStamping
+export const fetchDataStamping = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+  const queryString = buildQueryString(params);
+  const url = `/api/rest/v4/stampings/insert?${queryString}`;
+  const title = "Inserisci timbratura del ";
+  fetchData(setDataTab, setShow, setTitle, url, title);
 };
 
 // Funzione per simulateData
@@ -103,9 +124,10 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
     console.error("unable to achieve this", error);
   }
 };
+export const saveDataStamping = async (dataTab:any, handleClose:any) => {};
 
 // Funzione per simulateData
-export const saveData = async (dataTab:any, handleClose:any) => {
+export const saveDataAbsence = async (dataTab:any, handleClose:any) => {
   if (dataTab === null){
     return;
   }

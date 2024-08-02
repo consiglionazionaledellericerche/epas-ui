@@ -50,7 +50,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
       else if (modalType == 'Stamping'){
         setShowAbsenceModal(false);
         setShowStampingModal(true);
-        setStampingParameters({'id':id, 'from':date});
+        setStampingParameters({'personId':id, 'date':date});
         setStampingTitleModal("");
       }
     }

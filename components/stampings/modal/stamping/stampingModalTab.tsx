@@ -6,7 +6,7 @@ import StampingModalContent from "./stampingModalContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 //import { AbsenceForm } from "../../../../types/absenceForm";
-import { fetchData, saveData } from '../apiUtils';
+import { saveDataStamping } from '../apiUtils';
 
 interface StampingModalTabProps {
   data: any;
@@ -36,7 +36,7 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
 
   const handleSaveData = () => {
     if (dataTab) {
-      saveData(dataTab, handleClose);
+      saveDataStamping(dataTab, handleClose);
     }
   };
 

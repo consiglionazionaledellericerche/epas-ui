@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import AbsenceModalTab from "./absenceModalTab";
-import { fetchData, simulateData } from '../apiUtils';
+import { fetchDataAbsence, simulateData } from '../apiUtils';
 
 interface AbsenceModalProps {
   title: string,
@@ -26,14 +26,14 @@ const AbsenceModal: React.FC<AbsenceModalProps> = ({ title, tmpshow, close, para
 
   useEffect(() => {
     if (tmpshow) {
-      fetchData(parameters, setData, setShow, setTitle);
+      fetchDataAbsence(parameters, setData, setShow, setTitle);
       simulateData(data, setSimData);
 
     } else {
       setShow(false);
       setData(null);
     }
-  }, [tmpshow, parameters, data]);
+  }, [tmpshow]);
 
   const handleClose = () => {
     setShow(false);

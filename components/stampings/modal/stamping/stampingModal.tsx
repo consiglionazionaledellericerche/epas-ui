@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import StampingModalTab from "../stamping/stampingModalTab";
-import { fetchData } from '../apiUtils';
+import { fetchDataStamping } from '../apiUtils';
 
 interface StampingModalProps {
   title: string,
@@ -25,12 +25,12 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
 
   useEffect(() => {
     if (tmpshow) {
-      fetchData(parameters, setData, setShow, setTitle);
+      fetchDataStamping(parameters, setData, setShow, setTitle);
     } else {
       setShow(false);
       setData(null);
     }
-  }, [tmpshow, parameters, data]);
+  }, [tmpshow]);
 
   const handleClose = () => {
     setShow(false);
@@ -51,8 +51,6 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
       <Modal.Body>
         {show && <StampingModalTab data={data}
         parameters={parameters}
-        tabName={data.categoryTabSelected.name}
-        tabsVisible={data.tabsVisibile}
         handleClose={handleClose}
         />}
       </Modal.Body>

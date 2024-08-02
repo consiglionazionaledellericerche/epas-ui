@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { AbsenceForm } from "../../../../types/absenceForm";
 import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
-import { fetchData, simulateData, saveData } from '../apiUtils';
+import { fetchDataAbsence, simulateData, saveDataAbsence } from '../apiUtils';
 
 interface AbsenceModalTabProps {
   tabName: string;
@@ -65,7 +65,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     } else if (element.from === 'ENDATE') {
       newParams['to'] = element.value;
     }
-    fetchData(newParams, setDataTab, false, false);
+    fetchDataAbsence(newParams, setDataTab, false, false);
   }
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     params['id'] = parameters.id;
     params['from'] = parameters.from;
     params['category'] = selectedTab;
-    fetchData(params, setDataTab, false, false);
+    fetchDataAbsence(params, setDataTab, false, false);
    }
   }, [selectedTab, parameters,params]);
 
@@ -90,7 +90,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
 
   const handleSaveData = () => {
     if (dataTab) {
-      saveData(dataTab, handleClose);
+      saveDataAbsence(dataTab, handleClose);
     }
   };
 
