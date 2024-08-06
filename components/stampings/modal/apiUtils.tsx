@@ -71,10 +71,18 @@ export const fetchDataAbsence = async (params:any, setDataTab:any, setShow:any, 
 
 // Funzione per fetchDataStamping
 export const fetchDataStamping = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+
+  var mode = params['mode'];
+  delete params['mode'];
+  console.log("open modal stamping in mode ", mode);
+
   const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/stampings/insert?${queryString}`;
-  const title = "Inserisci timbratura del ";
+  const url = `/api/rest/v4/stampings/${mode}?${queryString}` ;
+  var titleMode = mode =='insert' ? 'Inserisci':'Modifica';
+  const title = `${titleMode} timbratura del `;
   fetchData(setDataTab, setShow, setTitle, url, title);
+
+  params['mode'] = mode;
 };
 
 // Funzione per simulateData

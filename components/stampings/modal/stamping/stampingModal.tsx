@@ -25,7 +25,9 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
 
   useEffect(() => {
     if (tmpshow) {
+    console.log("parameters1111>>> ", parameters);
       fetchDataStamping(parameters, setData, setShow, setTitle);
+      console.log("parameters22222>>> ", parameters);
     } else {
       setShow(false);
       setData(null);
@@ -54,9 +56,6 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
         handleClose={handleClose}
         />}
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleClose}>Cancel</Button>
-      </Modal.Footer>
     </Modal>
   );
 }

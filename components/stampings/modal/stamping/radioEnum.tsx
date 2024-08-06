@@ -4,7 +4,7 @@ const RadioEnum = ({ name, items, value, onChange }) => {
   return (
     <>
       {items.map((item) => (
-        <label key={item.value}>
+        <label key={item.value} className="radio-inline">
           <input
             type="radio"
             name={name}

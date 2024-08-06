@@ -1,7 +1,7 @@
 @import url("//fonts.googleapis.com/css?family=Shadows+Into+Light");
+@import url("./bootstrap-production/css/bootstrap.css");
 @import url("./epas.css");
 @import url("./stampingsTable.css");
-
 
 html,
 body {
