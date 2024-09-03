@@ -132,7 +132,48 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
     console.error("unable to achieve this", error);
   }
 };
-export const saveDataStamping = async (dataTab:any, handleClose:any) => {};
+
+export const saveDataStamping = async (dataTab:any, handleClose:any, showError:any) => {
+
+console.log("saveDataStamping dataTab", dataTab);
+  if (dataTab.stampType == null || dataTab.time == null || dataTab.way == null){
+    return;
+  }
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
+  const url = '/api/rest/v4/stampings/save';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(dataTab)
+    });
+
+    if (!response.ok) {
+      if (response.status == 409){
+            const errorMessage = "pippo";//await response.text(); // O `await response.json()` se il server restituisce un JSON
+            showError(`Timbratura ignorata perchè già presente`);
+      }
+      else {
+            throw new Error('Errore durante la richiesta API');
+      }
+    }
+    else {
+        const data = await response.json();
+    }
+    handleClose();
+  } catch (error) {
+    console.error("unable to achieve this", error);
+  }
+};
 
 // Funzione per simulateData
 export const saveDataAbsence = async (dataTab:any, handleClose:any) => {

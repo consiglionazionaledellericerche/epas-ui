@@ -20,33 +20,27 @@ const customStyles: StylesConfig = {
   }),
 };
 
-interface ModifiedSelectedOption {
-  value: any;
-  label: any;
-}
-
 interface DropDownElementProps {
 data: StampingForm;
-onChange: (elementOption: ModifiedSelectedOption) => void;
+setStampType: any;
 }
 
 const DropDownElement: React.FC<DropDownElementProps> = ({
 data,
-onChange
+setStampType
 }) => {
   const [options, setOptions] = useState<any>([]);
   const [selectedOption, setSelectedOption] = useState<any>(null);
   const t = useTranslations('Message');
 
-
 useEffect(() => {
   let selectedOption;
   let formattedOptions;
-console.log('data.StampTypes.length',data.stampTypes.length);
+    console.log('data.StampTypes.length',data.stampTypes.length);
     if (data.stampTypes && data.stampTypes.length > 0) {
       let options = data.stampTypes.map((item) => ({
-                                                      value: item,
-                                                      label: item
+                                                      value: item.name,
+                                                      label: item.description
                                                     })
                                         );
       formattedOptions = [{ options: options }];
@@ -64,7 +58,8 @@ console.log('data.StampTypes.length',data.stampTypes.length);
   },[data.StampTypes]);
 
     const handleSelectChange = (selectedOption: any) => {
-      onChange(selectedOption);
+      setSelectedOption(selectedOption);
+      setStampType(selectedOption.value);
     };
 
     return (

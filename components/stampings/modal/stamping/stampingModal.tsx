@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import StampingModalTab from "../stamping/stampingModalTab";
 import { fetchDataStamping } from '../apiUtils';
+import Alert from '../../../miscellanous/alert';
 
 interface StampingModalProps {
   title: string,
@@ -22,6 +23,8 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
   const [data, setData] = useState<any>(null);
   const [titleModal, setTitle] = useState(title);
   const [categoryTab, setCategoryTab] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (tmpshow) {
@@ -35,11 +38,21 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
   }, [tmpshow]);
 
   const handleClose = () => {
+  console.log("CHIUDO MODALE");
     setShow(false);
     close();
-  }
+  };
+
+  const showError = (message) => {
+  console.log("STO IN SHOWERROR");
+    setAlertMessage(message);
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
+  };
 
   return (
+    <>
+    {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} />}
     <Modal
       tmpshow={tmpshow.toString()}
       show={show}
@@ -54,9 +67,11 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
         {show && <StampingModalTab data={data}
         parameters={parameters}
         handleClose={handleClose}
+        showError={showError}
         />}
       </Modal.Body>
     </Modal>
+    </>
   );
 }
 
