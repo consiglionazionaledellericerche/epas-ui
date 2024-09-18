@@ -44,7 +44,6 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
                 let accessToken = session ? session.accessToken : null;
 
                 try {
-                    console.log("abs", absElem.id);
                     let idItem = absElem.id;
                     const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
                         method: 'GET',

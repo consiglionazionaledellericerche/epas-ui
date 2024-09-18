@@ -5,32 +5,73 @@ import { getSession } from 'next-auth/react';
 import StampingModalContent from "./stampingModalContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-//import { AbsenceForm } from "../../../../types/absenceForm";
 
 interface StampingModalTabProps {
   data: any;
   parameters: any;
   handleClose: () => void;
   showError: () => void;
+  showSuccess: () => void;
+  showInsertTab: boolean;
+  showInsertOffSiteTab: boolean
 }
 
 const StampingModalTab: React.FC<StampingModalTabProps> = ({
   data,
   parameters,
   handleClose,
-  showError
+  showError,
+  showSuccess,
+  showInsertTab,
+  showInsertOffSiteTab
 }) => {
   const [dataTab, setDataTab] = useState(data);
   const [params, setParams] = useState<any>({});
-  const [selectedTab, setSelectedTab] = useState("ADD_STAMP");
+  const [selectedTab, setSelectedTab] = useState("");
+  const [modalType, setModalType] = useState(parameters.mode);
 
   useEffect(() => {
-  }, [selectedTab, parameters,params]);
+    let tabSelect ;
+    if (selectedTab == ""){
+      if (parameters.mode == 'insert' ){
+        tabSelect = showInsertTab ? "ADD_STAMP" : (showInsertOffSiteTab ? "ADD_OFFSITE": "");
+        handleTabChange(tabSelect)
+      } else {
+        tabSelect = "EDIT_STAMP";
+        handleTabChange(tabSelect)
+      }
+    }
+  }, [selectedTab, parameters, params]);
 
   const handleTabChange = (tabName: string|null, params={}) => {
+    if (tabName == 'DELETE_STAMP') {
+      parameters.mode='delete';
+      setModalType('delete');
+    } else if (tabName == 'ADD_STAMP' || tabName == 'ADD_OFFSITE') {
+       parameters.mode='insert';
+       setModalType('insert');
+    }  else if (tabName == 'EDIT_STAMP') {
+       parameters.mode='edit';
+       setModalType('edit');
+    }
     setParams(params);
     setSelectedTab(tabName);
   };
+
+  let tabList = [];
+  if (parameters.mode == 'insert' ){
+    if (showInsertTab){
+      tabList.push(["addStamping", "ADD_STAMP", "Inserisci timbratura"]);
+    }
+    if (showInsertOffSiteTab){
+      tabList.push(["addOffsite", "ADD_OFFSITE", "Fuori sede"]);
+    }
+  } else {
+      tabList.push(["editStamping", "EDIT_STAMP", "Modifica"]);
+      if (!data.serviceReasons) {
+          tabList.push(["deleteStamping", "DELETE_STAMP", "Elimina"]);
+      }
+  }
 
   return (
     <>
@@ -40,12 +81,19 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
         className="mb-3"
         onSelect={(k) => handleTabChange(k)}
       >
-      <Tab key="addStamping" eventKey="ADD_STAMP" title="Inserisci timbratura">
-        <StampingModalContent data={dataTab} parameters={parameters} handleClose={handleClose} showError={showError} />
-      </Tab>
-      <Tab key="addOffsite" eventKey="ADD_OFFSITE" title="Fuori sede">
-        <StampingModalContent data={dataTab} parameters={parameters} handleClose={handleClose} showError={showError} />
-      </Tab>
+      {tabList.map(([key, eventKey, title]) => {
+        return (
+              <Tab key={key} eventKey={eventKey} title={title}>
+                <StampingModalContent
+                data={dataTab}
+                stampingId={parameters.stampingId}
+                modalType={modalType}
+                handleClose={handleClose}
+                showError={showError}
+                showSuccess={showSuccess}/>
+              </Tab>
+        );
+      })}
       </Tabs>
     </>
   );

@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import StampingModalTab from "../stamping/stampingModalTab";
 import { fetchDataStamping } from '../apiUtils';
 import Alert from '../../../miscellanous/alert';
+import { secureCheck } from '../../../../utils/secureCheck';
 
 interface StampingModalProps {
   title: string,
@@ -24,13 +25,26 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
   const [titleModal, setTitle] = useState(title);
   const [categoryTab, setCategoryTab] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [typeAlert, setTypeAlert] = useState('SUCCESS');
   const [alertMessage, setAlertMessage] = useState('');
+  const [showInsertTab, setShowInsertTab] = useState(false);
+  const [showInsertOffSiteTab, setShowInsertOffSiteTab] = useState(false);
 
   useEffect(() => {
     if (tmpshow) {
-    console.log("parameters1111>>> ", parameters);
+      let paramsSC = {'method':'POST',
+                    'path':'/rest/v4/stampings',
+                    'entityType':'Person',
+                    'id':parameters['personId']};
+      secureCheck(paramsSC, setShowInsertTab);
+
+      paramsSC = {'method':'POST',
+                'path':'/rest/v4/stampings/saveOffSite',
+                'entityType':'Person',
+                'id':parameters['personId']};
+      secureCheck(paramsSC, setShowInsertOffSiteTab);
+      /***********************************************/
       fetchDataStamping(parameters, setData, setShow, setTitle);
-      console.log("parameters22222>>> ", parameters);
     } else {
       setShow(false);
       setData(null);
@@ -38,21 +52,26 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
   }, [tmpshow]);
 
   const handleClose = () => {
-  console.log("CHIUDO MODALE");
     setShow(false);
     close();
   };
 
   const showError = (message) => {
-  console.log("STO IN SHOWERROR");
     setAlertMessage(message);
     setShowAlert(true);
+    setTypeAlert("ERROR");
+    setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
+  };
+  const showSuccess = (message) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+    setTypeAlert("SUCCESS");
     setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
   };
 
   return (
     <>
-    {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} />}
+    {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} typeAlert={typeAlert} />}
     <Modal
       tmpshow={tmpshow.toString()}
       show={show}
@@ -68,6 +87,9 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
         parameters={parameters}
         handleClose={handleClose}
         showError={showError}
+        showSuccess={showSuccess}
+        showInsertTab={showInsertTab}
+        showInsertOffSiteTab={showInsertOffSiteTab}
         />}
       </Modal.Body>
     </Modal>

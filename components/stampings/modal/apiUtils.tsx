@@ -26,6 +26,7 @@ export const fetchData = async (setDataTab:any, setShow:any, setTitle:any, url:s
     accessToken = session.accessToken;
    }
 
+console.log("fetchData URL ", url);
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -37,7 +38,7 @@ export const fetchData = async (setDataTab:any, setShow:any, setTitle:any, url:s
     });
 
     if (!response.ok) {
-      throw new Error('Errore durante la richiesta API');
+      throw new Error('Errore durante la richiesta API', response);
     }
 
     const data = await response.json();
@@ -53,8 +54,14 @@ export const fetchData = async (setDataTab:any, setShow:any, setTitle:any, url:s
       }
       let person = data.person.surname + " " + data.person.name;
       let titleModal = title + dataFormat + " per " + person;
-      setTitle(titleModal);
-      setShow(true);
+
+      if (setTitle) {
+        setTitle(titleModal);
+      }
+
+      if (setShow) {
+        setShow(true);
+       }
     }
   } catch (error) {
     console.error("unable to achieve this", error);
@@ -74,7 +81,10 @@ export const fetchDataStamping = async (params:any, setDataTab:any, setShow:any,
 
   var mode = params['mode'];
   delete params['mode'];
-  console.log("open modal stamping in mode ", mode);
+
+  if (mode == 'edit'){
+    delete params['personId'];
+  }
 
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/stampings/${mode}?${queryString}` ;
@@ -133,18 +143,34 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
   }
 };
 
-export const saveDataStamping = async (dataTab:any, handleClose:any, showError:any) => {
+export const saveDataStamping = async (dataTab:any, handleClose:any, showError:any, showSuccess:any) => {
 
-console.log("saveDataStamping dataTab", dataTab);
   if (dataTab.stampType == null || dataTab.time == null || dataTab.way == null){
     return;
   }
+
   const session = await getSession()  as CustomSession;
   let accessToken = null;
   if (session) {
     accessToken = session.accessToken;
    }
-  const url = '/api/rest/v4/stampings/save';
+
+  let action;
+  if (dataTab['serviceReasons']){
+    action = '/saveServiceReasons';
+  } else if (dataTab['offSiteWork'] || dataTab['insertOffsite']){
+    action = '/saveOffSite';
+  } else if (dataTab['mode'] == 'edit'){
+    action = '/update';
+  }
+
+
+  console.log("saveDataStamping>>> ", dataTab['offSiteWork'], dataTab['insertOffsite'], action);
+  const url = '/api/rest/v4/stampings'+action;
+  delete dataTab['mode'];
+  delete dataTab['serviceReasons'];
+  delete dataTab['offSiteWork'];
+  delete dataTab['insertOffsite'];
 
   try {
     const response = await fetch(url, {
@@ -156,10 +182,8 @@ console.log("saveDataStamping dataTab", dataTab);
       },
       body: JSON.stringify(dataTab)
     });
-
     if (!response.ok) {
       if (response.status == 409){
-            const errorMessage = "pippo";//await response.text(); // O `await response.json()` se il server restituisce un JSON
             showError(`Timbratura ignorata perchè già presente`);
       }
       else {
@@ -168,6 +192,38 @@ console.log("saveDataStamping dataTab", dataTab);
     }
     else {
         const data = await response.json();
+        showSuccess(data.message);
+    }
+    handleClose();
+  } catch (error) {
+    console.error("unable to achieve this", error);
+  }
+};
+export const deleteStamping = async (stampingId:number, handleClose:any, showError:any, showSuccess:any) => {
+
+  const session = await getSession()  as CustomSession;
+  let accessToken = null;
+  if (session) {
+    accessToken = session.accessToken;
+   }
+  const url = '/api/rest/v4/stampings/'+stampingId;
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+     throw new Error('Errore durante la richiesta API');
+    }
+    else {
+        const data = await response.json();
+        showSuccess(data.message);
     }
     handleClose();
   } catch (error) {

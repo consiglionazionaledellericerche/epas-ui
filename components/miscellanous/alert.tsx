@@ -10,9 +10,11 @@ const alertStyles = {
   margin: '0 auto'
 };
 
-const Alert = ({ message, onClose }) => {
+const Alert = ({ message, onClose, typeAlert }) => {
+
+  let alertCss = typeAlert == "ERROR" ? "alert alert-danger alert-dismissible fade show" : "alert alert-success alert-dismissible fade show";
   return (
-    <div className="alert alert-danger alert-dismissible fade show" style={alertStyles} role="alert">
+    <div className={`${alertCss}`} style={alertStyles} role="alert">
       {message}
       <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
     </div>

@@ -198,6 +198,19 @@ class DateUtility {
     return format;
   }
 
+  static formattedHour(time:string) {
+      if (typeof time !== 'string' || time.length !== 4 || isNaN(time)) {
+          throw new Error('Invalid time format. Expected a string in "HHMM" format.');
+      }
+      const hours = time.slice(0, 2);
+      const minutes = time.slice(2, 4);
+      if (parseInt(hours, 10) > 23 || parseInt(minutes, 10) > 59) {
+          throw new Error('Invalid time value. Hours must be between 00 and 23 and minutes between 00 and 59.');
+      }
+      return `${hours}:${minutes}`;
+  }
+
+
 }
 
 

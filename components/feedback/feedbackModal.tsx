@@ -35,7 +35,6 @@ interface FeedbackModalState {
 class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalState>  {
   constructor(props:any) {
     super(props);
-    console.log("props", props);
     this.state = {screenshot: "",
                   title:"",
                   description:"",

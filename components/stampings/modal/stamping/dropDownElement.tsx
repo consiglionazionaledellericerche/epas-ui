@@ -36,7 +36,6 @@ setStampType
 useEffect(() => {
   let selectedOption;
   let formattedOptions;
-    console.log('data.StampTypes.length',data.stampTypes.length);
     if (data.stampTypes && data.stampTypes.length > 0) {
       let options = data.stampTypes.map((item) => ({
                                                       value: item.name,
@@ -44,12 +43,10 @@ useEffect(() => {
                                                     })
                                         );
       formattedOptions = [{ options: options }];
-      console.log("StampTypes", data.stampTypes);
-     selectedOption = {
-               value: null,
-               label: "-"
-             };
-
+      selectedOption = {
+                 value: data?.stampTypeOpt?.name || null,
+                 label: data?.stampTypeOpt?.description || null,
+              };
     }
     if (formattedOptions) {
         setOptions(formattedOptions);

@@ -655,3 +655,7 @@ z-index:9999 !important;
   max-width: none;
   width: auto;
 }
+
+.left-align {
+  text-align: left !important;
+}

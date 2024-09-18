@@ -68,7 +68,6 @@ useEffect(() => {
           options: options,
         },
       ];
-      console.log("absenceTypeSelected", data.absenceTypeSelected);
       if (data.absenceTypeSelected == null)
       {      selectedOption = {
                value: null,
