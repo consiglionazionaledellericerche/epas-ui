@@ -19,6 +19,7 @@ const buildQueryString = (params: Record<string, any>) => {
 };
 
 
+
 // Funzione per fetchData
 export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
   const session = await getSession()  as CustomSession;
@@ -26,6 +27,13 @@ export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitl
   if (session) {
     accessToken = session.accessToken;
    }
+  let forceInsert = null;
+
+  if ('forceInsert' in params) {
+    forceInsert = params['forceInsert'];
+    delete params['forceInsert'];
+  }
+
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
 
@@ -42,8 +50,10 @@ export const fetchData = async (params:any, setDataTab:any, setShow:any, setTitl
     if (!response.ok) {
       throw new Error('Errore durante la richiesta API');
     }
-
     const data = await response.json();
+    if (forceInsert != null){
+      data['forceInsert'] = forceInsert;
+    }
     setDataTab(data);
     if (setShow !== false){
       let person = data.person.surname + " " + data.person.name;
@@ -70,7 +80,7 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
     idPerson: dataTab?.person.id || null,
     from: dataTab?.from || null,
     categoryTabName: dataTab?.categoryTabSelected.name || null,
-    forceInsert: false,
+    forceInsert: dataTab?.forceInsert || false,
     to: dataTab?.to || null,
     recoveryDate: dataTab?.recoveryDate || null,
     justifiedTypeName: dataTab?.justifiedTypeSelected || null,

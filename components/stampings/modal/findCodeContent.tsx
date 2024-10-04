@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchFindCode } from './apiUtils';
+import { fetchFindCode } from './callApi';
 import { Table, Button } from "react-bootstrap";
 import DataTable from 'react-data-table-component';
 
@@ -34,7 +34,7 @@ handleTabChange
     // Effetto per chiamare l'API quando il componente viene montato
     useEffect(() => {
         fetchFindCode(parameters, setData, setLoading, setError, setTotalRows);
-    }, []);
+    }, [parameters]);
 
     const columns = [
         {
@@ -58,7 +58,7 @@ handleTabChange
                 <button onClick={() => handleTabChange(row.categoryTabName, parameters)}>Seleziona</button>
               ),
               ignoreRowClick: true,
-              allowOverflow: true,
+              allowoverflow: true,
               button: true,
             },
    ];

@@ -7,6 +7,7 @@ import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
 import DateUtility from "../../utils/dateUtility";
+import { secureCheck } from '../../utils/apiUtility';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -29,15 +30,32 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [tooltipContent, setTooltipContent] = useState('');
     const [showTooltip, setShowTooltip] = useState(true);
 
+    const [yearMonthSecureCheck, setYearMonthSecureCheck] = useState(false);
+    const [personSecureCheck, setPersonSecureCheck] = useState(false);
     function setModalParam(pdr:any){
-      let day = DateUtility.formatDateDay(pdr.personDay.date);
-      console.log("setModalParam",day,month,year);
-      let date = DateUtility.textToDate(parseInt(day),month-1,year);
-      console.log("setModalParam date",date);
+      let dayDate = DateUtility.formatDateDay(pdr.personDay.date);
+      let dateFrom = DateUtility.textToDate(parseInt(dayDate),month-1,year);
       let id = pdr.personDay.personId;
-      setShowModal(true);
-      setParameters({'id':id, 'from':date});
-      setTitleModal("");
+
+      let paramsSCYearMonth = {'method':'GET',
+                    'path':'/rest/v4/absencesGroups/groupsForCategory',
+                    'entityType':'YearMonth',
+                    'id':id,
+                    'year':year,
+                    'month':month};
+      secureCheck(paramsSCYearMonth, setYearMonthSecureCheck);
+
+      let paramsSCPerson = {'method':'GET',
+                    'path':'/rest/v4/absencesGroups/groupsForCategory',
+                    'entityType':'Person',
+                    'id':id};
+      secureCheck(paramsSCPerson, setPersonSecureCheck);
+
+      if (yearMonthSecureCheck && personSecureCheck){
+          setShowModal(true);
+          setParameters({'id':id, 'from':dateFrom});
+          setTitleModal("");
+      }
     }
 
     return (<>
@@ -111,7 +129,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
 
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
 
-                        <td>{pdr.wttd.workingTimeType?.description}</td>
+                        <td>{pdr.wttd && pdr.wttd.workingTimeType ? pdr.wttd.workingTimeType.description : ""}</td>
                     </tr>
                     )
                 )

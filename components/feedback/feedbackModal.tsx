@@ -10,8 +10,6 @@ import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import dotenv from 'dotenv/config';
 
 interface FeedbackModalProps {
@@ -37,7 +35,6 @@ interface FeedbackModalState {
 class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalState>  {
   constructor(props:any) {
     super(props);
-    console.log("props", props);
     this.state = {screenshot: "",
                   title:"",
                   description:"",
