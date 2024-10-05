@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { CustomSession } from "../../../../types/customSession";
 import { StampingForm } from "../../../../types/stampingForm";
+import { StampingEditForm } from "../../../../types/stampingEditForm";
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from '../../../../pages/api/auth/[...nextauth]';
 import {useTranslations} from 'next-intl';
@@ -21,8 +22,8 @@ const customStyles: StylesConfig = {
 };
 
 interface DropDownElementProps {
-data: StampingForm;
-setStampType: any;
+data: StampingForm | StampingEditForm;
+setStampType: (type: string) => void;
 }
 
 const DropDownElement: React.FC<DropDownElementProps> = ({
@@ -43,16 +44,25 @@ useEffect(() => {
                                                     })
                                         );
       formattedOptions = [{ options: options }];
-      selectedOption = {
-                 value: data?.stampTypeOpt?.name || null,
-                 label: data?.stampTypeOpt?.description || null,
-              };
+
+      if ('stampTypeOpt' in data) {
+        selectedOption = {
+          value: data.stampTypeOpt?.name || null,
+          label: data.stampTypeOpt?.description || null,
+        };
+      } else {
+        // Gestione per il caso in cui data è di tipo StampingForm
+        selectedOption = {
+          value: null,
+          label: null,
+        };
+      }
     }
     if (formattedOptions) {
         setOptions(formattedOptions);
         setSelectedOption(selectedOption);
       }
-  },[data.StampTypes]);
+  },[data.stampTypes]);
 
     const handleSelectChange = (selectedOption: any) => {
       setSelectedOption(selectedOption);

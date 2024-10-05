@@ -1,130 +1,131 @@
-import { OfficeShowTerseDto } from "./officeShowTerseDto"
+import { OfficeShowTerse } from "./officeShowTerse"
+import { UserShowTerse } from "./userShowTerse"
 
 export type PersonShow = {
     /**
      * Nome
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     name: string;
     /**
      * Cognome
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     surname: string;
     /**
      * Codice fiscale
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     fiscalCode?: string;
     /**
      * Email
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     email: string;
     /**
      * Matricola
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     number?: string;
     /**
      * eppn - indicatore univoco all'interno dell'organizzazione
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     eppn?: string;
     /**
      * livello
      * @type {number}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     qualification: number;
     /**
      * Id di collegamento con l'anagrafica CNR
      * @type {number}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     perseoId?: number;
     /**
      * Data di nascita
      * @type {Date}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     birthday?: Date;
     /**
      * Residenza
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     residence?: string;
     /**
      * Numero del telefono ufficio
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     telephone?: string;
     /**
      * Numero di fax
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     fax?: string;
     /**
      * Numero di cellulare
      * @type {string}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     mobile?: string;
     /**
      * Abilitato invio delle email si/no
      * @type {boolean}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     wantEmail?: boolean;
     /**
      * Id della persona
      * @type {number}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     id?: number;
     /**
      * Data inizio validità
      * @type {Date}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     beginDate?: Date;
     /**
      * Data fine validità
      * @type {Date}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     endDate?: Date;
     /**
      *
-     * @type {UserShowTerseDto}
-     * @memberof PersonShowDto
+     * @type {UserShowTerse}
+     * @memberof PersonShow
      */
-    user?: UserShowTerseDto;
+    user?: UserShowTerse;
     /**
      *
-     * @type {OfficeShowTerseDto}
-     * @memberof PersonShowDto
+     * @type {OfficeShowTerse}
+     * @memberof PersonShow
      */
-    office?: OfficeShowTerseDto;
+    office?: OfficeShowTerse;
     /**
      * Data ultimo aggiornamento
      * @type {Date}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     updatedAt?: Date;
     /**
      * Data di nascita
      * @type {Date}
-     * @memberof PersonShowDto
+     * @memberof PersonShow
      */
     birthDate?: Date;
 }

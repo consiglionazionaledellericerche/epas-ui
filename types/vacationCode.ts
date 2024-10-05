@@ -2,19 +2,19 @@ export type VacationCode = {
     /**
      *
      * @type {string}
-     * @memberof VacationCodeDto
+     * @memberof VacationCode
      */
     name?: string;
     /**
      *
      * @type {number}
-     * @memberof VacationCodeDto
+     * @memberof VacationCode
      */
     vacations?: number;
     /**
      *
      * @type {number}
-     * @memberof VacationCodeDto
+     * @memberof VacationCode
      */
     permissions?: number;
 }

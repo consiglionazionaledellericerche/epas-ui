@@ -5,68 +5,68 @@ import { TemplateRow } from "./templateRow"
 export type AbsenceFormSimulationResponse = {
     /**
      * 
-     * @type {Array<CriticalErrorDto>}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @type {Array<CriticalError>}
+     * @memberof AbsenceFormSimulationResponse
      */
     criticalErrors?: Array<CriticalError>;
     /**
      *
-     * @type {Array<TemplateRowDto>}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @type {Array<TemplateRow>}
+     * @memberof AbsenceFormSimulationResponse
      */
     insertTemplateRows?: Array<TemplateRow>;
     /**
      *
      * @type {boolean}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     usableColumn?: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     complationColumn?: boolean;
     /**
      *
-     * @type {Array<AbsenceShowDto>}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @type {Array<AbsenceShow>}
+     * @memberof AbsenceFormSimulationResponse
      */
     absencesToPersist?: Array<AbsenceShow>;
     /**
      *
      * @type {Array<string>}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     warningsPreviousVersion?: Array<string>;
     /**
      *
      * @type {number}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     howManyWarning?: number;
     /**
      *
      * @type {number}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     howManyError?: number;
     /**
      *
      * @type {number}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     howManySuccess?: number;
     /**
      *
      * @type {number}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     howManyReplacing?: number;
     /**
      *
      * @type {number}
-     * @memberof AbsenceFormSimulationResponseDto
+     * @memberof AbsenceFormSimulationResponse
      */
     howManyIgnored?: number;
 }

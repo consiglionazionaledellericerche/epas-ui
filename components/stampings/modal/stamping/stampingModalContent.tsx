@@ -20,8 +20,8 @@ interface StampingModalContentProps {
   stampingId: number;
   modalType: string;
   handleClose: () => void;
-  showError: () => void;
-  showSuccess: () => void;
+  showError: (type: string) => void;
+  showSuccess: (type: string) => void;
 }
 
 const StampingModalContent: React.FC<StampingModalContentProps> = ({
@@ -41,14 +41,14 @@ showSuccess
 
   const translation = useTranslations('Message');
 
-  const handleChangeTime = (event) => {
+  const handleChangeTime = (event:any) => {
     const { value } = event.target;
     if (/^\d*$/.test(value) && value.length <= 4) {
       setValueTime(value);
     }
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event:any) => {
       if (event.target.name == "note"){
         setValueNote(event.target.value);
       } else if (event.target.name == "place"){
@@ -143,7 +143,7 @@ showSuccess
                                   type="text"
                                   name="time"
                                   value={valueTime}
-                                  maxLength="4"
+                                  maxLength={4}
                                   pattern="\d*"
                                   onChange={handleChangeTime}
                                   required />
@@ -165,7 +165,6 @@ showSuccess
                         <div className="col-sm-6">
                           <RadioEnum
                                   name="stampingWay"
-                                  className="form-control"
                                   items={wayItems}
                                   value={selectedWay}
                                   onChange={setSelectedWay}
@@ -281,8 +280,8 @@ showSuccess
 
    let buttonSave = modalType === 'delete' ? (
                   <>
-                  	<div class="alert alert-danger center">
-                  	  E' possibile eliminare questa timbratura.<br/><br/>
+                  	<div className="alert alert-danger center">
+                  	  E&apos; possibile eliminare questa timbratura.<br/><br/>
                   	  <Button className="btn btn-danger" onClick={handleSaveData}>
                       <FontAwesomeIcon icon={faTrash}/>&nbsp;{buttonLabel}
                       </Button>

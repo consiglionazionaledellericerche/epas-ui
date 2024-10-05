@@ -1,5 +1,5 @@
 import { PersonShow } from "./personShow"
-import { Badge } from "./badge"
+import { BadgeReader } from "./badgeReader"
 import { BadgeSystem } from "./badgeSystem"
 import { Zone } from "./zone"
 

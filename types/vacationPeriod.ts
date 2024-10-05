@@ -2,25 +2,25 @@ export type VacationPeriod = {
     /**
      * Id univoco
      * @type {number}
-     * @memberof VacationPeriodDto
+     * @memberof VacationPeriod
      */
     id: number;
     /**
      *
      * @type {string}
-     * @memberof VacationPeriodDto
+     * @memberof VacationPeriod
      */
     vacationCode?: string;
     /**
      *
      * @type {Date}
-     * @memberof VacationPeriodDto
+     * @memberof VacationPeriod
      */
     beginDate?: Date;
     /**
      *
      * @type {Date}
-     * @memberof VacationPeriodDto
+     * @memberof VacationPeriod
      */
     endDate?: Date;
 

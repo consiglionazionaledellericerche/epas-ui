@@ -6,43 +6,43 @@ export type CriticalError = {
     /**
      *
      * @type {string}
-     * @memberof CriticalErrorDto
+     * @memberof CriticalError
      */
     criticalProblem?: string;
     /**
      *
      * @type {Date}
-     * @memberof CriticalErrorDto
+     * @memberof CriticalError
      */
     date?: Date;
     /**
      *
-     * @type {GroupAbsenceTypeDto}
-     * @memberof CriticalErrorDto
+     * @type {GroupAbsenceType}
+     * @memberof CriticalError
      */
     groupAbsenceType?: GroupAbsenceType;
     /**
      *
      * @type {string}
-     * @memberof CriticalErrorDto
+     * @memberof CriticalError
      */
     justifiedType?: string;
     /**
      *
-     * @type {AbsenceTypeDto}
-     * @memberof CriticalErrorDto
+     * @type {AbsenceType}
+     * @memberof CriticalError
      */
     absenceType?: AbsenceType;
     /**
      *
-     * @type {AbsenceTypeDto}
-     * @memberof CriticalErrorDto
+     * @type {AbsenceType}
+     * @memberof CriticalError
      */
     conflictingAbsenceType?: AbsenceType;
     /**
      *
-     * @type {AbsenceShowDto}
-     * @memberof CriticalErrorDto
+     * @type {AbsenceShow}
+     * @memberof CriticalError
      */
     absence?: AbsenceShow;
 

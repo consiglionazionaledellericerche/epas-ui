@@ -13,6 +13,8 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { secureCheck } from '../../utils/secureCheck';
 
+const defaultMonthRecap: MonthRecap = {};
+
 interface StampingsTableProps {
     monthRecap: MonthRecap;
     year: number;
@@ -27,7 +29,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     const [titleAbsenceModal, setAbsenceTitleModal] = useState("");
     const [showAbsenceModal, setShowAbsenceModal] = useState(false);
     const [showInsertStamping, setShowInsertStamping] = useState(false);
-    const [showEditStamping, setShowEditStamping] = useState(monthRecap.canEditStampings);
+    const [showEditStamping, setShowEditStamping] = useState<boolean>(monthRecap.canEditStampings ?? false);
     const [parametersAbsence, setAbsenceParameters] = useState({});
     const [monthRecapData, setMonthRecapData] = useState(monthRecap);
     const [titleStampingModal, setStampingTitleModal] = useState("");
@@ -82,7 +84,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     useEffect(() => {
         if (refreshStampingModal){
             const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
-            setMonthRecapData({});
+            setMonthRecapData(defaultMonthRecap);
             setRefreshStampingTable(false)
             const url = `/api/rest/v4/monthrecaps?${parameters}`;
             fetchData(setMonthRecapData, null, null, url, "");
@@ -162,7 +164,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         )}
                         </td>
                         
-                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={monthRecapData.canEditStampings}/>
+                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={monthRecapData.canEditStampings ?? false} />
                         <td>
                         {
                           showInsertStamping && !pdr.personDay.future ?

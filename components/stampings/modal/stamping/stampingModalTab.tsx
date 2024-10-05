@@ -10,8 +10,8 @@ interface StampingModalTabProps {
   data: any;
   parameters: any;
   handleClose: () => void;
-  showError: () => void;
-  showSuccess: () => void;
+  showError: (type: string) => void;
+  showSuccess: (type: string) => void;
   showInsertTab: boolean;
   showInsertOffSiteTab: boolean
 }
@@ -55,7 +55,7 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
        setModalType('edit');
     }
     setParams(params);
-    setSelectedTab(tabName);
+    setSelectedTab(tabName || '');
   };
 
   let tabList = [];

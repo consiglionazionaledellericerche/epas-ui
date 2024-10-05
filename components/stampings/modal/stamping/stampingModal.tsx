@@ -7,10 +7,10 @@ import Alert from '../../../miscellanous/alert';
 import { secureCheck } from '../../../../utils/secureCheck';
 
 interface StampingModalProps {
-  title: string,
-  tmpshow: boolean,
-  close: Function,
-  parameters: any
+  title: string;
+  tmpshow: boolean;
+  close: Function;
+  parameters: any;
 }
 
 interface StampingModalState {
@@ -56,13 +56,13 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
     close();
   };
 
-  const showError = (message) => {
+  const showError = (message:string) => {
     setAlertMessage(message);
     setShowAlert(true);
     setTypeAlert("ERROR");
     setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
   };
-  const showSuccess = (message) => {
+  const showSuccess = (message:string) => {
     setAlertMessage(message);
     setShowAlert(true);
     setTypeAlert("SUCCESS");

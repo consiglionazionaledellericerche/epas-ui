@@ -199,7 +199,7 @@ class DateUtility {
   }
 
   static formattedHour(time:string) {
-      if (typeof time !== 'string' || time.length !== 4 || isNaN(time)) {
+      if (typeof time !== 'string' || time.length !== 4 || isNaN(Number(time))) {
           throw new Error('Invalid time format. Expected a string in "HHMM" format.');
       }
       const hours = time.slice(0, 2);

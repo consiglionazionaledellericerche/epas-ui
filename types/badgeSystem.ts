@@ -1,7 +1,7 @@
 
 import { Badge } from "./badge"
 import { BadgeReader } from "./badgeReader"
-import { OfficeShowTerseDto } from "./officeShowTerse"
+import { OfficeShowTerse } from "./officeShowTerse"
 
 export type BadgeSystem = {
 

@@ -2,19 +2,19 @@ export type CompetenceCode = {
     /**
      *
      * @type {string}
-     * @memberof CompetenceCodeDto
+     * @memberof CompetenceCode
      */
     code?: string;
     /**
      *
      * @type {string}
-     * @memberof CompetenceCodeDto
+     * @memberof CompetenceCode
      */
     description?: string;
     /**
      *
      * @type {string}
-     * @memberof CompetenceCodeDto
+     * @memberof CompetenceCode
      */
     value?: string;
 

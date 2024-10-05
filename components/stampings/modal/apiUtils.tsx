@@ -38,7 +38,8 @@ console.log("fetchData URL ", url);
     });
 
     if (!response.ok) {
-      throw new Error('Errore durante la richiesta API', response);
+      const errorMessage = `Errore durante la richiesta API: ${response.status} ${response.statusText}`;
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -145,7 +146,7 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
 
 export const saveDataStamping = async (dataTab:any, handleClose:any, showError:any, showSuccess:any) => {
 
-  if (dataTab.stampType == null || dataTab.time == null || dataTab.way == null){
+  if (dataTab.time == null || dataTab.way == null){
     return;
   }
 
@@ -162,6 +163,8 @@ export const saveDataStamping = async (dataTab:any, handleClose:any, showError:a
     action = '/saveOffSite';
   } else if (dataTab['mode'] == 'edit'){
     action = '/update';
+  } else {
+  action='';
   }
 
 

@@ -9,6 +9,10 @@ interface StampingTemplatesProps {
     setEditModalParam: (id:number) => void;
     canEditStampings: boolean;
 }
+interface PopoverProps {
+  onClick?: () => void;
+  style?: React.CSSProperties;
+}
 
 const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
     personDayRecap,
@@ -16,15 +20,14 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
     canEditStampings
   }) => {
 
-
-  const renderPopover = (props, stampingTemplate) => (
+  const renderPopover = (props: PopoverProps, stampingTemplate: any) => (
       <Popover id="popover-basic" {...props}>
         <Popover.Body>
           {stampingTemplate.stamping?.stampType && (
             <p><strong>{stampingTemplate.stamping.stampType.identifier} </strong>{stampingTemplate.stamping.stampType.description}</p>
           )}
           <ul>
-            {stampingTemplate.stampModificationTypes.map((smt) =>
+            {stampingTemplate.stampModificationTypes.map((smt:any) =>
               smt.code ? <li key={uuidv4()}>{smt.code}</li> : null
             )}
           </ul>
@@ -57,7 +60,7 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
               overlay={(props) => renderPopover(props, stampingTemplate)}
             >
               <td
-                className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour)}`}
+                className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour as string)}`}
               >
                 {canEditStampings ? (<a
                                      id="new-stamping"
@@ -70,7 +73,7 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
                 {stampingTemplate.stamping?.stampType ? (
                   <strong>&nbsp;{stampingTemplate.stamping.stampType.identifier}</strong>
                 ) : null}&nbsp;
-                {stampingTemplate.stampModificationTypes.map((smt) => (
+                {stampingTemplate.stampModificationTypes?.map((smt) => (
                   smt.code ? <strong key={uuidv4()}>{smt.code}</strong> : ''
                 ))}
               </td>
@@ -78,7 +81,7 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
           ) : (
             <td
               key={uuidv4()}
-              className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour)}`}
+              className={`position${stampingTemplate.pairPosition} stamping ${colorMap.get(stampingTemplate.colour as string)}`}
             >
                 {canEditStampings ? (<a
                                      id="new-stamping"
@@ -91,7 +94,7 @@ const StampingsTemplate: React.FC<StampingTemplatesProps> = ({
                 {stampingTemplate.stamping?.stampType ? (
                   <strong>&nbsp;{stampingTemplate.stamping.stampType.identifier}</strong>
                 ) : null}
-                {stampingTemplate.stampModificationTypes.map((smt) => (
+                {stampingTemplate.stampModificationTypes?.map((smt) => (
                   smt.code ? <strong key={uuidv4()}>{smt.code}</strong> : ''
                 ))}
             </td>

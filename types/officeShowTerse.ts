@@ -2,25 +2,25 @@ export type OfficeShowTerse = {
     /**
          * Nome dell'ufficio
          * @type {string}
-         * @memberof OfficeShowTerseDto
+         * @memberof OfficeShowTerse
          */
         name: string;
         /**
          * Codice della sede
          * @type {string}
-         * @memberof OfficeShowTerseDto
+         * @memberof OfficeShowTerse
          */
         code?: string;
         /**
          * sedeId della sede, al CNR serve per l'invio degli attestati
          * @type {string}
-         * @memberof OfficeShowTerseDto
+         * @memberof OfficeShowTerse
          */
         codeId: string;
         /**
          * Id dell'ufficio
          * @type {number}
-         * @memberof OfficeShowTerseDto
+         * @memberof OfficeShowTerse
          */
         id?: number;
 }

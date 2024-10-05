@@ -2,25 +2,25 @@ export type ReperibilityTypeMonthYearMonth = {
     /**
      *
      * @type {number}
-     * @memberof ReperibilityTypeMonthDtoYearMonth
+     * @memberof ReperibilityTypeMonthYearMonth
      */
     year?: number;
     /**
      *
      * @type {string}
-     * @memberof ReperibilityTypeMonthDtoYearMonth
+     * @memberof ReperibilityTypeMonthYearMonth
      */
     month?: string;
     /**
      *
      * @type {number}
-     * @memberof ReperibilityTypeMonthDtoYearMonth
+     * @memberof ReperibilityTypeMonthYearMonth
      */
     monthValue?: number;
     /**
      *
      * @type {boolean}
-     * @memberof ReperibilityTypeMonthDtoYearMonth
+     * @memberof ReperibilityTypeMonthYearMonth
      */
     leapYear?: boolean;
 }
