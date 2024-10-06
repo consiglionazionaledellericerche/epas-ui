@@ -19,14 +19,14 @@ const buildQueryString = (params: Record<string, any>) => {
 };
 
 
-export const fetchData = async (setDataTab:any, setShow:any, setTitle:any, url:string, title:string) => {
+export const fetchData = async (url:string, title:string, setShow:any, showError:any=null) => {
   const session = await getSession()  as CustomSession;
   let accessToken = null;
   if (session) {
     accessToken = session.accessToken;
    }
 
-console.log("fetchData URL ", url);
+  console.log("fetchData URL ", url);
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -38,13 +38,22 @@ console.log("fetchData URL ", url);
     });
 
     if (!response.ok) {
-      const errorMessage = `Errore durante la richiesta API: ${response.status} ${response.statusText}`;
-      throw new Error(errorMessage);
+      if (response.status == 409){
+        if (showError){
+           showError(`Timbratura già presente.`);
+        }
+        console.log("conflict 409 elemento già presente");
+      }
+      else {
+            const errorMessage = `Errore durante la richiesta API: ${response.status} ${response.statusText}`;
+            throw new Error(errorMessage);
+      }
     }
 
     const data = await response.json();
-    setDataTab(data);
     let dataFormat;
+    let show = false;
+    let titleModal = "";
 
     if (setShow !== false){
       if (data.from){
@@ -53,32 +62,28 @@ console.log("fetchData URL ", url);
       else {
         dataFormat = DateUtility.formatDate(data.date);
       }
-      let person = data.person.surname + " " + data.person.name;
-      let titleModal = title + dataFormat + " per " + person;
-
-      if (setTitle) {
-        setTitle(titleModal);
-      }
-
-      if (setShow) {
-        setShow(true);
-       }
+       let person = data.person ? `${data.person.surname} ${data.person.name}`: '';
+       titleModal = `${title} ${dataFormat} per ${person}`;
+       show = true;
     }
+      return { data, show, title: titleModal };
   } catch (error) {
     console.error("unable to achieve this", error);
+    throw error;
   }
 }
 
 // Funzione per fetchDataAbsence
-export const fetchDataAbsence = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+export const fetchDataAbsence = async (params:any, setShow:any, showError:any=null) => {
   const queryString = buildQueryString(params);
   const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
   const title = "Nuovo codice assenza in data ";
-  fetchData(setDataTab, setShow, setTitle, url, title);
+  var result = fetchData(url, title, setShow);
+  return result;
 };
 
 // Funzione per fetchDataStamping
-export const fetchDataStamping = async (params:any, setDataTab:any, setShow:any, setTitle:any) => {
+export const fetchDataStamping = async (params:any, setShow:any, showError:any=null) => {
 
   var mode = params['mode'];
   delete params['mode'];
@@ -91,13 +96,13 @@ export const fetchDataStamping = async (params:any, setDataTab:any, setShow:any,
   const url = `/api/rest/v4/stampings/${mode}?${queryString}` ;
   var titleMode = mode =='insert' ? 'Inserisci':'Modifica';
   const title = `${titleMode} timbratura del `;
-  fetchData(setDataTab, setShow, setTitle, url, title);
-
+  var result  = fetchData(url, title, setShow);
   params['mode'] = mode;
+  return result;
 };
 
 // Funzione per simulateData
-export const simulateData = async (dataTab:any, setSimDataTab:any) => {
+export const simulateData = async (dataTab:any) => {
   if (dataTab === null){
     return;
   }
@@ -138,7 +143,8 @@ export const simulateData = async (dataTab:any, setSimDataTab:any) => {
     }
 
     const data = await response.json();
-    setSimDataTab(data);
+    return data;
+    //setSimDataTab(data);
   } catch (error) {
     console.error("unable to achieve this", error);
   }
@@ -159,15 +165,13 @@ export const saveDataStamping = async (dataTab:any, handleClose:any, showError:a
   let action;
   if (dataTab['serviceReasons']){
     action = '/saveServiceReasons';
-  } else if (dataTab['offSiteWork'] || dataTab['insertOffsite']){
+  } else if (dataTab['offSiteWork'] || dataTab['insertOffsite'] || dataTab['mode'] ==='insertOffSite'){
     action = '/saveOffSite';
   } else if (dataTab['mode'] == 'edit'){
     action = '/update';
   } else {
   action='';
   }
-
-
   console.log("saveDataStamping>>> ", dataTab['offSiteWork'], dataTab['insertOffsite'], action);
   const url = '/api/rest/v4/stampings'+action;
   delete dataTab['mode'];

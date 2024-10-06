@@ -23,7 +23,6 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
   }) => {
 
     let caption;
-
     tableName == "tabellaFerie" ? ( caption = "Ferie") : ( caption = "Permessi legge 937/77")
 
     return (

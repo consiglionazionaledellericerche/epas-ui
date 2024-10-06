@@ -17,6 +17,8 @@ interface AbsenceModalTabProps {
   simData: AbsenceFormSimulationResponse;
   parameters: any;
   handleClose: () => void;
+  showFindCodeTab: boolean;
+  showForceInsert: boolean;
 }
 
 const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
@@ -25,7 +27,9 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   data,
   simData,
   parameters,
-  handleClose
+  handleClose,
+  showFindCodeTab,
+  showForceInsert
 }) => {
   const [selectedTab, setSelectedTab] = useState<string | null | any>(tabName);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
@@ -34,8 +38,10 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   const titleFindCode = (<span><FontAwesomeIcon icon={faMagnifyingGlass} /> Ricerca Codici</span>);
   const [params, setParams] = useState<any>({});
   const [newParams, setNewParams] = useState<any>({});
+  const [forceInsert, setForceInsert] = useState(false);
 
   const handleChange = (element:any) => {
+
     if (element['absenceTypeCode'] === undefined) {
       delete newParams['absenceTypeCode'];
     }
@@ -64,28 +70,43 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
       newParams['minute'] = element.value;
     } else if (element.from === 'ENDATE') {
       newParams['to'] = element.value;
+    } else if (element.from === 'FORCEINSERT') {
+      newParams['forceInsert'] = element.value;
     }
-    fetchDataAbsence(newParams, setDataTab, false, false);
+    async function getData() {
+      var dataAbs = await fetchDataAbsence(newParams, false);
+      setDataTab(dataAbs.data);
+    }
+    getData();
   }
 
   useEffect(() => {
   if (selectedTab !== 'FIND_CODE'){
-    params['id'] = parameters.id;
-    params['from'] = parameters.from;
-    params['category'] = selectedTab;
-    fetchDataAbsence(params, setDataTab, false, false);
+    async function getData() {
+      params['id'] = parameters.id;
+      params['from'] = parameters.from;
+      params['category'] = selectedTab;
+      var dataAbs = await fetchDataAbsence(params, false);
+      setDataTab(dataAbs.data);
+    }
+    getData();
    }
   }, [selectedTab, parameters,params]);
 
   useEffect(() => {
     if (dataTab) {
-      simulateData(dataTab, setSimDataTab);
+      async function getData() {
+        var simData = await simulateData(dataTab);
+        setSimDataTab(simData)
+      }
+      getData();
     }
   }, [dataTab]);
 
   const handleTabChange = (tabName: string|null, params={}) => {
     setParams(params);
     setSelectedTab(tabName);
+    setForceInsert(false);
   };
 
   const handleSaveData = () => {
@@ -105,13 +126,21 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
         {visibleTabs.map((elem) => {
           return (
             <Tab key={elem.name} eventKey={elem.name} title={elem.description}>
-              <AbsenceModalContent data={dataTab} simData={simDataTab} parameters={parameters} handleChange={handleChange} handleSaveData={handleSaveData} />
+              <AbsenceModalContent data={dataTab}
+                                  simData={simDataTab}
+                                  parameters={parameters}
+                                  handleChange={handleChange}
+                                  handleSaveData={handleSaveData}
+                                  showForceInsert={showForceInsert}
+                                  forceInsert={forceInsert}
+                                  setForceInsert={setForceInsert} />
             </Tab>
           );
         })}
-        <Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
-          <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
-        </Tab>
+
+        {showFindCodeTab ? (<Tab key="findCode" eventKey="FIND_CODE" title={titleFindCode}>
+                              <FindCodeContent parameters={parameters} handleTabChange={handleTabChange}/>
+                              </Tab>):""}
       </Tabs>
     </>
   );

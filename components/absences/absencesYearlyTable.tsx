@@ -2,8 +2,6 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import AbsencePopOver from "./absencePopOver";
-import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 import { useState } from 'react';
 import { AbsenceShow } from "../../types/absenceShow";
 
@@ -11,7 +9,7 @@ function doesNotStartWithZero(variable:number) {
   return variable.toString()[0] !== '0';
 }
 
-function getTdElem(day: number, year: number, month: string, setTooltipContent: Function, setShowTooltip: Function, absencesRecap: AbsenceShow[]) {
+function getTdElem(day: number, year: number, month: string, absencesRecap: AbsenceShow[]) {
     let dday = day < 10 && doesNotStartWithZero(day) ? `0${day}` : day;
     let item;
 
@@ -29,9 +27,7 @@ function getTdElem(day: number, year: number, month: string, setTooltipContent: 
                <AbsencePopOver showGroup={true}
                key={`${month}-${day}`}
                absElem={item}
-               day={day}
-               setTooltipContent={setTooltipContent}
-               setShowTooltip={setShowTooltip} />
+               day={day}/>
                </a>);
     }
 }
@@ -53,16 +49,10 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
      {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
      {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
 
-  const [tooltipContent, setTooltipContent] = useState('');
-  const [showTooltip, setShowTooltip] = useState(true);
-
   const colSpan=31;
 
     return (
     <>
-       <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
-         {tooltipContent}
-       </Tooltip>
         <Table id="assenzeannuali" className="table table-bordered table-hover table-condensed" >
             <caption className="sr-only">Assenze Annuali</caption>
             <thead>
@@ -83,7 +73,7 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
             <td key={month.name}>{month.name}</td>
               {days.map((day) => (
               <td key={`td-${month.id}-${day}`}>
-              {getTdElem(day, year, month.id, setTooltipContent, setShowTooltip, absencesRecap)}
+              {getTdElem(day, year, month.id, absencesRecap)}
               </td>
 
               ))}

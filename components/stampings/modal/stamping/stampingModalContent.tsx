@@ -32,11 +32,11 @@ handleClose,
 showError,
 showSuccess
   }) => {
-  const [valueTime, setValueTime] = useState(data.time);
-  const [valueNote, setValueNote] = useState(data.note);
-  const [valuePlace, setValuePlace] = useState(data.place);
-  const [valueReason, setValueReason] = useState(data.reason);
-  const [selectedWay, setSelectedWay] = useState(data.way);
+  const [valueTime, setValueTime] = useState(data.time || "");
+  const [valueNote, setValueNote] = useState(data.note || "");
+  const [valuePlace, setValuePlace] = useState(data.place || "");
+  const [valueReason, setValueReason] = useState(data.reason || "");
+  const [selectedWay, setSelectedWay] = useState(data.way || "");
   const [stampType, setStampType] = useState(data.insertOffsite ? data.offsite[0].name : data.stampType);
 
   const translation = useTranslations('Message');
@@ -92,20 +92,19 @@ showSuccess
     let alertCss;
     let buttonLabel;
 
-    console.log("formattedHour>>>> ", 'time' in data);
+    console.log("data stamping modal content>>>> ", data);
 
     let formattedHour = 'time' in data && data.time != null ? DateUtility.formattedHour(data.time): "";
 
     if (modalType == 'insert') {
       buttonLabel = "Inserisci";
-      if (!data.insertOffsite){
-        stampString = "Inserisci i dati della nuova timbratura.";
-        alertCss = "alert alert-primary text-center";
-      } else {
-        stampString = "Inserisci i dati per la timbratura fuori sede.";
-        alertCss = 'alert alert-warning text-center';
-      }
-    } else if (modalType == 'edit') {
+      stampString = "Inserisci i dati della nuova timbratura.";
+      alertCss = "alert alert-primary text-center";
+      } else if (modalType === 'insertOffSite') {
+       buttonLabel = "Inserisci";
+       stampString = "Inserisci i dati per la timbratura fuori sede.";
+       alertCss = 'alert alert-warning text-center';
+      } else if (modalType == 'edit') {
       buttonLabel = "Modifica";
       if (!data.offSiteWork){
         if (!data.serviceReasons){
@@ -124,9 +123,9 @@ showSuccess
       stampString = "";
       alertCss = "";
     }
-    let mandatory = modalType == 'insert' || (modalType == 'edit' && data.offSiteWork) ? "*":"";
+    let mandatory = modalType == 'insert' || modalType == 'insertOffSite' || (modalType == 'edit' && data.offSiteWork) ? "*":"";
 
-    let offsiteStampType = !data.insertOffsite ? "" : data.offsite[0].description;
+    let offsiteStampType = data.insertOffsite || modalType === 'insertOffSite' ? data.offsite[0].description : "";
     let divTitle = <>
                    <div className={`${alertCss}`}>
                    {stampString}
@@ -136,7 +135,7 @@ showSuccess
     let timeElem = <>
                       <div className="form-group">
                             <label className="col-sm-2 control-label">Orario{mandatory} </label>
-                            {modalType == 'insert' ? (
+                            {modalType == 'insert' || modalType == 'insertOffSite' ? (
                             <div className="col-sm-6">
                                 <input
                                   className="form-control"
@@ -161,7 +160,7 @@ showSuccess
     let wayElem = <>
                   <div className="form-group">
                         <label className="col-sm-2 control-label">Verso timbratura{mandatory} </label>
-                        {modalType == 'insert' ? (
+                        {modalType == 'insert'|| modalType == 'insertOffSite' ? (
                         <div className="col-sm-6">
                           <RadioEnum
                                   name="stampingWay"
@@ -177,25 +176,26 @@ showSuccess
                   </div>
                  </>
 
-    let stamTypeElem =  modalType != 'delete' ? (
-                        <>
-                          <div className="form-group">
-                              <label className="col-sm-2 control-label">Causale timbratura</label>
-                              <div className="col-sm-6">
-                                {(modalType === 'insert' || !data.serviceReasons) && !data.offSiteWork ? (
-                                !data.insertOffsite?
-                                <DropDownElement data={data} setStampType={setStampType}/>
-                                : <label className="col-sm-6 control-label left-align">{offsiteStampType}</label>
-                                )
-                                :(
-                                <label className="col-sm-6 control-label left-align">{data.stampTypeOpt.description}</label>
-                                )
-                                }
-                              </div>
-                          </div>
-                        </> ) : "";
+    let stamTypeElem = modalType !== 'delete' ? (
+      <>
+        <div className="form-group">
+          <label className="col-sm-2 control-label">Causale timbratura</label>
+          <div className="col-sm-6">
+            {(modalType === 'insert' || !data.serviceReasons) && !data.offSiteWork ? (
+              data.insertOffsite || modalType === 'insertOffSite' ? (
+                <label className="col-sm-6 control-label left-align">{offsiteStampType}</label>
+              ) : (
+                <DropDownElement data={data} setStampType={setStampType} />
+              )
+            ) : (
+              <label className="col-sm-6 control-label left-align">{data.stampTypeOpt.description}</label>
+            )}
+          </div>
+        </div>
+      </>
+    ) : "";
 
-    let reasonElem = modalType === 'edit' && (data.serviceReasons || data.offSiteWork) || modalType === 'insert' && data.insertOffsite ? (
+    let reasonElem = modalType === 'edit' && (data.serviceReasons || data.offSiteWork) || modalType === 'insert' && data.insertOffsite || modalType == 'insertOffSite' ? (
                               <>
                               <div className="form-group">
                                  <label className="col-sm-2 control-label">Motivo{mandatory}</label>
@@ -211,7 +211,7 @@ showSuccess
                               </div>
                               </> ) : "";
 
-    let placeElem = modalType === 'edit' && (data.serviceReasons || data.offSiteWork) || modalType === 'insert' && data.insertOffsite ? (
+    let placeElem = modalType === 'edit' && (data.serviceReasons || data.offSiteWork) || modalType === 'insert' && data.insertOffsite || modalType == 'insertOffSite'? (
                               <>
                               <div className="form-group">
                                  <label className="col-sm-2 control-label">Luogo{mandatory}</label>

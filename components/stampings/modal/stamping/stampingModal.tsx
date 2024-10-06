@@ -30,32 +30,6 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
   const [showInsertTab, setShowInsertTab] = useState(false);
   const [showInsertOffSiteTab, setShowInsertOffSiteTab] = useState(false);
 
-  useEffect(() => {
-    if (tmpshow) {
-      let paramsSC = {'method':'POST',
-                    'path':'/rest/v4/stampings',
-                    'entityType':'Person',
-                    'id':parameters['personId']};
-      secureCheck(paramsSC, setShowInsertTab);
-
-      paramsSC = {'method':'POST',
-                'path':'/rest/v4/stampings/saveOffSite',
-                'entityType':'Person',
-                'id':parameters['personId']};
-      secureCheck(paramsSC, setShowInsertOffSiteTab);
-      /***********************************************/
-      fetchDataStamping(parameters, setData, setShow, setTitle);
-    } else {
-      setShow(false);
-      setData(null);
-    }
-  }, [tmpshow]);
-
-  const handleClose = () => {
-    setShow(false);
-    close();
-  };
-
   const showError = (message:string) => {
     setAlertMessage(message);
     setShowAlert(true);
@@ -68,8 +42,44 @@ const StampingModal: React.FC<StampingModalProps> = ({ title, tmpshow, close, pa
     setTypeAlert("SUCCESS");
     setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
   };
+  useEffect(() => {
+    if (tmpshow) {
+    async function checkSecure() {
+        let paramsSC = {'method':'POST',
+                      'path':'/rest/v4/stampings',
+                      'entityType':'Person',
+                      'id':parameters['personId']};
+        var showInsertTabResult = await secureCheck(paramsSC);
+        setShowInsertTab(showInsertTabResult);
 
-  return (
+        paramsSC = {'method':'POST',
+                  'path':'/rest/v4/stampings/saveOffSite',
+                  'entityType':'Person',
+                  'id':parameters['personId']};
+        var showInsertOffSiteTabResult = await secureCheck(paramsSC);
+        setShowInsertOffSiteTab(showInsertOffSiteTabResult);
+      }
+      checkSecure();
+
+      /***********************************************/
+      async function getData() {
+        var result = await fetchDataStamping(parameters, setShow, showError);
+        setData(result.data);
+        setShow(result.show);
+        setTitle(result.title);
+      }
+     getData();
+    } else {
+      setShow(false);
+      setData(null);
+    }
+  }, [tmpshow]);
+
+  const handleClose = () => {
+    setShow(false);
+    close();
+  };
+   return (
     <>
     {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} typeAlert={typeAlert} />}
     <Modal

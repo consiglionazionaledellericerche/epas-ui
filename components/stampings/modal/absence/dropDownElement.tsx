@@ -41,7 +41,6 @@ onChange
   const [selectedOption, setSelectedOption] = useState<any>(null);
   const t = useTranslations('Message');
 
-
 useEffect(() => {
   let formattedOptions;
   let selectedOption;
@@ -68,6 +67,7 @@ useEffect(() => {
           options: options,
         },
       ];
+
       if (data.absenceTypeSelected == null)
       {      selectedOption = {
                value: null,

@@ -32,6 +32,7 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
 
   useEffect(() => {
     let tabSelect ;
+    //console.log('parameters.mode--',parameters.mode, showInsertTab, showInsertOffSiteTab);
     if (selectedTab == ""){
       if (parameters.mode == 'insert' ){
         tabSelect = showInsertTab ? "ADD_STAMP" : (showInsertOffSiteTab ? "ADD_OFFSITE": "");
@@ -41,16 +42,19 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
         handleTabChange(tabSelect)
       }
     }
-  }, [selectedTab, parameters, params]);
+  }, [selectedTab, parameters.mode, showInsertTab, showInsertOffSiteTab]);
 
   const handleTabChange = (tabName: string|null, params={}) => {
     if (tabName == 'DELETE_STAMP') {
       parameters.mode='delete';
       setModalType('delete');
-    } else if (tabName == 'ADD_STAMP' || tabName == 'ADD_OFFSITE') {
+    } else if (tabName == 'ADD_STAMP'){
        parameters.mode='insert';
        setModalType('insert');
-    }  else if (tabName == 'EDIT_STAMP') {
+    }  else if (tabName == 'ADD_OFFSITE') {
+        parameters.mode='insert';
+        setModalType('insertOffSite');
+     }  else if (tabName == 'EDIT_STAMP') {
        parameters.mode='edit';
        setModalType('edit');
     }
@@ -72,6 +76,8 @@ const StampingModalTab: React.FC<StampingModalTabProps> = ({
           tabList.push(["deleteStamping", "DELETE_STAMP", "Elimina"]);
       }
   }
+
+  //dataTab['insertOffsite'] = showInsertOffSiteTab;
 
   return (
     <>

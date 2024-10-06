@@ -34,6 +34,8 @@
     "MinimumTimeViolated" : "Quantità minima richiesta non soddisfatta",
     "MaximumTimeExceed" : "Quantità massima giornaliera superata",
     "WayType_in":  "Ingresso",
-    "WayType_out": "Uscita"
+    "WayType_out": "Uscita",
+    "year": "anno",
+    "month": "mese"
   }
 }

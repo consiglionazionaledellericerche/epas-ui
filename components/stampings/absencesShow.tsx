@@ -9,23 +9,22 @@ interface AbsencesShowProps {
    year: number;
    month: number;
    day: string;
-   setShowTooltip: Function;
-   setTooltipContent: Function
 }
 
 const AbsencesShow: React.FC<AbsencesShowProps> = ({
     absences,
     year,
     month,
-    day,
-    setShowTooltip,
-    setTooltipContent
+    day
   }) => {
 
   const intDay = parseInt(day, 10);
   let loop = absences.map((absence) => (
         <span key={`absence-popover-${month}-${day}-${absence.id}`}>
-          <AbsencePopOver showGroup={true} absElem={absence} day={intDay} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
+          <AbsencePopOver
+          showGroup={true}
+          absElem={absence}
+          day={intDay}/>
         </span>
   ))
 

@@ -21,8 +21,6 @@ interface SimulationDataTableProps {
 const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
 
     const trans = useTranslations('Message');
-    const [tooltipContent, setTooltipContent] = useState<any>('');
-    const [showTooltip, setShowTooltip] = useState<any>(true);
 
     const [tooltipError, setTooltipError] = useState<any>('');
     const [showTooltipError, setShowTooltipError] = useState<any>(true);
@@ -109,11 +107,9 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
              popupAbsence = <>
                             <a href="#" onClick={(e) => e.preventDefault()}>
                               <AbsencePopOver showGroup={true}
-                              key={`${month}-${day}`}
+                              key={`popup-${month}-${day}`}
                               absElem={row.absence}
-                              day={day}
-                              setTooltipContent={setTooltipContent}
-                              setShowTooltip={setShowTooltip} />
+                              day={day} />
                             </a>
                             </>;
            }
@@ -181,7 +177,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
             }
 
           return (
-            <tr key={DateUtility.formatDate(row.date)} className={classTr}>
+            <tr key={`tr-${DateUtility.formatDate(row.date)}`} className={classTr} >
               <td>{DateUtility.formatDate(row.date)}</td>
               <td>{popupAbsence}</td>
               <td>{esito} {esitoWarn}</td>
@@ -193,9 +189,6 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
 
     return(<>
     <br/><br/>
-    <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
-       {tooltipContent}
-     </Tooltip>
      <Tooltip id="tooltip-error" className="tooltip-white webui-popover" isOpen={showTooltipError} clickable={true}>
         {tooltipError}
       </Tooltip>
