@@ -4,13 +4,13 @@ export type ReperibilityCalculatedCompetences = {
     /**
      * Nome della persona
      * @type {string}
-     * @memberof ReperibilityCalculatedCompetencesDto
+     * @memberof ReperibilityCalculatedCompetences
      */
     fullname?: string;
     /**
      * Conteggio delle reperibilità
      * @type {number}
-     * @memberof ReperibilityCalculatedCompetencesDto
+     * @memberof ReperibilityCalculatedCompetences
      */
     count?: number;
 }

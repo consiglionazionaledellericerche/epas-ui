@@ -3,20 +3,20 @@ import { AbsenceShow } from "./absenceShow"
 export type AbsenceError = {
     /**
          *
-         * @type {AbsenceShowDto}
-         * @memberof AbsenceErrorDto
+         * @type {AbsenceShow}
+         * @memberof AbsenceError
          */
         absence?: AbsenceShow;
         /**
          *
          * @type {string}
-         * @memberof AbsenceErrorDto
+         * @memberof AbsenceError
          */
         absenceProblem?: string;
         /**
          *
-         * @type {List<AbsenceShowDto>}
-         * @memberof AbsenceErrorDto
+         * @type {List<AbsenceShow>}
+         * @memberof AbsenceError
          */
         conflictingAbsences?: Array<AbsenceShow>;
 }

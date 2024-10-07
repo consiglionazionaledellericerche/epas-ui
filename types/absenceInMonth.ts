@@ -2,19 +2,19 @@ export type AbsenceInMonth = {
 /**
  * Id univoco
  * @type {number}
- * @memberof AbsenceInMonthDto
+ * @memberof AbsenceInMonth
  */
 id: number;
 /**
  *
  * @type {string}
- * @memberof AbsenceInMonthDto
+ * @memberof AbsenceInMonth
  */
 code?: string;
 /**
  *
  * @type {Array<Date>}
- * @memberof AbsenceInMonthDto
+ * @memberof AbsenceInMonth
  */
 dateAbsences?: Array<Date>;
 }

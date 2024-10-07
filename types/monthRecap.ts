@@ -2,28 +2,28 @@ import { ContractMonth } from "./contractMonth"
 import { PersonDayRecap } from "./personDayRecap"
 
 export type MonthRecap = {
-    personId: number
-    year: number
-    month: number
-    currentMonth: boolean
-    canEditStampings: boolean
-    numberOfCompensatoryRestUntilToday: number
-    basedWorkingDays: number
-    totalWorkingTime: number
-    positiveResidualInMonth: number
-    daysRecap: PersonDayRecap[]
+    personId?: number
+    year?: number
+    month?: number
+    currentMonth?: boolean
+    canEditStampings?: boolean
+    numberOfCompensatoryRestUntilToday?: number
+    basedWorkingDays?: number
+    totalWorkingTime?: number
+    positiveResidualInMonth?: number
+    daysRecap?: PersonDayRecap[]
     //tipo da creare
-    stampModificationTypeSet: object[]
+    stampModificationTypeSet?: object[]
     //tipo da creare
-    stampTypeSet: object[]
+    stampTypeSet?: object[]
     //tipo da creare
-    absenceCodeMap: object
+    absenceCodeMap?: object
     //tipo da creare
-    absenceList: object[]
-    contractMonths: ContractMonth[]
-    absenceToRecoverYet: boolean
+    absenceList?: object[]
+    contractMonths?: ContractMonth[]
+    absenceToRecoverYet?: boolean
     //tipo da creare
-    absencesToRecoverList: object[]
-    numberOfInOut: number
-    topQualification: boolean
+    absencesToRecoverList?: object[]
+    numberOfInOut?: number
+    topQualification?: boolean
 }

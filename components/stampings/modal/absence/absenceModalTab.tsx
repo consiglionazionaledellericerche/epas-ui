@@ -6,9 +6,9 @@ import AbsenceModalContent from "./absenceModalContent";
 import FindCodeContent from "./findCodeContent";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { AbsenceForm } from "../../../types/absenceForm";
-import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import { fetchData, simulateData, saveData } from './callApi';
+import { AbsenceForm } from "../../../../types/absenceForm";
+import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
+import { fetchDataAbsence, simulateData, saveDataAbsence } from '../apiUtils';
 
 interface AbsenceModalTabProps {
   tabName: string;
@@ -41,6 +41,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   const [forceInsert, setForceInsert] = useState(false);
 
   const handleChange = (element:any) => {
+
     if (element['absenceTypeCode'] === undefined) {
       delete newParams['absenceTypeCode'];
     }
@@ -72,21 +73,33 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
     } else if (element.from === 'FORCEINSERT') {
       newParams['forceInsert'] = element.value;
     }
-    fetchData(newParams, setDataTab, false, false);
+    async function getData() {
+      var dataAbs = await fetchDataAbsence(newParams, false);
+      setDataTab(dataAbs.data);
+    }
+    getData();
   }
 
   useEffect(() => {
   if (selectedTab !== 'FIND_CODE'){
-    params['id'] = parameters.id;
-    params['from'] = parameters.from;
-    params['category'] = selectedTab;
-    fetchData(params, setDataTab, false, false);
+    async function getData() {
+      params['id'] = parameters.id;
+      params['from'] = parameters.from;
+      params['category'] = selectedTab;
+      var dataAbs = await fetchDataAbsence(params, false);
+      setDataTab(dataAbs.data);
+    }
+    getData();
    }
   }, [selectedTab, parameters,params]);
 
   useEffect(() => {
     if (dataTab) {
-      simulateData(dataTab, setSimDataTab);
+      async function getData() {
+        var simData = await simulateData(dataTab);
+        setSimDataTab(simData)
+      }
+      getData();
     }
   }, [dataTab]);
 
@@ -98,7 +111,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
 
   const handleSaveData = () => {
     if (dataTab) {
-      saveData(dataTab, handleClose);
+      saveDataAbsence(dataTab, handleClose);
     }
   };
 

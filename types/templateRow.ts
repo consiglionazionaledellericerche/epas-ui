@@ -6,91 +6,91 @@ export type TemplateRow = {
     /**
      *
      * @type {Date}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     date?: Date;
     /**
      *
-     * @type {Array<AbsenceErrorDto>}
-     * @memberof TemplateRowDto
+     * @type {Array<AbsenceError>}
+     * @memberof TemplateRow
      */
     absenceErrors?: Array<AbsenceError>;
     /**
      *
-     * @type {Array<AbsenceErrorDto>}
-     * @memberof TemplateRowDto
+     * @type {Array<AbsenceError>}
+     * @memberof TemplateRow
      */
     absenceWarnings?: Array<AbsenceError>;
     /**
      *
-     * @type {AbsenceShowDto}
-     * @memberof TemplateRowDto
+     * @type {AbsenceShow}
+     * @memberof TemplateRow
      */
     absence?: AbsenceShow;
     /**
      *
-     * @type {GroupAbsenceTypeDto}
-     * @memberof TemplateRowDto
+     * @type {GroupAbsenceType}
+     * @memberof TemplateRow
      */
     groupAbsenceType?: GroupAbsenceType;
     /**
      *
      * @type {boolean}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     beforeInitialization?: boolean;
    /**
     *
     * @type {boolean}
-    * @memberof TemplateRowDto
+    * @memberof TemplateRow
     */
     onlyNotOnHoliday?: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     usableColumn?: boolean;
     /**
      *
      * @type {string}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     usableLimit?: string;
     /**
      *
      * @type {string}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     usableTaken?: string;
     /**
      *
      * @type {boolean}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     complationColumn?: boolean;
     /**
      *
      * @type {string}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     consumedComplationBefore?: string;
     /**
      *
      * @type {string}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     consumedComplationAbsence?: string;
     /**
      *
      * @type {string}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     consumedComplationNext?: string;
     /**
      *
      * @type {boolean}
-     * @memberof TemplateRowDto
+     * @memberof TemplateRow
      */
     replacingRow?: boolean;
 }

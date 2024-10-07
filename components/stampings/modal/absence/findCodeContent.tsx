@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchFindCode } from './callApi';
+import { fetchFindCode } from '../apiUtils';
 import { Table, Button } from "react-bootstrap";
 import DataTable from 'react-data-table-component';
 

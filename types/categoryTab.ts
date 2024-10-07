@@ -2,25 +2,25 @@ export type CategoryTab = {
     /**
      * Nome della tab.
      * @type {string}
-     * @memberof CategoryTabDto
+     * @memberof CategoryTab
      */
     name?: string;
     /**
      * Descrizione della tab.
      * @type {string}
-     * @memberof CategoryTabDto
+     * @memberof CategoryTab
      */
     description?: string;
     /**
      * Priorità della tab.
      * @type {number}
-     * @memberof CategoryTabDto
+     * @memberof CategoryTab
      */
     priority?: number;
     /**
      *
      * @type {boolean}
-     * @memberof CategoryTabDto
+     * @memberof CategoryTab
      */
     _default?: boolean;
 }

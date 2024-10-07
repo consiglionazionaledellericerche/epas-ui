@@ -34,7 +34,7 @@ const HoursRecapPreviousYear: React.FC<HoursRecapPreviousProps> = ({
                 <td className="col-xs-10">Residuo da anno precedente utilizzato questo mese come riposo compensativo</td>
                 <td className="col-xs-2 danger">{DateUtility.toHourTimeWithMinus(contractMonth.riposiCompensativiMinutiImputatoAnnoPassato)}</td>
             </tr>
-            {monthRecap.year < 2021 && monthRecap.month < 3 &&
+            {monthRecap && monthRecap.year !== undefined && monthRecap.month !== undefined  && monthRecap.year < 2021 && monthRecap.month < 3 &&
             <tr>
                 <td className="col-xs-10">Residuo da anno precedente utilizzato questo mese come recupero riposo compensativo chiusura ente (91CE)</td>
                 <td className="col-xs-2 danger">{DateUtility.toHourTimeWithMinus(contractMonth.riposiCompensativiChiusuraEnteMinutiImputatoAnnoPassato)}</td>

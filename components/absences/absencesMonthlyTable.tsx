@@ -1,8 +1,6 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
-import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 import { AbsenceType } from "../../types/absenceType";
 
 interface AbsencesMonthlyTableProps {

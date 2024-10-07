@@ -1,15 +1,18 @@
-import React, {useState} from "react";
+import React, {useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { MonthRecap } from "../../types/monthRecap";
 import AbsencesShow from "./absencesShow";
-import AbsenceModal  from "./modal/absenceModal";
+import AbsenceModal from "./modal/absence/absenceModal";
+import StampingModal from "./modal/stamping/stampingModal";
 import StampingsTemplate from "./stampingsTemplate";
 import TimeAtWorkDifferenceProgressive from "./timeAtWorkDifferenceProgressive";
 import MealTicketShow from "./mealTicketShow";
 import DateUtility from "../../utils/dateUtility";
-import { secureCheck } from '../../utils/apiUtility';
-import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
+import { fetchData } from './modal/apiUtils';
+import Alert from '../miscellanous/alert';
+import { secureCheck } from '../../utils/secureCheck';
+
+const defaultMonthRecap: MonthRecap = {};
 
 interface StampingsTableProps {
     monthRecap: MonthRecap;
@@ -22,47 +25,109 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
     year,
     month
   }) => {
+    const [titleAbsenceModal, setAbsenceTitleModal] = useState("");
+    const [showAbsenceModal, setShowAbsenceModal] = useState(false);
+    const [showInsertStamping, setShowInsertStamping] = useState(false);
+    const [showEditStamping, setShowEditStamping] = useState<boolean>(monthRecap.canEditStampings ?? false);
+    const [parametersAbsence, setAbsenceParameters] = useState({});
+    const [monthRecapData, setMonthRecapData] = useState(monthRecap);
+    const [titleStampingModal, setStampingTitleModal] = useState("");
+    const [showStampingModal, setShowStampingModal] = useState(false);
+    const [refreshStampingModal, setRefreshStampingTable] = useState(false);
+    const [parametersStamping, setStampingParameters] = useState({});
 
-    const [titleModal, setTitleModal] = useState("");
-    const [showModal, setShowModal] = useState(false);
-    const [parameters, setParameters] = useState({});
+    const [showAlert, setShowAlert] = useState(false);
+    const [typeAlert, setTypeAlert] = useState('SUCCESS');
+    const [alertMessage, setAlertMessage] = useState('');
 
-    const [tooltipContent, setTooltipContent] = useState('');
-    const [showTooltip, setShowTooltip] = useState(true);
+    const showError = (message:string) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+        setTypeAlert("ERROR");
+        setTimeout(() => setShowAlert(false), 5000); // nascondo dopo 5 secondi
+      };
 
-    const [yearMonthSecureCheck, setYearMonthSecureCheck] = useState(false);
-    const [personSecureCheck, setPersonSecureCheck] = useState(false);
-    function setModalParam(pdr:any){
-      let dayDate = DateUtility.formatDateDay(pdr.personDay.date);
-      let dateFrom = DateUtility.textToDate(parseInt(dayDate),month-1,year);
-      let id = pdr.personDay.personId;
+    const personId = monthRecap.personId;
+    console.log("personId ", personId);
+    console.log("monthRecap ", monthRecap);
 
-      let paramsSCYearMonth = {'method':'GET',
-                    'path':'/rest/v4/absencesGroups/groupsForCategory',
-                    'entityType':'YearMonth',
-                    'id':id,
-                    'year':year,
-                    'month':month};
-      secureCheck(paramsSCYearMonth, setYearMonthSecureCheck);
+    useEffect(() => {
+        let isMounted = true;  // Flag per sapere se il componente è ancora montato
+        if (personId){
+          async function checkSecure() {
+            let paramsSC = {'method':'GET',
+                          'path':'/rest/v4/stampings/insert',
+                          'entityType':'Person',
+                          'id':personId};
+            var showInsertStampingResult = await secureCheck(paramsSC);
+            if (isMounted && showInsertStampingResult !== showInsertStamping) {  // Assicura che il componente sia ancora montato
+              setShowInsertStamping(showInsertStampingResult);
+            }
+          }
+          checkSecure();
+        }
+        return () => {
+                isMounted = false;  // Imposta a false quando il componente viene smontato
+            };
+    }, [personId,showInsertStamping]);
 
-      let paramsSCPerson = {'method':'GET',
-                    'path':'/rest/v4/absencesGroups/groupsForCategory',
-                    'entityType':'Person',
-                    'id':id};
-      secureCheck(paramsSCPerson, setPersonSecureCheck);
-
-      if (yearMonthSecureCheck && personSecureCheck){
-          setShowModal(true);
-          setParameters({'id':id, 'from':dateFrom});
-          setTitleModal("");
+    function setModalParam(modalType:string, pdr:any){
+      let day = DateUtility.formatDateDay(pdr.personDay.date);
+      let date = DateUtility.textToDate(parseInt(day),month-1,year);
+      let personId = pdr.personDay.personId;
+      if (modalType == 'Absence'){
+        setShowStampingModal(false);
+        setShowAbsenceModal(true);
+        setAbsenceParameters({'id':personId, 'from':date});
+        setAbsenceTitleModal("");
+      }
+      else if (modalType == 'Stamping'){
+        setShowAbsenceModal(false);
+        setShowStampingModal(showInsertStamping);
+        setStampingParameters({'personId':personId, 'date':date, 'mode':'insert'});
+        setStampingTitleModal("");
       }
     }
 
+    function setEditModalParam(stampId:number){
+       setStampingParameters({'personId':personId, 'stampingId':stampId, 'mode':'edit'});
+       setShowAbsenceModal(false);
+       setShowStampingModal(showEditStamping);
+       setStampingTitleModal("");
+    }
+
+    const closeModalStamping= () => {
+      setShowStampingModal(false);
+      setRefreshStampingTable(true);
+    }
+
+    useEffect(() => {
+        if (refreshStampingModal){
+            const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
+            setMonthRecapData(defaultMonthRecap);
+            setRefreshStampingTable(false)
+            const url = `/api/rest/v4/monthrecaps?${parameters}`;
+            async function getData() {
+              var res = await fetchData(url, "", null);
+               console.log('Dati recuperati:', res);
+              setMonthRecapData(res.data);
+            }
+            getData();
+        }
+      }, [refreshStampingModal, personId,year,month]);
+    console.log('showInsertStamping setShowStampingModal---+', showInsertStamping, showStampingModal);
+        console.log('showAbsenceModal---+', showAbsenceModal);
     return (<>
-           <AbsenceModal title={titleModal} tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
-           <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
-             {tooltipContent}
-           </Tooltip>
+           <AbsenceModal
+                       title={titleAbsenceModal}
+                       tmpshow={showAbsenceModal}
+                       close={() => setShowAbsenceModal(false)}
+                       parameters={parametersAbsence} />
+           <StampingModal
+                       title={titleStampingModal}
+                       tmpshow={showStampingModal}
+                       close={() => closeModalStamping()}
+                       parameters={parametersStamping} />
             <Table id="tabellonetimbrature" bordered hover>
             <caption className="sr-only">Riepilogo mensile </caption>
             <thead>
@@ -74,14 +139,14 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                 <th className="group-single">Codice <br/>assenza</th>
 
                 {
-                [...Array(monthRecap.numberOfInOut),].map((value: undefined, index: number) => (
+                [...Array(monthRecapData.numberOfInOut),].map((value: undefined, index: number) => (
                     <React.Fragment key={`stampings-${index+1}`}>
                     <th className="group-left">{index+1}<sup>a</sup> <br/>entrata</th>
                     <th className="group-right">{index+1}<sup>a</sup> <br/>uscita</th>
                     </React.Fragment>
                     ))
                 }
-
+                {showInsertStamping ? <th className="group-single">Inserisci<br/>timbratura</th>: <th className="invisible"></th>}
                 <th className="invisible"></th>
 
                 <th className="group-single">Tempo<br />lavoro</th>
@@ -91,7 +156,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             </tr>
             </thead>
             <tbody>
-            {monthRecap.daysRecap?.map((pdr) => (
+            {monthRecapData.daysRecap?.map((pdr) => (
                     <tr key={`tr-${pdr.personDay.date}`} className={pdr.ignoreDay ? 'ignoreDay' : ''}>
                         <td className={pdr.personDay.holiday ? 'festivi' : 'capitalized'}>
                             {DateUtility.formatDateShort(pdr.personDay.date)}
@@ -109,27 +174,33 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                           <AbsencesShow absences={pdr.personDay.absences}
                           year={year}
                           month={month}
-                          day={DateUtility.formatDateDay(pdr.personDay.date)}
-                          setTooltipContent={setTooltipContent}
-                          setShowTooltip={setShowTooltip} />
+                          day={DateUtility.formatDateDay(pdr.personDay.date)}/>
                           </>
                         ):
                         (
                         <>
-                          <a id="new-abscence-code" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam(pdr)}>
+                          <a id="new-abscence-code" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam('Absence',pdr)}>
                             __
                           </a>
                           </>
                         )}
                         </td>
-                        
-                        <StampingsTemplate personDayRecap={pdr} />
 
+                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={monthRecapData.canEditStampings ?? false} />
+                        <td>
+                        {
+                          showInsertStamping && !pdr.personDay.future ?
+                          (
+                          <a id="new-stamping" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam('Stamping',pdr)}>
+                          +++
+                          </a>):''
+                          }
+                        </td>
                         <td className="invisible"></td>
 
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
 
-                        <td>{pdr.wttd && pdr.wttd.workingTimeType ? pdr.wttd.workingTimeType.description : ""}</td>
+                        <td>{pdr.wttd?.workingTimeType?.description}</td>
                     </tr>
                     )
                 )

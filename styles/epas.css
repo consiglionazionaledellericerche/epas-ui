@@ -307,6 +307,12 @@ div.form-group .form-control-static {
     text-align: center;
 }
 */
+
+.form-group {
+  display:flex;
+  margin-bottom: 15px;
+  }
+
 table[datatable] {
     border-radius: 5px;
     border: 1px solid rgb(220, 220, 220);
@@ -648,4 +654,8 @@ z-index:9999 !important;
 .centered-modal .modal-dialog {
   max-width: none;
   width: auto;
+}
+
+.left-align {
+  text-align: left !important;
 }

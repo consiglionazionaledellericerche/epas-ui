@@ -5,42 +5,42 @@ export type VacationSituation = {
     /**
      *
      * @type {number}
-     * @memberof VacationSituationDto
+     * @memberof VacationSituation
      */
     personId?: number;
     /**
      *
      * @type {number}
-     * @memberof VacationSituationDto
+     * @memberof VacationSituation
      */
     year?: number;
     /**
      *
      * @type {Date}
-     * @memberof VacationSituationDto
+     * @memberof VacationSituation
      */
     date?: Date;
     /**
      *
-     * @type {ContractShowDto}
-     * @memberof VacationSituationDto
+     * @type {ContractShow}
+     * @memberof VacationSituation
      */
     contract: Contract;
     /**
      *
-     * @type {VacationSummaryTerseDto}
-     * @memberof VacationSituationDto
+     * @type {VacationSummaryTerse}
+     * @memberof VacationSituation
      */
     lastYear: VacationSummary;
     /**
      *
-     * @type {VacationSummaryTerseDto}
-     * @memberof VacationSituationDto
+     * @type {VacationSummaryTerse}
+     * @memberof VacationSituation
      */
     currentYear: VacationSummary;
     /**
      *
-     * @type {VacationSummaryTerseDto}
-     * @memberof VacationSituationDto
+     * @type {VacationSummaryTerse}
+     * @memberof VacationSituation
      */
     permissions: VacationSummary;}

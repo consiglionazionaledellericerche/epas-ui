@@ -3,37 +3,37 @@ export type ContractBase = {
 /**
      * Data di inizio del contratto
      * @type {Date}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     beginDate?: Date;
     /**
      * Data di scadenza del contratto
      * @type {Date}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     endDate?: Date;
     /**
      * Data in cui è terminato il contratto, può essere diversa dalla scadenza
      * @type {Date}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     endContract?: Date;
     /**
      * Id esterno utilizzato per la sincronizzazione con l'anagrafica CNR
      * @type {string}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     perseoId?: string;
     /**
      * Id esterno utilizzato per la sincronizzazione con altre anagrafiche
      * @type {string}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     externalId?: string;
     /**
      * Contratto con gestione delle busta paga (ex. true per i dipendenti CNR
      * @type {boolean}
-     * @memberof ContractBaseDto
+     * @memberof ContractBase
      */
     onCertificate?: boolean;
 }

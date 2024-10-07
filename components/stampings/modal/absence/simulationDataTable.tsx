@@ -2,12 +2,12 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import 'react-tooltip/dist/react-tooltip.css';
 import {Tooltip} from 'react-tooltip';
-import { AbsenceFormSimulationResponse } from "../../../types/absenceFormSimulationResponse";
-import DateUtility from "../../../utils/dateUtility";
+import { AbsenceFormSimulationResponse } from "../../../../types/absenceFormSimulationResponse";
+import DateUtility from "../../../../utils/dateUtility";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AbsencePopOver from "../../absences/absencePopOver";
+import AbsencePopOver from "../../../absences/absencePopOver";
 import { useState } from 'react';
 import {useTranslations} from 'next-intl';
 
@@ -21,8 +21,6 @@ interface SimulationDataTableProps {
 const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
 
     const trans = useTranslations('Message');
-    const [tooltipContent, setTooltipContent] = useState<any>('');
-    const [showTooltip, setShowTooltip] = useState<any>(true);
 
     const [tooltipError, setTooltipError] = useState<any>('');
     const [showTooltipError, setShowTooltipError] = useState<any>(true);
@@ -111,9 +109,7 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
                               <AbsencePopOver showGroup={true}
                               key={`popup-${month}-${day}`}
                               absElem={row.absence}
-                              day={day}
-                              setTooltipContent={setTooltipContent}
-                              setShowTooltip={setShowTooltip} />
+                              day={day} />
                             </a>
                             </>;
            }
@@ -193,9 +189,6 @@ const SimulationDataTable: React.FC<SimulationDataTableProps> = ({data}) => {
 
     return(<>
     <br/><br/>
-    <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} clickable={true}>
-       {tooltipContent}
-     </Tooltip>
      <Tooltip id="tooltip-error" className="tooltip-white webui-popover" isOpen={showTooltipError} clickable={true}>
         {tooltipError}
       </Tooltip>

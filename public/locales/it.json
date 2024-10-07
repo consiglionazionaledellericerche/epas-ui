@@ -32,6 +32,10 @@
     "IgnoredBeforeInitialization" : "Precedente l'inizializzazione",
     "Migration661" : "In questa data il codice non dovrebbe essere uguale o superiore alle 6 ore",
     "MinimumTimeViolated" : "Quantità minima richiesta non soddisfatta",
-    "MaximumTimeExceed" : "Quantità massima giornaliera superata"
+    "MaximumTimeExceed" : "Quantità massima giornaliera superata",
+    "WayType_in":  "Ingresso",
+    "WayType_out": "Uscita",
+    "year": "anno",
+    "month": "mese"
   }
 }
