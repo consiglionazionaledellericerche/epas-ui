@@ -77,6 +77,12 @@ class DateUtility {
         return DateUtility.formatDateLocal(d);
     }
 
+    static toHour(minutes:number) {
+        const hour = Math.abs(Math.floor(minutes / 60));
+        return `${hour}`;
+    }
+
+
     static fromMinuteToHourMinute(minute : number) {
         if (minute == 0) {
           return "00:00";

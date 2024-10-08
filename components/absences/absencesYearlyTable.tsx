@@ -43,11 +43,21 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
   }) => {
 
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
-    const months = [{'id':'01', 'name':'January'},{'id':'02', 'name':'February'},{'id':'03', 'name':'March'},
-     {'id':'04', 'name':'April'}, {'id':'05', 'name':'May'}, {'id':'06', 'name':'June'},
-      {'id':'07', 'name':'July'},{'id':'08', 'name': 'August'},
-     {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
-     {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
+    const months = [
+        { 'id': '01', 'name': 'Gennaio' },
+        { 'id': '02', 'name': 'Febbraio' },
+        { 'id': '03', 'name': 'Marzo' },
+        { 'id': '04', 'name': 'Aprile' },
+        { 'id': '05', 'name': 'Maggio' },
+        { 'id': '06', 'name': 'Giugno' },
+        { 'id': '07', 'name': 'Luglio' },
+        { 'id': '08', 'name': 'Agosto' },
+        { 'id': '09', 'name': 'Settembre' },
+        { 'id': '10', 'name': 'Ottobre' },
+        { 'id': '11', 'name': 'Novembre' },
+        { 'id': '12', 'name': 'Dicembre' }
+    ];
+
 
   const colSpan=31;
 
