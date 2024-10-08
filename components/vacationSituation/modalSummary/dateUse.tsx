@@ -1,19 +1,30 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 import DateUtility from "../../../utils/dateUtility";
+import {VacationSummary} from "../../../types/vacationSummary";
 
 interface DateUseProps {
-    data;
+    data: VacationSummary;
 }
 
 const DateUse: React.FC<DateUseProps> = ({
     data
   }) => {
 
+  let rowElem =data.absencesUsed?.map((absence) => {
+                                let trID = absence.absenceType.code + "$" + DateUtility.formatDate(absence.personDay.date);
+                                 return (
+                                     <tr key={trID}>
+                                        <td data-order="{absence.personDay.date}">{DateUtility.formatDate(absence.personDay.date)}</td>
+                                        <td>{absence.absenceType.code}</td>
+                                        <td>{absence.absenceType.description}</td>
+                                     </tr> );
+                                 })
+
     return(
         <>
 
-           {data.sourced > 0 ? (<div className="alert alert-info">
+           {data.sourced && data.sourced > 0 ? (<div className="alert alert-info">
                                  <p><strong>{data.sourced}</strong> giorni utilizzati sono stati definiti da da inizializzazione ePAS.</p>
                                  </div>)  : ''
            }
@@ -28,16 +39,7 @@ const DateUse: React.FC<DateUseProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                {
-                  data.absencesUsed?.map((absence) => {
-                  return (
-                      <tr>
-                         <td data-order="{absence.personDay.date}">{DateUtility.formatDate(absence.personDay.date)}</td>
-                         <td>{absence.absenceType.code}</td>
-                         <td>{absence.absenceType.description}</td>
-                      </tr> );
-                  })
-                }
+                {rowElem}
                 </tbody>
               </Table>
           </div>

@@ -5,20 +5,39 @@ import VacationSummaryModalContent from './vacationSummaryModalContent'
 import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { getSession } from 'next-auth/react';
+import { CustomSession } from "../../types/customSession";
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 
-class VacationModal  extends React.Component {
-  constructor(props) {
+interface VacationModalProps {
+  title: string,
+  tmpshow: boolean,
+  close: Function,
+  parameters: string
+}
+
+interface VacationModalState {
+  title: string,
+  show: boolean,
+  data: any,
+  close: boolean
+}
+
+class VacationModal extends React.Component<VacationModalProps, VacationModalState> {
+  constructor(props:VacationModalProps) {
     super(props);
-    this.state = { data: [], show:false, title: ""};
+    this.state = { data: [], show:false, title: "", close:true};
   }
 
-  async componentDidUpdate(propsPrecedenti) {
+  async componentDidUpdate(propsPrecedenti: VacationModalProps) {
     if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
       if (this.props.tmpshow){
         const parameters = this.props.parameters
-        const session = await getSession();
-
-        const accessToken = session.accessToken
+        const session = await getSession() as CustomSession;
+        let accessToken = null;
+        if (session) {
+          accessToken = session.accessToken;
+        }
 
         const url = '/api/rest/v4/vacations/summary?'+parameters;
 
@@ -32,7 +51,8 @@ class VacationModal  extends React.Component {
         }).then(response => response.json())
           .catch(error => console.error("unable to achive this", error))
             .then(data => {
-                this.setState({'data': data.vacationSummary, 'show':true, 'title':data.vacationSummary.title})
+
+                this.setState({'data': data, 'show':true, 'title':data.vacationSummary.title})
             });
         }
         else {
@@ -43,8 +63,8 @@ class VacationModal  extends React.Component {
 
   handleClose = () => {
     this.setState ({'show': false})
+    this.props.close();
   }
-
  render() {
     return (
               <Modal
@@ -59,10 +79,10 @@ class VacationModal  extends React.Component {
                         <Modal.Title>{this.state.title}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                         {this.state.show ? <VacationSummaryModalContent  data={this.state.data} parameters={this.props.parameters} /> : ''}
+                         {this.state.show ? <VacationSummaryModalContent data={this.state.data} parameters={this.props.parameters} /> : ''}
                       </Modal.Body>
                       <Modal.Footer>
-                        <Button onClick={this.props.close}>Cancel</Button>
+                        <Button onClick={this.handleClose}>Cancel</Button>
                       </Modal.Footer>
                     </Modal>
     );
@@ -70,12 +90,12 @@ class VacationModal  extends React.Component {
 
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
   return {
     props: {
       session: await getServerSession(req, res, authOptions)
-    }
-  }
+    },
+  };
 }
 
 export default VacationModal;

@@ -17,34 +17,64 @@ class DateUtility {
       return monthName;
     }
 
-    static formatDateShort(date : Date) {
-        return moment(date).locale('it-IT').format('DD ddd');
+    static formatDateShort(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD ddd');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateYear(date : Date) {
-        return moment(date).locale('it-IT').format('YYYY');
+    static formatDateYear(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('YYYY');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateMonth(date : Date) {
-        return moment(date).locale('it-IT').format('MM');
+    static formatDateMonth(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('MM');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateDay(date : Date) {
-        return moment(date).locale('it-IT').format('DD');
+    static formatDateDay(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD');
+        } else {
+          return "";
+        }
     }
 
-    static formatDate(date : Date) {
-        return moment(date).locale('it-IT').format('DD/MM/YYYY');
+    static formatDate(date : Date | undefined) {
+        if (date) {
+          return moment(date).locale('it-IT').format('DD/MM/YYYY');
+        } else {
+          return "";
+        }
     }
 
-    static formatDateLocal(date : Date) {
+    static formatDateLocal(date : Date | undefined) {
         //return moment(date).locale('it-IT').format('DD-MM-YYYY');
-        return moment(date).format('YYYY-MM-DD')
+        if (date) {
+          return moment(date).format('YYYY-MM-DD')
+        } else {
+          return "";
+        }
     }
 
     static getLastDayOfMonth(month : number, year : number) {
         var d = new Date(year, month, 0);
         return DateUtility.formatDateDay(d);
+    }
+
+    static textToDate(day : number, month : number, year : number) {
+        console.log("textToDate",day,month,year);
+        var d = new Date(year, month, day);
+        return DateUtility.formatDateLocal(d);
     }
 
     static fromMinuteToHourMinute(minute : number) {
@@ -167,6 +197,19 @@ class DateUtility {
     }
     return format;
   }
+
+  static formattedHour(time:string) {
+      if (typeof time !== 'string' || time.length !== 4 || isNaN(Number(time))) {
+          throw new Error('Invalid time format. Expected a string in "HHMM" format.');
+      }
+      const hours = time.slice(0, 2);
+      const minutes = time.slice(2, 4);
+      if (parseInt(hours, 10) > 23 || parseInt(minutes, 10) > 59) {
+          throw new Error('Invalid time value. Hours must be between 00 and 23 and minutes between 00 and 59.');
+      }
+      return `${hours}:${minutes}`;
+  }
+
 
 }
 

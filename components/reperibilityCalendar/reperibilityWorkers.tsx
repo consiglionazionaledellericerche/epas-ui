@@ -1,10 +1,12 @@
 import React from "react";
 import { Col, Row } from 'react-bootstrap';
-import messages from '../../public/data/messages.json';
+import { ReperibilityEvent } from "../../types/reperibilityEvent";
 
 interface ReperibilityWorkersProps {
-    reperibilityWorkers;
+    reperibilityWorkers: ReperibilityEvent[];
 }
+//              personreperibilitydayid={event.personReperibilityDayId}
+//              personid={event.personId}
 
 const ReperibilityWorkers: React.FC<ReperibilityWorkersProps> = ({
     reperibilityWorkers
@@ -25,9 +27,7 @@ const ReperibilityWorkers: React.FC<ReperibilityWorkersProps> = ({
             <li
               className={event.className}
               title={event.title}
-              id={event.personId}
-              personreperibilitydayid={event.personReperibilityDayId}
-              personid={event.personId}
+              id={event.personId?.toString()}
               key={event.personId}
               style={{color:event.textColor, backgroundColor: event.color, borderColor:event.borderColor}}
               color={event.eventColor}

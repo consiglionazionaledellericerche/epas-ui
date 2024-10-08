@@ -1,165 +1,211 @@
-import React from "react";
-import { Spinner } from 'react-bootstrap'
-import { Tooltip } from 'react-tooltip'
+import React, { useEffect, useState } from "react";
+import { getSession } from 'next-auth/react';
+import { CustomSession } from '../../types/customSession';
+import { Spinner } from 'react-bootstrap';
+import { v4 as uuidv4 } from 'uuid';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import Link from 'next/link';
-import 'react-tooltip/dist/react-tooltip.css'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRequest } from "../../request/useRequest";
-import messages from '../../public/data/messages.json';
 import DateUtility from "../../utils/dateUtility";
-import { useState } from 'react';
+import { AbsenceShow } from "../../types/absenceShow";
+import { useTranslations } from 'next-intl';
 
 library.add(faPaperPlane);
 
-function doesNotStartWithZero(variable) {
-  return variable.toString()[0] !== '0';
+interface AbsencePopOverProps {
+  day: number | string;
+  absElem: any;
+  showGroup: boolean;
 }
 
-interface AbsencePopOverProps {
-    absencesRecap: Absence[];
-    year: integer;
-    month: string;
-    day: integer;
-    showGroup: boolean;
-    setShowTooltip;
-    setTooltipContent
+interface PopoverProps {
+  onClick?: () => void;
+  style?: React.CSSProperties;
 }
+
+const renderPopover = (
+  props: PopoverProps,
+  absElem: any,
+  data: AbsenceShow,
+  translation: any
+) => {
+  const groupList = data.replacingAbsencesGroup?.map((group: any) => (
+    <span key={group.id}>
+      <span>{group.description}</span>
+      <Link
+        href={{
+          pathname: '/absencesGroups',
+          query: {
+            groupAbsenceTypeId: group.id,
+            personId: data.personDay.personId,
+            from: DateUtility.formatDateLocal(data.date),
+          },
+        }}
+        passHref
+      >
+        &nbsp;&nbsp;Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i>
+      </Link>
+    </span>
+  ));
+
+  let justifiedTimeContent = null;
+
+  if (data.justifiedTime && data.justifiedTime > 0) {
+    justifiedTimeContent = (
+      <>
+        <strong>Tempo Specificato</strong>
+        {DateUtility.fromMinuteToHourMinute(data.justifiedTime)}
+        <br />
+      </>
+    );
+  }
+
+  let nothingJustified = null;
+  if (data.nothingJustified) {
+      nothingJustified = (
+        <>
+          <strong>Tempo Giustificato</strong> Questo codice non giustifica alcun orario.
+          <br />
+        </>
+      );
+    }
+
+    let note = null;
+      if (data.note) {
+          note = (
+            <>
+              <strong>Note</strong> {data.note}
+              <br />
+            </>
+          );
+        }
+
+
+  return (
+    <Popover id="popover-absencecode" {...props}>
+      <Popover.Body>
+        <p>
+        <span className="tooltip-icon-black"><FontAwesomeIcon icon={faPaperPlane}/></span>
+          <strong className="text-success">
+            &nbsp;&nbsp;Il codice {absElem.code} verrà inviato ad attestati.
+          </strong>
+        </p>
+        <ul className="list-group">
+          <li key={uuidv4()} className="list-group-item">
+            <strong>Codice</strong> <strong>{absElem.code}</strong>
+            <br />
+            <strong>Descrizione</strong> {data.absenceType?.description}
+            <br />
+            <strong>Data</strong> {DateUtility.formatDate(data.date)}
+            <br />
+            <strong>Tipo Giustificazione</strong> {translation(data.justifiedType)}
+            <br />
+            {nothingJustified}
+            {justifiedTimeContent}
+            {note}
+          </li>
+          {data.replacingAbsencesGroup && (
+            <li key={uuidv4()} className="list-group-item">
+              <strong>Gruppo</strong>
+              <br />
+              {groupList}
+            </li>
+          )}
+        </ul>
+      </Popover.Body>
+    </Popover>
+  );
+};
 
 const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
-    absencesRecap,
-    year,
-    month,
-    day,
-    showGroup,
-    setShowTooltip,
-    setTooltipContent
-  }) => {
+  day,
+  absElem,
+  showGroup
+}) => {
+  const [data, setData] = useState<AbsenceShow | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const t = useTranslations('Message');
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [showPopover, setShowPopover] = useState(false);
 
-    let dday = day < 10 & doesNotStartWithZero(day) ? `0${day}` : day;
-    let item;
+  const handleMouseEnter = () => {
+    setShowPopover(true);
+  };
 
-    try{
-        item = absencesRecap.find(item => item.date === `${year}-${month}-${dday}`);
-    }catch {
-        item = absencesRecap
-    }
+  const handleMouseLeave = () => {
+    setTimeout(() => setShowPopover(false), 1000);
+  };
 
-    let absenceCode;
-    let absencejustifiedTime;
-    let absenceDescription;
-    let absenceData;
-    let absenceNoteElem;
-    let absenceJustifiedType;
-    let absenceJustifiedTimeElem;
-    let nothingJustifiedElem;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (absElem && 'absenceType' in absElem) {
+      console.log('absElem****', absElem, absElem.justifiedTime);
+        setData(absElem);
+        setIsLoading(false);
+      } else {
+        const session = await getSession() as CustomSession;
+        let accessToken = session ? session.accessToken : null;
 
-    let hasGroupsElem;
+        try {
+          console.log('absElem****', absElem, 'absElem.justifiedTime', absElem.justifiedTime);
+          let idItem = absElem.id;
+          const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
 
-    if (item) {
-      absenceCode = item.code;
-      absencejustifiedTime = item.justifiedTime;
-      const {data, error} = useRequest(`/absences/${item.id}`);
-      if (error) return (<div>Errore!</div>);
-      if (!data) return <React.Suspense fallback={<Spinner />} />
+          if (!response.ok) {
+            throw new Error('Errore durante la richiesta API');
+          }
 
-      absenceDescription = data.absenceType.description;
-      absenceData = DateUtility.formatDate(data.date);
-      absenceJustifiedType = messages[data.justifiedType];
+          const data: AbsenceShow = await response.json();
+          console.log('data absElem****', data, );
 
-      if (data.justifiedTime) {
-        absenceJustifiedTimeElem = <>
-                                  <strong>Tipo Giustificazione</strong> {DateUtility.fromMinuteToHourMinute(data.justifiedTime)} <br/>
-                                  </>
+          setData(data);
+        } catch (error) {
+          setError(error as Error);
+          console.error("unable to achieve this", error);
+        }
+        setIsLoading(false);
       }
+    };
 
-      if (data.nothingJustified) {
-        nothingJustifiedElem = <>
-                               <strong>Tempo Giustificato</strong> Questo codice non giustifica alcun orario.<br/>
-                               </>
-      }
+    fetchData();
+  }, [absElem]);
 
-      if (data.note) {
-        absenceNoteElem = <>
-                          <strong>Note</strong> {data.note}<br/>
-                          </>
-      }
+  if (isLoading) {
+    return <Spinner animation="border" />;
+  }
 
-      if (data.absenceType.hasGroups && showGroup) {
-        let groupVerified = false
-        let description = ''
-        let groupVerifiedLink = ''
-        let rowRes = data.replacingAbsencesGroup?.map((replacingGroup) => {
-                                          let query = {
-                                                        pathname: '/absencesGroups',
-                                                        query: { groupAbsenceTypeId: replacingGroup.id, personId: data.personDay.personId, from:DateUtility.formatDateLocal(data.date) }
-                                                      };
-                                          groupVerified = true;
-                                          description = <>
-                                                        <span>{replacingGroup.description}</span>
-                                                          <Link href={query}  passHref={true} legacyBehavior={true}>
-                                                            <a> Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i></a>
-                                                          </Link>
-                                                        </>
+  if (error || !data) {
+    return <div>Errore!</div>;
+  }
 
-                                        !groupVerified ?
-                                          groupVerifiedLink = <>
-                                                                <Link href={query}  passHref={true} legacyBehavior={true}>
-                                                                  <a> Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i></a>
-                                                                </Link>
-                                                              </>
-                                         : groupVerifiedLink = ""
+  const absenceCode = absElem.code;
 
-                                        return (  <span key="{`$row-res-${dday.id}`}">
-                                                  {description}
-                                                  {groupVerifiedLink}
-                                                  </span>
-                                        )
-                        })
-        hasGroupsElem = <>
-                          <li key={`group-${item.code}-${day}`} className="list-group-item">
-                            <strong>Gruppo</strong><br/>
-                            {rowRes}
-                          </li>
-                        </>
-      }
-    }
+  return (
+    <OverlayTrigger
+      trigger={['hover', 'focus']}
+      placement="top"
+      show={showPopover}  // Show/Hide the popover based on state
+      overlay={(props) => renderPopover(props, absElem, data, t)}
+    >
+      <div
+        onMouseEnter={handleMouseEnter}  // Opens popover on mouse enter
+        onMouseLeave={handleMouseLeave}  // Closes popover on mouse leave
+      >
+        {absenceCode}
+      </div>
+    </OverlayTrigger>
+  );
+};
 
-    let contentTooltip = <>
-                        <p>
-                         <span className="tooltip-icon-black"><FontAwesomeIcon icon={faPaperPlane}/></span>
-                         <strong className="text-success"> Il codice {absenceCode} verrà inviato ad attestati.</strong>
-                      </p>
-                      <ul className="list-group">
-                        <li key={`list-group-${absenceCode}-${day}`} className="list-group-item">
-                          <strong>Codice</strong> <strong>{absenceCode}</strong><br/>
-                          <strong>Descrizione</strong> {absenceDescription}<br/>
-                          <strong>Data</strong> {absenceData}<br/>
-                          <strong>Tipo Giustificazione</strong> {absenceJustifiedType} <br/>
-                          {nothingJustifiedElem}
-                          {absenceJustifiedTimeElem}
-                          {absenceNoteElem}
-                        </li>
-                        {hasGroupsElem}
-                      </ul>
-                      </>
-
-    if (!absenceCode)
-    { return (<></>)}
-
-       return(<>
-             <div data-tooltip-id="tooltip-absencecode" onMouseEnter={() => {
-                                                                        setTooltipContent(contentTooltip);
-                                                                        setShowTooltip(true);
-                                                                      }}
-                                                                      onClick={() => { setShowTooltip(false);}}>
-           {absenceCode}
-            </div>
-            </>
-    );
-}
-
-export default AbsencePopOver
+export default AbsencePopOver;

@@ -1,15 +1,16 @@
-import {React, useState } from "react";
+import React from "react";
+import {useState } from "react";
 import { Table, Button } from "react-bootstrap";
-import { vacationSituation } from "../../types/vacationSituation";
+import { VacationSituation } from "../../types/vacationSituation";
 import VacationSummaryRow from "./vacationSummaryRow";
 
 interface VacationRecapTableProps {
     vacationSituation: VacationSituation;
     tableName: string;
     param: string;
-    setModal;
-    setParameters;
-    setTitleModal;
+    setModal: Function;
+    setParameters: Function;
+    setTitleModal: Function;
 }
 
 const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
@@ -22,7 +23,6 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
   }) => {
 
     let caption;
-
     tableName == "tabellaFerie" ? ( caption = "Ferie") : ( caption = "Permessi legge 937/77")
 
     return (

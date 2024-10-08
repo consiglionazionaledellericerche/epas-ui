@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle  } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import {AbsenceSubPeriod} from "../../../types/absenceSubPeriod";
 
 interface CalcTotRowProps {
-    subperiod;
+    subperiod: AbsenceSubPeriod;
 }
 
 const CalcTotRow: React.FC<CalcTotRowProps> = ({
@@ -18,7 +19,7 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
     let tdPostPartum;
     let dataContent=`Utilizzando ulteriori ${subperiod.subDayToFixPostPartum} giorni di riduzione si perderà il diritto ad utilizzare i ${subperiod.subAmountBeforeFixedPostPartum} giorni maturati in questo periodo.`
 
-     subperiod.subDayToFixPostPartum > 0 ?
+     subperiod.subDayToFixPostPartum && subperiod.subDayToFixPostPartum > 0 ?
       spanPostPartum = <>
               <span className="text-warning">
               <FontAwesomeIcon icon={faExclamationTriangle} data-tooltip-id="subdayTooltip" data-tooltip-content={dataContent} />
@@ -27,7 +28,7 @@ const CalcTotRow: React.FC<CalcTotRowProps> = ({
               </>
        : spanPostPartum = ''
 
-      subperiod.subDayPostPartum > 0 ?
+      subperiod.subDayPostPartum && subperiod.subDayPostPartum > 0 ?
              tdPostPartum = <>
                   {subperiod.subDayPostPartum}
                   ({subperiod.subDayPostPartumProgression})

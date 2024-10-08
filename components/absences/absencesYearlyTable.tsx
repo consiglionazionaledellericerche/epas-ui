@@ -2,13 +2,39 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import AbsencePopOver from "./absencePopOver";
-import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 import { useState } from 'react';
+import { AbsenceShow } from "../../types/absenceShow";
+
+function doesNotStartWithZero(variable:number) {
+  return variable.toString()[0] !== '0';
+}
+
+function getTdElem(day: number, year: number, month: string, absencesRecap: AbsenceShow[]) {
+    let dday = day < 10 && doesNotStartWithZero(day) ? `0${day}` : day;
+    let item;
+
+    try{
+        item = absencesRecap.find(recap => recap && DateUtility.formatDateLocal(recap.date) === `${year}-${month}-${dday}`);
+    }catch {
+        item = null;
+    }
+
+    if (!item  || item ===null){
+      return (<div></div>);
+    }
+    else {
+       return (<a href="#" onClick={(e) => e.preventDefault()}>
+               <AbsencePopOver showGroup={true}
+               key={`${month}-${day}`}
+               absElem={item}
+               day={day}/>
+               </a>);
+    }
+}
 
 interface AbsencesYearlyTableProps {
-    absencesRecap: Absence[];
-    year: integer;
+    absencesRecap: AbsenceShow[];
+    year: number;
 }
 
 const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
@@ -23,20 +49,16 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
      {'id':'09', 'name':'September'}, {'id':'10', 'name':'October'},
      {'id':'11', 'name':'November'}, {'id':'12', 'name':'December'}];
 
-  const [tooltipContent, setTooltipContent] = useState('');
-  const [showTooltip, setShowTooltip] = useState(true);
+  const colSpan=31;
 
     return (
     <>
-       <Tooltip id="tooltip-absencecode" className="tooltip-white webui-popover" isOpen={showTooltip} effect="solid" clickable={true}>
-         {tooltipContent}
-       </Tooltip>
         <Table id="assenzeannuali" className="table table-bordered table-hover table-condensed" >
             <caption className="sr-only">Assenze Annuali</caption>
             <thead>
             <tr className="warning">
                 <th >Mese</th>
-                <th colSpan="31">Giorni</th>
+                <th colSpan={colSpan}>Giorni</th>
             </tr>
             <tr className="warning">
             <th></th>
@@ -50,10 +72,8 @@ const AbsencesYearlyTable: React.FC<AbsencesYearlyTableProps> = ({
             <tr key={`tr-${month.name}`}>
             <td key={month.name}>{month.name}</td>
               {days.map((day) => (
-              <td key={`td-${month}-${day}`}>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-              <AbsencePopOver showGroup={true} key={`${month}-${day}`} absencesRecap={absencesRecap} year={year} month={month.id} day={day} setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
-              </a>
+              <td key={`td-${month.id}-${day}`}>
+              {getTdElem(day, year, month.id, absencesRecap)}
               </td>
 
               ))}

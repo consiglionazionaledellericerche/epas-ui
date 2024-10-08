@@ -1,13 +1,24 @@
 import useSwr from 'swr';
 
+class CustomError extends Error {
+  status: number;
+  info: any;
+
+  constructor(message: string, status: number, info: any) {
+    super(message);
+    this.status = status;
+    this.info = info;
+  }
+}
+
 const baseUrl = '/api/rest/v4'
 
-export const useRequest = (path, parameters) => {
+export const useRequest = (path: string, parameters: string | null = null) => {
     if (!path) {
-        throw new Error('Path is required')
+        throw new Error('Path is required');
     }
 
-    const url = parameters ? baseUrl + path + '?' + parameters : baseUrl + path
+    const url = parameters ? baseUrl + path + '?' + parameters : baseUrl + path;
 
     const { data, error} = useSwr(url,
                                    {  revalidateIfStale: false,
@@ -15,12 +26,11 @@ export const useRequest = (path, parameters) => {
                                       revalidateOnReconnect: false,
                                       revalidateOnMount: true, // If false, undefined data gets cached against the key.
                                       dedupingInterval: 3_600_000, // dont duplicate a request w/ same key for 1hr
-                                   } )
+                                   });
+    return { data, error };
+};
 
-    return { data, error }
-}
-
-export const useRequestPost = (path, body, accessToken) => {
+export const useRequestPost = (path:string, body:any, accessToken:string) => {
     if (!path) {
         throw new Error('Path is required')
     }
@@ -38,9 +48,8 @@ export const useRequestPost = (path, body, accessToken) => {
             })
 
             if (!response.ok) {
-                const error = new Error('An error occurred while fetching the data.');
-                error.info = await response.json();
-                error.status = response.status;
+                let info = await response.json();
+                const error = new CustomError('An error occurred while fetching the data.',response.status, info);
                 throw error;
             }
 
@@ -49,5 +58,4 @@ export const useRequestPost = (path, body, accessToken) => {
 
     let result = data;
     return { result, error}
-
-}
+};

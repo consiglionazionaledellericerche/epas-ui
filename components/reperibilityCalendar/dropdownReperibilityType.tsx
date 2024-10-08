@@ -3,17 +3,27 @@ import Select from 'react-select';
 import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
+import { CustomSession } from "../../types/customSession";
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 
-const DropdownReperibilityType = ({ onChange }) => {
+interface DropItem {
+  id:number,
+  description:string
+}
+
+const DropdownReperibilityType: React.FC<{ onChange: (selectedOption: {label: string, value: number}) => void }> = ({ onChange }) => {
   const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<{ value: any; label: any; } | null>(null);
 
   let apiUrl = "/api/rest/v4/reperibilitycalendar/show";
 
   const { data: session, status } = useSession();
-  const accessToken = session.accessToken;
+  let accessToken: string | null = null;
 
-  //const {data, error} = useRequest('/vacations');
+  if (status === "authenticated" && session) {
+    accessToken = (session as CustomSession).accessToken;
+  }
 
   useEffect(() => {
       // Esegui la chiamata API per ottenere le opzioni
@@ -32,23 +42,23 @@ const DropdownReperibilityType = ({ onChange }) => {
           return response.json();
         })
         .then((data) => {
-          console.log("DATA", data);
-          const formattedOptions = data.reperibilities.map((item) => ({
+          const formattedOptions = data.reperibilities.map((item:DropItem) => ({
             value: item.id,
             label: item.description,
           }));
           setOptions(formattedOptions);
-           setSelectedOption({
-                  value: data.reperibilitySelected.id,
-                  label: data.reperibilitySelected.description,
-                });
+          setSelectedOption({
+            value: data.reperibilitySelected.id,
+            label: data.reperibilitySelected.description,
+          } as { value: any; label: any; });
+
         })
         .catch((error) => {
           console.error('Errore nella chiamata API:', error);
         });
-    }, [apiUrl]);
+    }, [apiUrl, accessToken]);
 
-  const handleSelectChange = (option) => {
+  const handleSelectChange = (option:any) => {
     setSelectedOption(option);
     onChange(option);
   };
@@ -63,11 +73,11 @@ const DropdownReperibilityType = ({ onChange }) => {
   );
 };
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
   return {
     props: {
-      session: await getServerSession(req, res, authOptions)
-    }
-  }
+      session: await getServerSession(req, res, authOptions),
+    },
+  };
 }
 export default DropdownReperibilityType;

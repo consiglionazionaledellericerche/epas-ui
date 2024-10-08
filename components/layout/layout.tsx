@@ -10,7 +10,7 @@ type Props = {
 export default function Layout ({ children, title }: Props): JSX.Element {
     return (
         <>
-            <Header />
+            <Header title={title}/>
             <main className="flex-shrink-0">
                 {children}
             </main>

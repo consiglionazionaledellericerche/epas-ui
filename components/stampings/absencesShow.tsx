@@ -1,30 +1,30 @@
-import { Absence } from "../../types/absence";
+import { AbsenceShow } from "../../types/absenceShow";
 import { PersonDayRecap } from "../../types/personDayRecap";
 import { StampingTemplate } from "../../types/stampingTemplate";
 import AbsencePopOver from "../absences/absencePopOver";
 import { useState } from 'react';
 
 interface AbsencesShowProps {
-    absences: Absence[];
-    year: integer;
-    month: string;
-    day: string;
-   setShowTooltip;
-   setTooltipContent
+   absences: AbsenceShow[];
+   year: number;
+   month: number;
+   day: string;
 }
 
 const AbsencesShow: React.FC<AbsencesShowProps> = ({
     absences,
     year,
     month,
-    day,
-    setShowTooltip,
-    setTooltipContent
+    day
   }) => {
 
+  const intDay = parseInt(day, 10);
   let loop = absences.map((absence) => (
         <span key={`absence-popover-${month}-${day}-${absence.id}`}>
-          <AbsencePopOver showGroup={true} absencesRecap={absence} year={year} month={month} day={day}  setTooltipContent={setTooltipContent} setShowTooltip={setShowTooltip}/>
+          <AbsencePopOver
+          showGroup={true}
+          absElem={absence}
+          day={intDay}/>
         </span>
   ))
 

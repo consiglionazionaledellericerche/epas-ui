@@ -6,8 +6,8 @@ import MealTicketsRecap from "./mealTicketsRecap";
 
 interface MonthRecapProps {
         monthRecap: MonthRecap;
-        month: integer;
-        year: integer
+        month: number;
+        year: number
 }
 
 const MonthRecapView: React.FC<MonthRecapProps> = ({

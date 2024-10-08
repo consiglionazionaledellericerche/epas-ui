@@ -29,6 +29,10 @@ lato server.
 
 Al momento è possibile utilizzare l'autenticazione tramite Bearer Token OAUTH2 oppure Basic Auth.
 
+## Configurazione
+Per configurare il comportamento dell'interfaccia e i servizi REST che utilizza, è necessario configurare il file .env come
+documentato al suo interno
+
 ## 👏 Come Contribuire 
 
 Lo scopo principale di questo repository è continuare ad evolvere ePAS. 
