@@ -8,9 +8,9 @@ import { Spinner } from 'react-bootstrap'
 import { useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from './api/auth/[...nextauth]'
-import PersonMonthsView from '../components/personMonths/personMonthsView'
+import PersonMonthsTrainingView from '../components/personMonths/personMonthsTrainingView'
 
-function Absences() {
+function TrainingRecap() {
   const router = useRouter()
   let personId = router.query["personId"]
   const currentDate = useContext(CurrentDateContext)
@@ -20,12 +20,12 @@ function Absences() {
   const year = currentDate.year
   const parameters = `year=${year}`
 
-  const {data, error} = useRequest('/personmonths/hourRecap', parameters);
+  const {data, error} = useRequest('/personmonths/trainingHours', parameters);
   if (error) return (<div>Impossibile caricare la situazione annuale</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />
 
   return (
-  <PersonMonthsView personMonthsData={data} year={year} />
+  <PersonMonthsTrainingView trainingData={data} year={year} />
   )
 
 }
@@ -37,4 +37,4 @@ export async function getServerSideProps({ req, res }) {
     }
   }
 }
-export default Absences
+export default TrainingRecap

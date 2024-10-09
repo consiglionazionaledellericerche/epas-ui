@@ -10,6 +10,28 @@ class DateUtility {
         return periodType == 'year' ? 'anno' : 'mese'
     }
 
+    static areDatesEqual(date1, date2) {
+      const d1 = new Date(date1);
+      const d2 = new Date(date2);
+
+      return d1.getTime() === d2.getTime();
+    }
+
+    static areMonthEqual(date, month) {
+      const d1 = new Date(date);
+      return d1.getMonth() + 1 === month;
+    }
+
+    static areYearEqual(date, year) {
+      const d1 = new Date(date);
+      return d1.getFullYear() === year;
+    }
+
+    static subtractMonth(date) {
+      const newDate = new Date(date); // Crea una copia della data
+      newDate.setMonth(newDate.getMonth() - 1); // Sottrai un mese
+      return newDate;
+    }
     static getMonthName(month: number) {
       const date = new Date();
       date.setMonth(month - 1); // Imposta il mese nell'oggetto Date (i mesi in JavaScript sono indicizzati da 0 a 11)
