@@ -3,8 +3,11 @@ import KeycloakProvider from "next-auth/providers/keycloak";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const CLIENTID = process.env.CLIENTID || "";
-const CLIENTSECRET = process.env.CLIENTSECRET || "";
+const CLIENTID = process.env.NEXT_PUBLIC_CLIENTID || process.env.CLIENTID || "";
+const CLIENTSECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET || process.env.CLIENT_SECRET || "";
+const NEXTAUTH_SECRET = process.env.NEXT_PUBLIC_NEXTAUTH_SECRET || process.env.NEXTAUTH_SECRET || "";
+const OAUTH_CONFIG_URL = process.env.NEXT_PUBLIC_OAUTH_CONFIG_URL || "";
+const OAUTH_ISSUER_URL = process.env.NEXT_PUBLIC_OAUTH_ISSUER_URL || "";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -13,10 +16,11 @@ export const authOptions: NextAuthOptions = {
     KeycloakProvider({
       clientId: CLIENTID,
       clientSecret: CLIENTSECRET,
-      wellKnown:"https://auth.iit.cnr.it/auth/realms/testing/.well-known/uma2-configuration",
-      issuer : "https://auth.iit.cnr.it/auth/realms/testing",
+      wellKnown: OAUTH_CONFIG_URL,
+      issuer : OAUTH_ISSUER_URL,
     })
   ],
+  secret: NEXTAUTH_SECRET,
   debug: true,
   callbacks: {
     async session({ session, user, token }) {

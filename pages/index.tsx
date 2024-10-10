@@ -7,8 +7,8 @@ import LoginLdap from '../components/login/loginLdap';
 import { Col, Container, Row } from 'react-bootstrap';
 
 
-const OAUTH_LOGIN = process.env.OAUTH_LOGIN;
-const LDAP_LOGIN = process.env.LDAP_LOGIN;
+const OAUTH_LOGIN = process.env.NEXT_PUBLIC_OAUTH_LOGIN;
+const LDAP_LOGIN = process.env.NEXT_PUBLIC_LDAP_LOGIN;
 
 const App: React.FC = () => {
   const { data: session, status } = useSession();

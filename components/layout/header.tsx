@@ -12,7 +12,7 @@ import CalendarsMenu from './menu/calendarsMenu';
 import SelectPeriod from './menu/selectPeriod'
 import dotenv from 'dotenv/config';
 
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
+const NEXTAUTH_URL = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
 interface HeaderProps {
     title?: string
 }

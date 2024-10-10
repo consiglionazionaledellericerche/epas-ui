@@ -40,7 +40,7 @@ class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalSta
                   description:"",
                   close: props.close,
                   show: props.tmpshow,
-                  url: process.env.EPAS_HELPDESK_SERVICE+'/send',
+                  url: process.env.NEXT_PUBLIC_EPAS_HELPDESK_SERVICE+'/send',
                   selectedCategory:"",
                   categories:[{'label':'Problemi Tecnici - Epas', 'value':'Problemi Tecnici - Epas'},
                                {'label':'Problemi Amministrativi - Epas', 'value':'Problemi Amministrativi - Epas'}],
