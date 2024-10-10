@@ -19,12 +19,12 @@ class DateUtility {
 
     static areMonthEqual(date, month) {
       const d1 = new Date(date);
-      return d1.getMonth() + 1 === month;
+      return d1.getMonth() + 1 === parseInt(month);
     }
 
     static areYearEqual(date, year) {
       const d1 = new Date(date);
-      return d1.getFullYear() === year;
+      return d1.getFullYear() === parseInt(year);
     }
 
     static subtractMonth(date) {

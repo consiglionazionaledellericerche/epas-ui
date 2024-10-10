@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getSession } from 'next-auth/react';
+import { CustomSession } from '../../../types/customSession';
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import { TrainingHours } from "../../types/trainingHours";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TrainingHoursModal from "./modal/trainingHoursModal";
+import Alert from '../miscellanous/alert';
 
 interface PersonMonthsTrainingTableProps {
   trainingData: TrainingHours;
@@ -12,7 +16,7 @@ interface PersonMonthsTrainingTableProps {
 
 const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
   trainingData,
-  year,
+  year
 }) => {
   const months = [
     { id: "01", name: "Gennaio" },
@@ -29,95 +33,164 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
     { id: "12", name: "Dicembre" },
   ];
 
+  const [dataTraining, setDataTraining] = useState(trainingData);
+  const [parameters, setParameters] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [typeAlert, setTypeAlert] = useState('SUCCESS');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [yearModal, setYearModal] = useState(year);
+
+  const closeModal = () => {
+    setShowModal(false);
+    fetchTrainingData();
+  };
+
+  const showError = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+    setTypeAlert("ERROR");
+    setTimeout(() => setShowAlert(false), 5000); // Nascondo dopo 5 secondi
+  };
+
+  const showSuccess = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+    setTypeAlert("SUCCESS");
+    setTimeout(() => setShowAlert(false), 5000); // Nascondo dopo 5 secondi
+  };
+
+  const fetchTrainingData = async () => {
+    try {
+      const session = await getSession();
+      if (!session) throw new Error("No session found");
+      const accessToken = session.accessToken;
+
+      const url = `/api/rest/v4/personmonths/trainingHours?year=${year}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+
+      if (!response.ok) {
+          throw new Error('Errore durante la richiesta API');
+      } else {
+        const data = await response.json();
+        setDataTraining(data);
+      }
+    } catch (error) {
+      console.error("Unable to save data", error);
+      showError("Errore durante il caricamento dei dati");
+    }
+  };
+
+  function setModalParam(action: string, pm: any) {
+    let month = months.find((m) => parseInt(m.id) === parseInt(pm.month));
+    var params = {
+      month: month,
+      year: pm.year,
+      action: action,
+    };
+    if (action !== "insert") {
+      params["id"] = pm.id;
+      params["fromDate"] = pm.fromDate;
+      params["toDate"] = pm.toDate;
+    }
+    setParameters(params);
+    setShowModal(true);
+  }
+
   let today = new Date(trainingData.today);
 
-  let infoMessage = (
-    <div className="alert-info">
-      <p>
-        È possibile aggiungere o modificare le ore di formazione del mese attuale o dei primi giorni del mese
-        precedente (fino all'invio degli attestati).
-      </p>
-      <p>Nel momento in cui l'amministratore le approva, non potranno più essere modificate.</p>
-    </div>
-  );
-
   return (
-    <Table id="trainingRecap" className="table hour-recap table-condensed center">
-      <caption className="sr-only">Ore di formazione {year}</caption>
-      <thead>
-        <tr className="warning">
-          <th>Mese</th>
-          <th>Ore di formazione</th>
-          <th>Aggiungi</th>
-          <th>Inviate ad Attestati</th>
-        </tr>
-      </thead>
-      <tbody>
-        {months.map((month) => {
-          const recap = trainingData.personMonthRecaps.filter(
-            (recap) => recap.month === parseInt(month.id, 10)
-          );
-
-          let monthIsEqual = DateUtility.areMonthEqual(today, month);
-          let yearIsEqual = DateUtility.areYearEqual(today, year);
-          let todayBeforeMonth = DateUtility.subtractMonth(today);
-          let monthBeforeIsEqual = DateUtility.areMonthEqual(todayBeforeMonth, month);
-          let yearBeforeIsEqual = DateUtility.areYearEqual(todayBeforeMonth, year);
-
-          return (
-            <tr key={month.id}>
-              <td className="warning">{month.name}</td>
-              <td>
-                {recap.length > 0 ? (
-                  recap.map((pm) => (
-                    <p key={pm.id}>
-                      <span className="label label-success">{pm.trainingHours} ore</span>
-                      &nbsp;
-                      <span>{pm.fromDate ? DateUtility.formatDate(pm.fromDate) : ""}</span>
-                      {pm.fromDate && !DateUtility.areDatesEqual(pm.fromDate, pm.toDate) && (
-                        <span> - {DateUtility.formatDate(pm.toDate)}</span>
-                      )}
-                      {pm.editable && (
-                        <>
-                          <a
-                            href={`/personmonths/modifyTrainingHours/${pm.id}`}
-                            data-async-modal="#defaultModal"
-                          >
-                            <FontAwesomeIcon icon={faPencil} />
-                          </a>
-                          <a
-                            href={`/personmonths/deleteTrainingHours/${pm.id}`}
-                            data-async-modal="#defaultModal"
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </a>
-                        </>
-                      )}
-                    </p>
-                  ))
-                ) : (
-                  <span></span>
-                )}
-              </td>
-              <td>
-              {(monthIsEqual && yearIsEqual)
-                   || (monthBeforeIsEqual && yearBeforeIsEqual) ?
-                (<a href="@{PersonMonths.insertTrainingHours(mese, year)}" data-async-modal="#defaultModal">
-                Inserisci ore di formazione
-                </a>) : ("")
-              }
-            </td>
-
-            <td>
-               {pm.hoursApproved == true ?
-                    ("SI"):("NO")
-               }
-            </td>
+    <>
+      {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} typeAlert={typeAlert} />}
+      <TrainingHoursModal
+        tmpshow={showModal}
+        close={() => closeModal()}
+        parameters={parameters}
+        showError={showError}
+        showSuccess={showSuccess}
+      />
+      <Table id="trainingRecap" className="table hour-recap table-condensed center">
+        <caption className="sr-only">Ore di formazione {year}</caption>
+        <thead>
+          <tr className="warning">
+            <th>Mese</th>
+            <th>Ore di formazione</th>
+            <th>Aggiungi</th>
+            <th>Inviate ad Attestati</th>
           </tr>
-          );
-        })}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {months.map((month) => {
+            const recap = dataTraining.personMonthRecaps.filter(
+              (recap) => recap.month === parseInt(month.id, 10)
+            );
+
+            let monthIsEqual = DateUtility.areMonthEqual(today, month.id);
+            let yearIsEqual = DateUtility.areYearEqual(today, year);
+            let todayBeforeMonth = DateUtility.subtractMonth(today);
+            let monthBeforeIsEqual = DateUtility.areMonthEqual(todayBeforeMonth, month.id);
+            let yearBeforeIsEqual = DateUtility.areYearEqual(todayBeforeMonth, year);
+
+            return (
+              <tr key={month.id}>
+                <td className="warning">{month.name}</td>
+                <td>
+                  {recap.length > 0 ? (
+                    recap.map((pm) => (
+                      <p key={pm.id}>
+                        <span className="label label-success">{pm.trainingHours} ore</span>
+                        &nbsp;
+                        <span>{pm.fromDate ? DateUtility.formatDate(pm.fromDate) : ""}</span>
+                        {pm.fromDate && !DateUtility.areDatesEqual(pm.fromDate, pm.toDate) && (
+                          <span> - {DateUtility.formatDate(pm.toDate)}</span>
+                        )}
+                        {pm.editable && (
+                          <>
+                            <a id="editTraining" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam("edit", pm)}>
+                              &nbsp;&nbsp;<FontAwesomeIcon icon={faPencil} />
+                            </a>
+                            <a id="deleteTraining" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam("delete", pm)}>
+                              &nbsp;&nbsp;<FontAwesomeIcon icon={faTrash} />
+                            </a>
+                          </>
+                        )}
+                      </p>
+                    ))
+                  ) : (
+                    <span></span>
+                  )}
+                </td>
+                <td>
+                  {
+                    (monthIsEqual && yearIsEqual) || (monthBeforeIsEqual && yearBeforeIsEqual) ? (
+                      <a id="insertTraining" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam("insert",{'month':month.id,'year':yearModal})}>
+                        Inserisci ore di formazione
+                      </a>
+                    ) : (
+                      ""
+                    )}
+                </td>
+                <td>
+                  {recap.length > 0 ? (
+                    <span key={recap[0].id}>{recap[0].hoursApproved ? "SI" : "NO"}</span>
+                  ) : (
+                    "NO"
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    </>
   );
 };
 
