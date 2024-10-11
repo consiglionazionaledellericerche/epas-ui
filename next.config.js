@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 
+const defaultEpasService = 'https://epas-service.devel.iit.cnr.it';
+
 const nextConfig = {
   env: {
       CLIENTID: process.env.NEXT_PUBLIC_CLIENTID,
@@ -21,7 +23,7 @@ const nextConfig = {
       },
       {
         source: '/api/:path*',
-        destination: process.env.NEXT_PUBLIC_EPAS_SERVICE // Proxy to Backend
+        destination: process.env.NEXT_PUBLIC_EPAS_SERVICE || defaultEpasService // Proxy to Backend
       },
     ]
   },
