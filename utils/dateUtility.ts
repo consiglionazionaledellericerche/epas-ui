@@ -10,10 +10,34 @@ class DateUtility {
         return periodType == 'year' ? 'anno' : 'mese'
     }
 
+    static areDatesEqual(date1:string|Date, date2:string|Date) {
+      const d1 = new Date(date1);
+      const d2 = new Date(date2);
+      return d1.getTime() === d2.getTime();
+    }
+
+    static areMonthEqual(date: string | Date, month: string | number) {
+      const d1 = new Date(date);
+      const monthNumber = typeof month === 'number' ? month : parseInt(month, 10);
+      return d1.getMonth() + 1 === monthNumber;
+    }
+
+    static areYearEqual(date: string | Date, year: string | number) {
+      const d1 = new Date(date);
+      const yearNumber = typeof year === 'number' ? year : parseInt(year, 10);
+      return d1.getFullYear() === yearNumber;
+    }
+
+    static subtractMonth(date: string | Date) {
+      const newDate = new Date(date);
+      newDate.setMonth(newDate.getMonth() - 1);
+      return newDate;
+    }
+
     static getMonthName(month: number) {
       const date = new Date();
-      date.setMonth(month - 1); // Imposta il mese nell'oggetto Date (i mesi in JavaScript sono indicizzati da 0 a 11)
-      const monthName = date.toLocaleString('it-IT', { month: 'long' }); // Ottieni il nome del mese
+      date.setMonth(month - 1);
+      const monthName = date.toLocaleString('it-IT', { month: 'long' });
       return monthName;
     }
 
@@ -76,6 +100,12 @@ class DateUtility {
         var d = new Date(year, month, day);
         return DateUtility.formatDateLocal(d);
     }
+
+    static toHour(minutes:number) {
+        const hour = Math.abs(Math.floor(minutes / 60));
+        return `${hour}`;
+    }
+
 
     static fromMinuteToHourMinute(minute : number) {
         if (minute == 0) {
