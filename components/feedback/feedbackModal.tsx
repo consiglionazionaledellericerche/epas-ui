@@ -172,7 +172,11 @@ class FeedbackModal  extends React.Component<FeedbackModalProps,FeedbackModalSta
                       <br/>
                       <div>
                         <h6>Screenshot Catturato:</h6>
-                        <Image src={this.state.screenshot} alt="Screenshot" style={{ width: '400px', height: '300px' }} />
+                        <img
+                            src={this.state.screenshot}
+                            alt="Screenshot"
+                            style={{ width: '400px', height: '300px' }}
+                          />
                       </div>
                       </Modal.Body>
                       <Modal.Footer>
