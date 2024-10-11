@@ -71,7 +71,7 @@ const saveData = async (modeType: string, dataForm: any, handleClose: any, showE
 
 interface TrainingHoursModalContentProps {
   year: number;
-  month: string;
+  month: any;
   action: string;
   pm: any;
   handleClose: () => void;

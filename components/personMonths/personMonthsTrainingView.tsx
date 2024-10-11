@@ -13,7 +13,7 @@ const PersonMonthsTrainingView: React.FC<PersonMonthsTrainingViewProps> = ({
   }) => {
 
   let person = trainingData.person;
-  let utente = `${person.name} ${person.surname}`;
+  let utente = `${person?.name} ${person?.surname}`;
   return (
       <>
       <Container fluid>

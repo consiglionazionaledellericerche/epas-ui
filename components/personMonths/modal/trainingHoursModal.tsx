@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import TrainingHoursModalContent from "./trainingHoursModalContent";
-import { fetchDataStamping } from './apiUtils';
+import TrainingHoursModalContent from './trainingHoursModalContent';
 import { secureCheck } from '../../../utils/secureCheck';
 
 interface TrainingHoursModalProps {
@@ -65,7 +64,6 @@ const TrainingHoursModal: React.FC<TrainingHoursModalProps> = ({
         </Modal.Header>
         <Modal.Body>
           {show && <TrainingHoursModalContent
-            data={dataTraining}
             year={parameters.year}
             month={parameters.month}
             action={parameters.action}

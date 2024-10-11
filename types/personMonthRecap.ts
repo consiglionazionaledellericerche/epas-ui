@@ -8,6 +8,12 @@ export type PersonMonthRecap = {
      */
     person?: PersonShow;
     /**
+     *
+     * @type {number}
+     * @memberof PersonMonthRecap
+     */
+    id?: number;
+    /**
      * 
      * @type {number}
      * @memberof PersonMonthRecap
@@ -43,4 +49,10 @@ export type PersonMonthRecap = {
      * @memberof PersonMonthRecap
      */
     hoursApproved?: boolean;
+    /**
+     *
+     * @type {boolean}
+     * @memberof PersonMonthRecap
+     */
+    editable?: boolean;
 }

@@ -30,7 +30,7 @@ const PersonMonthsHourTable: React.FC<PersonMonthsHourTableProps> = ({
   if (personMonthsData.length === 0) {
     return (
       <p className="alert-info">
-        Nessun riepilogo da visualizzare per l'anno selezionato.
+        Nessun riepilogo da visualizzare per l&apos;anno selezionato.
       </p>
     );
   }
@@ -59,37 +59,49 @@ const PersonMonthsHourTable: React.FC<PersonMonthsHourTableProps> = ({
       </thead>
       <tbody>
         {personMonthsData.map((recap: PersonMonth, index: number) => {
-          const monthIndex = recap.value.month; // Supponiamo che recap.value.month sia un numero da 1 a 12
+          const monthIndex = recap?.value?.month ?? 0; // Usa 0 come valore predefinito
           const monthId = monthIndex < 10 ? `0${monthIndex}` : monthIndex.toString(); // Formatta l'ID del mese
-          const monthName = months.find(month => month.id === monthId)?.name; // Trova il nome del mese
+          const monthName = months.find(month => month.id === monthId)?.name || 'Unknown'; // Usa 'Unknown' se il mese non è trovato
+
+          const oreLavorate = DateUtility.fromMinuteToHourMinute(recap?.value?.oreLavorate ?? 0);
+          const residualLastYearInit = DateUtility.fromMinuteToHourMinute(recap?.getResidualLastYearInit ?? 0);
+          const initMonteOreAnnoCorrente = DateUtility.fromMinuteToHourMinute(recap?.value?.initMonteOreAnnoCorrente ?? 0);
+          const totalResidualAndInit = DateUtility.fromMinuteToHourMinute(
+            (recap?.getResidualLastYearInit ?? 0) + (recap?.value?.initMonteOreAnnoCorrente ?? 0)
+          );
+          const progressivoFinaleMese = DateUtility.fromMinuteToHourMinute(recap?.value?.progressivoFinaleMese ?? 0);
+          const straordinarioMinuti = DateUtility.toHour(recap?.value?.straordinarioMinuti ?? 0);
+          const recoveryDayUsed = recap?.value?.recoveryDayUsed ?? 0;
+          const riposiCompensativiMinutiPrint = DateUtility.fromMinuteToHourMinute(recap?.value?.riposiCompensativiMinutiPrint ?? 0);
+          const remainingMinutesLastYear = DateUtility.fromMinuteToHourMinute(recap?.value?.remainingMinutesLastYear ?? 0);
+          const remainingMinutesCurrentYear = DateUtility.fromMinuteToHourMinute(recap?.value?.remainingMinutesCurrentYear ?? 0);
+          const totalRemainingMinutes = DateUtility.fromMinuteToHourMinute(
+            (recap?.value?.remainingMinutesLastYear ?? 0) + (recap?.value?.remainingMinutesCurrentYear ?? 0)
+          );
 
           return (
             <tr key={index}>
               <td><strong>{monthName}</strong></td>
-              <td>{DateUtility.fromMinuteToHourMinute(recap.value.oreLavorate)}</td>
-              <td><em>{DateUtility.fromMinuteToHourMinute(recap.getResidualLastYearInit)}</em></td>
-              <td><em>{DateUtility.fromMinuteToHourMinute(recap.value.initMonteOreAnnoCorrente)}</em></td>
-              <td>{DateUtility.fromMinuteToHourMinute(
-                recap.getResidualLastYearInit + recap.value.initMonteOreAnnoCorrente
-              )}</td>
-              <td style={{ color: recap.value.progressivoFinaleMese > 0 ? "darkblue" : "darkred" }}>
-                {DateUtility.fromMinuteToHourMinute(recap.value.progressivoFinaleMese)}
+              <td>{oreLavorate}</td>
+              <td><em>{residualLastYearInit}</em></td>
+              <td><em>{initMonteOreAnnoCorrente}</em></td>
+              <td>{totalResidualAndInit}</td>
+              <td style={{ color: (recap?.value?.progressivoFinaleMese ?? 0) > 0 ? "darkblue" : "darkred" }}>
+                {progressivoFinaleMese}
               </td>
               <td style={{ color: "darkred" }}>
-                {DateUtility.toHour(recap.value.straordinarioMinuti)}
+                {straordinarioMinuti}
               </td>
               <td>
-                ({recap.value.recoveryDayUsed})&nbsp;
+                ({recoveryDayUsed})&nbsp;
                 <div style={{ color: "darkred", display: "inline" }}>
-                  {DateUtility.fromMinuteToHourMinute(recap.value.riposiCompensativiMinutiPrint)}
+                  {riposiCompensativiMinutiPrint}
                 </div>
               </td>
-              <td><em>{DateUtility.fromMinuteToHourMinute(recap.value.remainingMinutesLastYear)}</em></td>
-              <td><em>{DateUtility.fromMinuteToHourMinute(recap.value.remainingMinutesCurrentYear)}</em></td>
+              <td><em>{remainingMinutesLastYear}</em></td>
+              <td><em>{remainingMinutesCurrentYear}</em></td>
               <td style={{ color: "darkblue" }}>
-                {DateUtility.fromMinuteToHourMinute(
-                  recap.value.remainingMinutesLastYear + recap.value.remainingMinutesCurrentYear
-                )}
+                {totalRemainingMinutes}
               </td>
             </tr>
           );

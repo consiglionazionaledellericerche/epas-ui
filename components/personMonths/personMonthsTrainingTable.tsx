@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getSession } from 'next-auth/react';
-import { CustomSession } from '../../../types/customSession';
+import { CustomSession } from '../../types/customSession';
 import { Table } from "react-bootstrap";
 import DateUtility from "../../utils/dateUtility";
 import { TrainingHours } from "../../types/trainingHours";
@@ -95,6 +95,9 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
       month: month,
       year: pm.year,
       action: action,
+      id:null,
+      fromDate:null,
+      toDate:null
     };
     if (action !== "insert") {
       params["id"] = pm.id;
@@ -105,7 +108,7 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
     setShowModal(true);
   }
 
-  let today = new Date(trainingData.today);
+  let today = dataTraining?.today ? new Date(dataTraining.today) : new Date();
 
   return (
     <>
@@ -129,7 +132,7 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
         </thead>
         <tbody>
           {months.map((month) => {
-            const recap = dataTraining.personMonthRecaps.filter(
+            const recap = dataTraining?.personMonthRecaps?.filter(
               (recap) => recap.month === parseInt(month.id, 10)
             );
 
@@ -143,13 +146,13 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
               <tr key={month.id}>
                 <td className="warning">{month.name}</td>
                 <td>
-                  {recap.length > 0 ? (
-                    recap.map((pm) => (
+                  {recap && recap.length > 0 ? (
+                    recap.map((pm, index) => (
                       <p key={pm.id}>
                         <span className="label label-success">{pm.trainingHours} ore</span>
                         &nbsp;
                         <span>{pm.fromDate ? DateUtility.formatDate(pm.fromDate) : ""}</span>
-                        {pm.fromDate && !DateUtility.areDatesEqual(pm.fromDate, pm.toDate) && (
+                        {(pm.fromDate && pm.toDate) && !DateUtility.areDatesEqual(pm.fromDate, pm.toDate) && (
                           <span> - {DateUtility.formatDate(pm.toDate)}</span>
                         )}
                         {pm.editable && (
@@ -179,7 +182,7 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
                     )}
                 </td>
                 <td>
-                  {recap.length > 0 ? (
+                  {recap && recap.length > 0 ? (
                     <span key={recap[0].id}>{recap[0].hoursApproved ? "SI" : "NO"}</span>
                   ) : (
                     "NO"
