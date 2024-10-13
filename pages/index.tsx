@@ -1,11 +1,9 @@
 import React from 'react';
-import dotenv from 'dotenv/config';
 import { useSession } from 'next-auth/react';
 import LoginTabbed from '../components/login/loginTabbed';
 import LoginOauth from '../components/login/loginOauth';
 import LoginLdap from '../components/login/loginLdap';
 import { Col, Container, Row } from 'react-bootstrap';
-
 
 const OAUTH_LOGIN = process.env.NEXT_PUBLIC_OAUTH_LOGIN;
 const LDAP_LOGIN = process.env.NEXT_PUBLIC_LDAP_LOGIN;

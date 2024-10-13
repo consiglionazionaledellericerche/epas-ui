@@ -7,11 +7,13 @@ services:
   epas-ui:
     build:
       context: ./
+      args:
+        EPAS_SERVICE: https://epas-service.devel.iit.cnr.it/:path*
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_EPAS_SERVICE=https://epas-service.devel.iit.cnr.it/:path*
-      - NEXT_PUBLIC_CLIENT_SECRET=DA_INSERIRE_IL_VALORE
-      - NEXT_PUBLIC_NEXTAUTH_SECRET=aGg9Ywk3i8UFekJjfg4aP0DEWciHVBX2ZLd5nBIz2KY=
+      - NEXTAUTH_URL=http://192.168.1.177:3000/
+      - CLIENT_SECRET=client_secret
+      - NEXTAUTH_SECRET=nextauth_secret
       - NEXT_PUBLIC_OAUTH_CONFIG_URL=https://auth.iit.cnr.it/auth/realms/testing/.well-known/uma2-configuration
       - NEXT_PUBLIC_OAUTH_ISSUER_URL=https://auth.iit.cnr.it/auth/realms/testing

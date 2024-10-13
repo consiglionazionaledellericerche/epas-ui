@@ -10,7 +10,6 @@ import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import { getSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import dotenv from 'dotenv/config';
 
 interface FeedbackModalProps {
   tmpshow: boolean;
