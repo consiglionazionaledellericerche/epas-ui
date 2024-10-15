@@ -25,19 +25,20 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
 
        let keyDesc = "absenceDescription$" + DateUtility.formatDate(absencePeriod.from)+"$"+DateUtility.formatDate(absencePeriod.to);
        let keyLimit = "absenceLimit$" +DateUtility.formatDate(absencePeriod.from)+"$"+DateUtility.formatDate(absencePeriod.to);
+      const daysInPeriodHasElements = absencePeriod.daysInPeriod && Object.keys(absencePeriod.daysInPeriod).length > 0;
 
-      const daysInPeriodHasElements = Object.keys(absencePeriod.daysInPeriod).length > 0;
       absencePeriod.takableWithLimit ? (
-              withLimit = <>
-              <strong>Tipo periodo </strong>
-              {DateUtility.formatPeriodType(absencePeriod.groupAbsenceType.periodType)}
-              <br/>
-              <strong>Validità periodo </strong>
-              {DateUtility.formatDate(absencePeriod.from)} - {DateUtility.formatDate(absencePeriod.to)}
-              <br/>
-              <strong>Totale utilizzabile </strong>
-              {DateUtility.fromMinuteToHour(absencePeriod.periodTakableAmount, absencePeriod.takeAmountType)}
-              </>
+          withLimit = <>
+            <strong>Tipo periodo </strong>
+            {absencePeriod.groupAbsenceType?.periodType ? DateUtility.formatPeriodType(absencePeriod.groupAbsenceType.periodType) : 'N/A'}
+            <br/>
+            <strong>Validità periodo </strong>
+            {DateUtility.formatDate(absencePeriod.from)} - {DateUtility.formatDate(absencePeriod.to)}
+            <strong>Totale utilizzabile </strong>
+            {absencePeriod.periodTakableAmount !== undefined && absencePeriod.takeAmountType !== undefined
+                ? DateUtility.fromMinuteToHour(absencePeriod.periodTakableAmount, absencePeriod.takeAmountType)
+                : ''}
+          </>
       ) : (
       withLimit = '');
 
@@ -59,7 +60,9 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
            <FontAwesomeIcon icon={faExclamationCircle}/>&nbsp;
            <span>Rimangono</span>&nbsp;
            <strong><span className="text-success">
-           {DateUtility.fromMinuteToHour(absencePeriod.remainingAmount, absencePeriod.takeAmountType)}
+           {absencePeriod.remainingAmount !== undefined && absencePeriod.takeAmountType !== undefined
+               ? DateUtility.fromMinuteToHour(absencePeriod.remainingAmount, absencePeriod.takeAmountType)
+               : ''}
            </span></strong>
            <span> da utilizzare entro il </span>
            <strong className="text-success">
@@ -90,9 +93,9 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(absencePeriod.daysInPeriod).map((dayKey) => {
-                  const dayInPeriod = absencePeriod.daysInPeriod[dayKey];
-                  return dayInPeriod.allTemplateRows.map((rowRecap, index) => (
+              {Object.keys(absencePeriod.daysInPeriod ?? {}).map((dayKey) => {
+                  const dayInPeriod = absencePeriod.daysInPeriod![dayKey];
+                  return dayInPeriod?.allTemplateRows?.map((rowRecap, index) => (
                     <tr key={index} className={rowRecap.beforeInitialization ? "bg-grey" : ""}>
                       <td>{dayInPeriod.date ? DateUtility.formatDate(dayInPeriod.date) : ''}</td>
                       <td className="text-success">
@@ -100,7 +103,7 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
                           <AbsencePopOver
                                     showGroup={false}
                                     absElem={rowRecap.absence}
-                                    day={rowRecap.absence.code}/>
+                                    day={rowRecap.absence?.code ?? ''} />
                         </strong>
                       </td>
                       {absencePeriod.takableWithLimit && (
@@ -111,7 +114,7 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
                       )}
                       <td>{rowRecap.consumedComplationBefore}</td>
                       <td>{rowRecap.consumedComplationAbsence}</td>
-                      <td>{absencePeriod.consumedComplationNext}</td>
+                      <td>{rowRecap.consumedComplationNext}</td>
                     </tr>
                   ));
                 })}
@@ -130,11 +133,12 @@ const PermissionGroupList: React.FC<PermissionGroupListProps> = ({
 
         return(
           <>
-            <li className="list-group-item list-group-item-info" key={keyDesc}>
-                <p>
-                  <strong>{absencePeriod.groupAbsenceType.description}</strong>
-                </p>
-            </li>
+          <li className="list-group-item list-group-item-info" key={keyDesc}>
+            <p>
+              <strong>{absencePeriod?.groupAbsenceType ? absencePeriod.groupAbsenceType.description : 'Descrizione non disponibile'}</strong>
+            </p>
+          </li>
+
             <li className="list-group-item" key={keyLimit}>
              <p>
                 {withLimit}
