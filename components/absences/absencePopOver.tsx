@@ -30,7 +30,8 @@ const renderPopover = (
   props: PopoverProps,
   absElem: any,
   data: AbsenceShow,
-  translation: any
+  translation: any,
+  showGroup: boolean
 ) => {
   const groupList = data.replacingAbsencesGroup?.map((group: any) => (
     <span key={group.id}>
@@ -56,60 +57,76 @@ const renderPopover = (
   if (data.justifiedTime && data.justifiedTime > 0) {
     justifiedTimeContent = (
       <>
-        <strong>Tempo Specificato</strong>
-        {DateUtility.fromMinuteToHourMinute(data.justifiedTime)}
+        <strong>Tempo Specificato:</strong> {DateUtility.fromMinuteToHourMinute(data.justifiedTime)}
         <br />
+      </>
+    );
+  }
+
+  let justifiedBehaviours = null;
+  if (data.absenceType?.justifiedBehaviours) {
+    justifiedBehaviours = (
+      <>
+        <br/><strong>Comportamenti speciali:</strong><br/>
+        {data.absenceType.justifiedBehaviours.map((justifiedBehaviour: any, index: number) => (
+          <span key={index}>
+            {translation(justifiedBehaviour.justifiedBehaviour)} - {justifiedBehaviour.printData || ""}
+          </span>
+        ))}
+        <br/>
       </>
     );
   }
 
   let nothingJustified = null;
   if (data.nothingJustified) {
-      nothingJustified = (
-        <>
-          <strong>Tempo Giustificato</strong> Questo codice non giustifica alcun orario.
-          <br />
-        </>
-      );
-    }
+    nothingJustified = (
+      <>
+        <strong>Tempo Giustificato:</strong> Questo codice non giustifica alcun orario.
+        <br />
+      </>
+    );
+  }
 
-    let note = null;
-      if (data.note) {
-          note = (
-            <>
-              <strong>Note</strong> {data.note}
-              <br />
-            </>
-          );
-        }
-
+  let note = null;
+  if (data.note) {
+    note = (
+      <>
+        <strong>Note:</strong> {data.note}
+        <br />
+      </>
+    );
+  }
 
   return (
     <Popover id="popover-absencecode" {...props}>
       <Popover.Body>
         <p>
-        <span className="tooltip-icon-black"><FontAwesomeIcon icon={faPaperPlane}/></span>
+          <span className="tooltip-icon-black">
+            <FontAwesomeIcon icon={faPaperPlane}/>
+          </span>
           <strong className="text-success">
             &nbsp;&nbsp;Il codice {absElem.code} verrà inviato ad attestati.
           </strong>
         </p>
         <ul className="list-group">
           <li key={uuidv4()} className="list-group-item">
-            <strong>Codice</strong> <strong>{absElem.code}</strong>
+            <strong>Codice:</strong> {absElem.code}
             <br />
-            <strong>Descrizione</strong> {data.absenceType?.description}
+            <strong>Descrizione:</strong> {data.absenceType?.description}
             <br />
-            <strong>Data</strong> {DateUtility.formatDate(data.date)}
+            <strong>Data:</strong> {DateUtility.formatDate(data.date)}
             <br />
-            <strong>Tipo Giustificazione</strong> {translation(data.justifiedType)}
+            <strong>Tipo Giustificazione:</strong> {translation(data.justifiedType)}
             <br />
             {nothingJustified}
+            {justifiedBehaviours}
             {justifiedTimeContent}
             {note}
           </li>
-          {data.replacingAbsencesGroup && (
+          {showGroup && groupList && (
             <li key={uuidv4()} className="list-group-item">
-              <strong>Gruppo</strong>
+              <strong>Gruppo:</strong>
               <br />
               {groupList}
             </li>
@@ -143,7 +160,6 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       if (absElem && 'absenceType' in absElem) {
-      console.log('absElem****', absElem, absElem.justifiedTime);
         setData(absElem);
         setIsLoading(false);
       } else {
@@ -151,8 +167,7 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
         let accessToken = session ? session.accessToken : null;
 
         try {
-          console.log('absElem****', absElem, 'absElem.justifiedTime', absElem.justifiedTime);
-          let idItem = absElem.id;
+          const idItem = absElem.id;
           const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
             method: 'GET',
             headers: {
@@ -167,12 +182,9 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
           }
 
           const data: AbsenceShow = await response.json();
-          console.log('data absElem****', data, );
-
           setData(data);
         } catch (error) {
           setError(error as Error);
-          console.error("unable to achieve this", error);
         }
         setIsLoading(false);
       }
@@ -189,20 +201,18 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
     return <div>Errore!</div>;
   }
 
-  const absenceCode = absElem.code;
-
   return (
     <OverlayTrigger
       trigger={['hover', 'focus']}
       placement="top"
-      show={showPopover}  // Show/Hide the popover based on state
-      overlay={(props) => renderPopover(props, absElem, data, t)}
+      show={showPopover}
+      overlay={(props) => renderPopover(props, absElem, data, t, showGroup)}
     >
       <div
-        onMouseEnter={handleMouseEnter}  // Opens popover on mouse enter
-        onMouseLeave={handleMouseLeave}  // Closes popover on mouse leave
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        {absenceCode}
+        {absElem.code}
       </div>
     </OverlayTrigger>
   );

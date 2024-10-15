@@ -109,7 +109,7 @@ console.log('data groupStatus --- ',data);
                                <tbody>
                                  {Object.entries(absencePeriod.daysInPeriod).map(([date, dp], index) => (
                                    <React.Fragment key={`${dp.day}-${index}`}>
-                                       {dp.rowRecap.map((rowRecap, idx) => (
+                                       {dp.allTemplateRows.map((rowRecap, idx) => (
                                        <tr key={`${rowRecap.id}-${idx}`} className={rowRecap.beforeInitialization ? "bg-grey" : ""}>
                                          <td>{rowRecap.date ? DateUtility.formatDate(rowRecap.date) : ""}</td>
                                          <td>

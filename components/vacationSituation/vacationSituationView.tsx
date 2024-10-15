@@ -24,10 +24,12 @@ const VacationSituationView: React.FC<VacationSituationProps> = ({
 
   return (
       <>
-      <h4>Ferie e Permessi {year}</h4>
        <VacationModal title={titleModal} tmpshow={showModal} close={() => setShowModal(false)} parameters={parameters} />
-
-      <Container fluid>
+       <div className="container">
+        <div className="page-header">
+            <h2>Ferie e Permessi {year}</h2>
+            <br/>
+        </div>
         { data.vacationSituations?.map((vsr) => {
          let param = "personId="+vsr.personId+"&year="+vsr.year+"&month=1&contractId="+vsr.contract.id;
          return (
@@ -53,7 +55,7 @@ const VacationSituationView: React.FC<VacationSituationProps> = ({
                   <VacationPeriodTable contracts={data.contracts} />
               </Col>
           </Row>
-      </Container>
+      </div>
       </>
   );
 }

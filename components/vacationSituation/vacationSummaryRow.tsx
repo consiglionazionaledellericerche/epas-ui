@@ -35,8 +35,7 @@ const VacationSummaryRow: React.FC<VacationSummaryRowProps> = ({
                   {vacationSummary.used}
                </a>
             </td>
-            <td>{vacationSummary.usableTotal}
-               ({vacationSummary.usable})
+            <td>{vacationSummary.usableTotal} ({vacationSummary.usable})
             </td>
           </tr>
           </>

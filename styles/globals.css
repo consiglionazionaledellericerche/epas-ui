@@ -7,13 +7,11 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: #337ab7;
+    text-decoration: none;
 }
 
 * {
@@ -27,7 +25,7 @@ a {
 }
 
 main {
-  padding:15px 10px 15px;
+  padding:0px 10px 15px;
 }
 
 nav {
