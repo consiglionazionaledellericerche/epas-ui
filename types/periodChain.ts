@@ -1,10 +1,35 @@
 import { GroupAbsenceType } from "./groupAbsenceType"
-import { AbsencePeriod } from "./absencePeriod"
+import { AbsencePeriodTerse } from "./absencePeriodTerse"
 
 export type PeriodChain = {
-    date: Date
-    from: Date
-    to: Date
-    groupAbsenceType: GroupAbsenceType
-    periods: AbsencePeriod[]
+    /**
+     * 
+     * @type {GroupAbsenceType}
+     * @memberof PeriodChain
+     */
+    groupAbsenceType?: GroupAbsenceType;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PeriodChain
+     */
+    date?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PeriodChain
+     */
+    from?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PeriodChain
+     */
+    to?: Date;
+    /**
+     * 
+     * @type {Array<AbsencePeriodTerse>}
+     * @memberof PeriodChain
+     */
+    periods?: Array<AbsencePeriodTerse>;
 }

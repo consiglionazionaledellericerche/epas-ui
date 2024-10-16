@@ -36,6 +36,11 @@
     "WayType_in":  "Ingresso",
     "WayType_out": "Uscita",
     "year": "anno",
-    "month": "mese"
+    "month": "mese",
+
+    "no_overtime": "No straordinari assegnabili",
+    "minimumTime": "Quantità minima",
+    "maximumTime": "Quantità massima",
+    "takenPercentageTime": "Consumo dal monte disponibile (in caso di orario normale)"
   }
 }

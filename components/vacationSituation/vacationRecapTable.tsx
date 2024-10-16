@@ -27,7 +27,11 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
 
     return (
     <>
-      <h4>{caption}</h4>
+    <div className="panel panel-primary">
+      <div className="panel-heading">
+        <h3 className="panel-title">{caption}</h3>
+      </div>
+      <div className="panel-body">
       <Table id={tableName} bordered className="riepilogo-ore table-smr">
           <caption className="sr-only">{caption}</caption>
           <thead>
@@ -49,6 +53,8 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
                 )}
            </tbody>
       </Table>
+      </div>
+    </div>
     </>
     );
 }

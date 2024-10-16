@@ -1,3 +1,5 @@
+import { AbsenceTypeJustifiedBehaviour } from "./absenceTypeJustifiedBehaviour"
+
 export type AbsenceType = {
     /**
      * Id univoco
@@ -29,4 +31,23 @@ export type AbsenceType = {
      * @memberof AbsenceType
      */
     numberOfDays?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AbsenceType
+     */
+    defaultTakableGroup?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AbsenceType
+     */
+    categoryTabName?: string;
+    /**
+     * 
+     * @type {Array<AbsenceTypeJustifiedBehaviour>}
+     * @memberof AbsenceType
+     */
+    justifiedBehaviours?: Array<AbsenceTypeJustifiedBehaviour>;
+
 }

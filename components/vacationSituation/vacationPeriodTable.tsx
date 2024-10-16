@@ -17,9 +17,9 @@ const VacationPeriodTable: React.FC<VacationPeriodTableProps> = ({
     <caption className="sr-only">Piani Ferie</caption>
     <thead>
       <tr>
-        <th>Dal</th>
-        <th>Al</th>
-        <th>Valore</th>
+        <th className="info">Dal</th>
+        <th className="info">Al</th>
+        <th className="info">Valore</th>
       </tr>
     </thead>
     <tbody>
