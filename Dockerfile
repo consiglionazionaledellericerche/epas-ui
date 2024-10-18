@@ -28,8 +28,6 @@ COPY . .
 
 # Fix permissions for Next.js
 RUN chmod +x ./node_modules/.bin/next
-ARG EPAS_SERVICE
-ENV NEXT_PUBLIC_EPAS_SERVICE=${EPAS_SERVICE}
 
 RUN yarn build
 

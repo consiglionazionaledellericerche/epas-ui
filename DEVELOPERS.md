@@ -44,7 +44,7 @@ details.
 
 ## Variabili d'ambiente, .env e next.config.js
 
-quando si esegue npm run dev o npm run start, vengono prima caricate le variabili d'ambiente
+Quando si esegue npm run dev o npm run start, vengono prima caricate le variabili d'ambiente
 contenuto nel .env, poi quelle contenute in .env.local e infine
 quelle del .env dell'ambiente in cui ci si trova (es. .env.development o .env.production)
 
@@ -65,7 +65,7 @@ bisogna dichiararlo come ARGS e poi richiamarlo nel Dockerfile per fare poi la b
 
 in .env quindi dichiariamo le ENV uguali sia per ambiente di development che di production, mentre
 nei rispettivi .env di ambiente (.env.development e .env.production) dichiariamo le ENV
-dell'ambiente a cui appartengono, oppure se utilizziamo docker, le passiamo con il docker-compose
+dell'ambiente a cui appartengono, oppure se utilizziamo docker, le passiamo con il docker-compose.
 
 la redirectUrl dell'Oauth dichiarata nella ENV NEXTAUTH_URL deve essere inserita tra le redirect url
 del Keycloak altrimenti restituirà il messaggio:
