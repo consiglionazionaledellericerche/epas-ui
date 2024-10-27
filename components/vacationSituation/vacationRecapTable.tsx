@@ -24,7 +24,7 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
 
     let caption;
     tableName == "tabellaFerie" ? ( caption = "Ferie") : ( caption = "Permessi legge 937/77")
-
+    console.log("vacationSituation.lastYear", vacationSituation.lastYear);
     return (
     <>
     <div className="panel panel-primary">
@@ -45,11 +45,26 @@ const VacationRecapTable: React.FC<VacationRecapTableProps> = ({
           <tbody>
                 {tableName == 'tabellaFerie' ? (
                 <>
-                <VacationSummaryRow vacationSummary={vacationSituation.lastYear} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param+"&type=VACATION"} />
-                <VacationSummaryRow vacationSummary={vacationSituation.currentYear} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param+"&type=VACATION"} />
+                <VacationSummaryRow
+                vacationSummary={vacationSituation.lastYear}
+                setModal={setModal}
+                setTitleModal={setTitleModal}
+                setParameters={setParameters}
+                param={param+"&type=VACATION&year="+vacationSituation.lastYear.year} />
+                <VacationSummaryRow
+                vacationSummary={vacationSituation.currentYear}
+                setModal={setModal}
+                setTitleModal={setTitleModal}
+                setParameters={setParameters}
+                param={param+"&type=VACATION&year="+vacationSituation.currentYear.year} />
                 </>
                 ) : (
-                <VacationSummaryRow vacationSummary={vacationSituation.permissions} setModal={setModal} setTitleModal={setTitleModal} setParameters={setParameters} param={param+"&type=PERMISSION"} />
+                <VacationSummaryRow
+                vacationSummary={vacationSituation.permissions}
+                setModal={setModal}
+                setTitleModal={setTitleModal}
+                setParameters={setParameters}
+                param={param+"&type=PERMISSION&year="+vacationSituation.permissions.year} />
                 )}
            </tbody>
       </Table>

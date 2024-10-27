@@ -31,7 +31,7 @@ const VacationSituationView: React.FC<VacationSituationProps> = ({
             <br/>
         </div>
         { data.vacationSituations?.map((vsr) => {
-         let param = "personId="+vsr.personId+"&year="+vsr.year+"&month=1&contractId="+vsr.contract.id;
+         let param = "personId="+vsr.personId+"&month=1&contractId="+vsr.contract.id;
          return (
           <Row key="VacationRecapTable">
                 <Col sm={6}>
