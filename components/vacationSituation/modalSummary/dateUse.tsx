@@ -21,11 +21,11 @@ const DateUse: React.FC<DateUseProps> = ({
         };
 
     // Filtra i dati in base al termine di ricerca
-    const filteredAbsences = data.absencesUsed?.filter((absence) =>
-        absence.absenceType.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        absence.absenceType.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        DateUtility.formatDate(absence.personDay.date).includes(searchTerm)
-    ) || [];
+   const filteredAbsences = data.absencesUsed?.filter((absence) =>
+       absence?.absenceType?.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       absence?.absenceType?.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       DateUtility.formatDate(absence.personDay.date).includes(searchTerm)
+   ) || [];
 
     // Calcola le righe per la pagina corrente
     const offset = currentPage * rowsPerPage;
