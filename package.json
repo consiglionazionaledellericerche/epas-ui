@@ -30,9 +30,10 @@
     "react-bootstrap": "^2.10.2",
     "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
+    "react-paginate": "^8.2.0",
     "react-select": "^5.8.0",
     "react-tooltip": "^5.26.4",
-    "sweetalert2": "^11.6.13",
+    "sweetalert2": "^11.14.4",
     "swr": "^2.2.5",
     "uuid": "^9.0.1"
   },
@@ -41,9 +42,9 @@
     "@types/react": "18.2.74",
     "@types/react-dom": "18.2.24",
     "@types/uuid": "^9.0.8",
-    "dotenv": "^16.3.1",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.1.4",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.13.0",
+    "eslint-config-next": "^15.0.1",
     "typescript": "5.4.4"
   }
 }

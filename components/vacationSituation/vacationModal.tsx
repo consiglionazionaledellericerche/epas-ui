@@ -72,7 +72,7 @@ class VacationModal extends React.Component<VacationModalProps, VacationModalSta
                       show={this.state.show}
                       onHide={this.handleClose}
                       cancel={this.state.close}
-                      size="lg"
+                      size="xl"
                       aria-labelledby="modal-vacation-info"
                     >
                       <Modal.Header closeButton>
