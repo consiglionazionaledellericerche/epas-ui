@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const defaultEpasService = 'https://epas-service.devel.iit.cnr.it';
+const defaultEpasService = 'https://epas-service.devel.iit.cnr.it/:path*';
 
 const nextConfig = {
   env: {},
