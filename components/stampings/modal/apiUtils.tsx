@@ -76,7 +76,7 @@ export const fetchData = async (url:string, title:string, setShow:any, showError
 // Funzione per fetchDataAbsence
 export const fetchDataAbsence = async (params:any, setShow:any, showError:any=null) => {
   const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/absencesGroups/groupsForCategory?${queryString}`;
+  const url = `/api/rest/v4?endpoint=absencesGroups%2FgroupsForCategory&${queryString}`;
   const title = "Nuovo codice assenza in data ";
   var result = fetchData(url, title, setShow);
   return result;
@@ -93,7 +93,7 @@ export const fetchDataStamping = async (params:any, setShow:any, showError:any=n
   }
 
   const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/stampings/${mode}?${queryString}` ;
+  const url = `/api/rest/v4?endpoint=stampings%2F${mode}&${queryString}`;
   var titleMode = mode =='insert' ? 'Inserisci':'Modifica';
   const title = `${titleMode} timbratura del `;
   var result  = fetchData(url, title, setShow);
@@ -125,7 +125,7 @@ export const simulateData = async (dataTab:any) => {
     hours: dataTab?.hours || null,
   };
 
-  const url = '/api/rest/v4/absencesGroups/simulateInsert';
+  const url = '/api/rest/v4?endpoint=absencesGroups%2FsimulateInsert';
 
   try {
     const response = await fetch(url, {
@@ -164,16 +164,16 @@ export const saveDataStamping = async (dataTab:any, handleClose:any, showError:a
 
   let action;
   if (dataTab['serviceReasons']){
-    action = '/saveServiceReasons';
+    action = '%2FsaveServiceReasons';
   } else if (dataTab['offSiteWork'] || dataTab['insertOffsite'] || dataTab['mode'] ==='insertOffSite'){
-    action = '/saveOffSite';
+    action = '%2FsaveOffSite';
   } else if (dataTab['mode'] == 'edit'){
-    action = '/update';
+    action = '%2Fupdate';
   } else {
   action='';
   }
   console.log("saveDataStamping>>> ", dataTab['offSiteWork'], dataTab['insertOffsite'], action);
-  const url = '/api/rest/v4/stampings'+action;
+  const url = '/api/rest/v4?endpoint=stampings'+action;
   delete dataTab['mode'];
   delete dataTab['serviceReasons'];
   delete dataTab['offSiteWork'];
@@ -213,7 +213,7 @@ export const deleteStamping = async (stampingId:number, handleClose:any, showErr
   if (session) {
     accessToken = session.accessToken;
    }
-  const url = '/api/rest/v4/stampings/'+stampingId;
+  const url = '/api/rest/v4?endpoint=stampings%2F'+stampingId;
 
   try {
     const response = await fetch(url, {
@@ -263,7 +263,7 @@ export const saveDataAbsence = async (dataTab:any, handleClose:any) => {
     hours: dataTab?.hours || null,
   };
 
-  const url = '/api/rest/v4/absencesGroups/save';
+  const url = '/api/rest/v4?endpoint=absencesGroups%2Fsave';
 
   try {
     const response = await fetch(url, {
@@ -295,7 +295,7 @@ export const fetchFindCode = async (params:any, setData:any, setLoading:any, set
    }
 
   const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/absencesGroups/findCode?${queryString}`;
+  const url = `/api/rest/v4?endpoint=absencesGroups%2FfindCode&${queryString}`;
 
   try {
     const response = await fetch(url, {

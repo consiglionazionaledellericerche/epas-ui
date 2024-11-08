@@ -17,7 +17,7 @@ function Reperibility() {
 
   const { data: session, status } = useSession()
 
-  const {data, error} = useRequest('/reperibilitycalendar/show');
+  const {data, error} = useRequest('?endpoint=reperibilitycalendar%2Fshow');
   if (error) return <div>Impossibile caricare la situazione annuale</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />
 

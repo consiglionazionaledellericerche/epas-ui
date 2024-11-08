@@ -66,7 +66,7 @@ const PersonMonthsTrainingTable: React.FC<PersonMonthsTrainingTableProps> = ({
       if (!session) throw new Error("No session found");
       const accessToken = session.accessToken;
 
-      const url = `/api/rest/v4/personmonths/trainingHours?year=${year}`;
+      const url = `/api/rest/v4?endpoint=personmonths%2FtrainingHours&year=${year}`;
 
       const response = await fetch(url, {
         method: 'GET',

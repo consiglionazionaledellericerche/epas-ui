@@ -3,7 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 import Image from "next/image";
-import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from '../../pages/api/auth/[...nextauth]';
