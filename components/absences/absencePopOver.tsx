@@ -33,7 +33,9 @@ const renderPopover = (
   translation: any,
   showGroup: boolean
 ) => {
+
   const groupList = data.replacingAbsencesGroup?.map((group: any) => (
+  <>
     <span key={group.id}>
       <span>{group.description}</span>
       <Link
@@ -50,6 +52,7 @@ const renderPopover = (
         &nbsp;&nbsp;Riepilogo <i className="fa fa-external-link" aria-hidden="true"></i>
       </Link>
     </span>
+    </>
   ));
 
   let justifiedTimeContent = null;
@@ -168,14 +171,19 @@ const AbsencePopOver: React.FC<AbsencePopOverProps> = ({
 
         try {
           const idItem = absElem.id;
-          const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
+//           const response = await fetch(`/api/rest/v4/absences/${idItem}`, {
+//             method: 'GET',
+//             headers: {
+//               Accept: 'application/json',
+//               'Content-Type': 'application/json',
+//               Authorization: `Bearer ${accessToken}`,
+//             },
+//           });
+          const response = await fetch(`/api/rest/v4?endpoint=absences%2F${idItem}`,
+            { method: 'GET' });
+//             .then(response => response.json())
+//             .then(data => console.log(data))
+//             .catch(error => console.error(error));
 
           if (!response.ok) {
             throw new Error('Errore durante la richiesta API');

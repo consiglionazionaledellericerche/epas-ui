@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from '../../pages/api/auth/[...nextauth]';
@@ -34,7 +33,7 @@ class AbsencesMonthlyModal  extends React.Component<AbsencesMonthlyModalProps,Ab
         let accessToken = null;
         if (session) {
           accessToken = session.accessToken;
-          const url = '/api/rest/v4/absences/absenceInMonth?'+parameters;
+          const url = '/api/rest/v4?endpoint=absences%2FabsenceInMonth?'+parameters;
 
           fetch(url, {
               method: 'GET',

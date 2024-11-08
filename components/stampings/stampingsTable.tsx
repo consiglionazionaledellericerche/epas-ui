@@ -59,7 +59,28 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                           'path':'/rest/v4/stampings/insert',
                           'entityType':'Person',
                           'id':personId};
-            var showInsertStampingResult = await secureCheck(paramsSC);
+            var canInsertStampingResult = await secureCheck(paramsSC);
+
+            paramsSC = {'method':'GET',
+                          'path':'/rest/v4/stampings/edit',
+                          'entityType':'Person',
+                          'id':personId};
+            var canEditStampings = await secureCheck(paramsSC);
+            setShowEditStamping(canEditStampings);
+
+            paramsSC = {'method':'POST',
+                          'path':'/rest/v4/stampings',
+                          'entityType':'Person',
+                          'id':personId};
+            var canSaveStampingResult = await secureCheck(paramsSC);
+
+            paramsSC = {'method':'POST',
+                      'path':'/rest/v4/stampings/saveOffSite',
+                      'entityType':'Person',
+                      'id':personId};
+            var canInsertOffSiteTabResult = await secureCheck(paramsSC);
+            var showInsertStampingResult = canInsertStampingResult && (canSaveStampingResult || canInsertOffSiteTabResult);
+
             if (isMounted && showInsertStampingResult !== showInsertStamping) {  // Assicura che il componente sia ancora montato
               setShowInsertStamping(showInsertStampingResult);
             }
@@ -106,7 +127,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
             setMonthRecapData(defaultMonthRecap);
             setRefreshStampingTable(false)
-            const url = `/api/rest/v4/monthrecaps?${parameters}`;
+            const url = `/api/rest/v4?endpoint=monthrecaps&${parameters}`;
             async function getData() {
               var res = await fetchData(url, "", null);
                console.log('Dati recuperati:', res);
@@ -115,8 +136,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             getData();
         }
       }, [refreshStampingModal, personId,year,month]);
-    console.log('showInsertStamping setShowStampingModal---+', showInsertStamping, showStampingModal);
-        console.log('showAbsenceModal---+', showAbsenceModal);
+    console.log('monthRecapData.canEditStampings---+', monthRecapData.canEditStampings);
     return (<>
            <AbsenceModal
                        title={titleAbsenceModal}
@@ -135,9 +155,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                 <th className="group-single">Giorno</th>
                 <th className="group-single">Buono <br/>Pasto</th>
                 <th className="invisible"></th>
-
                 <th className="group-single">Codice <br/>assenza</th>
-
                 {
                 [...Array(monthRecapData.numberOfInOut),].map((value: undefined, index: number) => (
                     <React.Fragment key={`stampings-${index+1}`}>
@@ -148,7 +166,6 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                 }
                 {showInsertStamping ? <th className="group-single">Inserisci<br/>timbratura</th>: <th className="invisible"></th>}
                 <th className="invisible"></th>
-
                 <th className="group-single">Tempo<br />lavoro</th>
                 <th className="group-single">Diffe-<br />renza</th>
                 <th className="group-single">Progres-<br />sivo</th>
@@ -186,7 +203,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         )}
                         </td>
 
-                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={monthRecapData.canEditStampings ?? false} />
+                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={showEditStamping} />
                         <td>
                         {
                           showInsertStamping && !pdr.personDay.future ?
@@ -197,9 +214,7 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                           }
                         </td>
                         <td className="invisible"></td>
-
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
-
                         <td>{pdr.wttd?.workingTimeType?.description}</td>
                     </tr>
                     )

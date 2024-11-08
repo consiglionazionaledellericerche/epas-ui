@@ -9,7 +9,7 @@ const deleteData = async (id: number, handleClose: any, showError: any, showSucc
     const session = await getSession();
     if (!session) throw new Error("No session found");
     const accessToken = session.accessToken;
-    const url = `/api/rest/v4/personmonths/trainingHours/${id}`;
+    const url = `/api/rest/v4?endpoint=personmonths%2FtrainingHours%2F${id}`;
 
     const response = await fetch(url, {
       method: 'DELETE',
@@ -39,8 +39,8 @@ const saveData = async (modeType: string, dataForm: any, handleClose: any, showE
     if (!session) throw new Error("No session found");
     const accessToken = session.accessToken;
 
-    const action = modeType === 'edit' ? '/update' : '';
-    const url = `/api/rest/v4/personmonths/trainingHours${action}`;
+    const action = modeType === 'edit' ? '%2Fupdate' : '';
+    const url = `/api/rest/v4?endpoint=personmonths%2FtrainingHours${action}`;
 
     const response = await fetch(url, {
       method: 'POST',

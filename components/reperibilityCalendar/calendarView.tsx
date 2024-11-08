@@ -7,7 +7,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import itLocale from '@fullcalendar/core/locales/it'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import Alert from "sweetalert2";
-import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { getSession } from 'next-auth/react';
 import ReperibilityWorkers from './reperibilityWorkers';
@@ -145,7 +144,7 @@ async callAPI() {
     let parameters = "start="+startDate+"&end="+endDate;
     let reperibilityId = this.state.reperibilityId;
 
-    let url = '/api/rest/v4/reperibilitycalendar/show?'+parameters;
+    let url = '/api/rest/v4?endpoint=reperibilitycalendar%2Fshow&'+parameters;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -162,7 +161,7 @@ async callAPI() {
 
     parameters = "reperibility="+reperibilityId+"&start="+startDate+"&end="+endDate;
 
-    url = '/api/rest/v4/reperibilitycalendar/events?'+parameters;
+    url = '/api/rest/v4?endpoint=reperibilitycalendar%2Fevents&'+parameters;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -176,7 +175,7 @@ async callAPI() {
             this.setState({'calendarEvents': data})
         });
 
-    url = '/api/rest/v4/reperibilitycalendar/reperibilityPeople?'+parameters;
+    url = '/api/rest/v4?endpoint=reperibilitycalendar%2FreperibilityPeople&'+parameters;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -190,7 +189,7 @@ async callAPI() {
             this.setState({'reperibilityWorkers': data, componentDidMountExecuted: true})
         });
 
-    url = '/api/rest/v4/reperibilitycalendar/recap?'+parameters;
+    url = '/api/rest/v4?endpoint=reperibilitycalendar%2Frecap&'+parameters;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -330,7 +329,7 @@ async callAPI() {
       if (session) {
         accessToken = session.accessToken;
       }
-      const url = '/api/rest/v4/reperibilitycalendar/';
+      const url = '/api/rest/v4?endpoint=reperibilitycalendar%2F';
       fetch(url, {
           method: 'PUT',
           headers: {
@@ -373,7 +372,7 @@ async callAPI() {
       if (session) {
         accessToken = session.accessToken;
       }
-      const url = '/api/rest/v4/reperibilitycalendar/patch/'+eventId+'?'+parameters;
+      const url = '/api/rest/v4?endpoint=reperibilitycalendar%2Fpatch%2F'+eventId+'&'+parameters;
       fetch(url, {
           method: 'PATCH',
           headers: {

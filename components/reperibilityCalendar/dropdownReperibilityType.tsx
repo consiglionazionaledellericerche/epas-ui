@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { CustomSession } from "../../types/customSession";
@@ -16,7 +15,7 @@ const DropdownReperibilityType: React.FC<{ onChange: (selectedOption: {label: st
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState<{ value: any; label: any; } | null>(null);
 
-  let apiUrl = "/api/rest/v4/reperibilitycalendar/show";
+  let apiUrl = "/api/rest/v4?endpoint=reperibilitycalendar%2Fshow";
 
   const { data: session, status } = useSession();
   let accessToken: string | null = null;

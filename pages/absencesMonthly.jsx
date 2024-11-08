@@ -23,7 +23,7 @@ function Absences() {
 
   const parameters = personId ? `id=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
 
-  const {data, error} = useRequest('/absences/absenceTypeInMonth', parameters);
+  const {data, error} = useRequest('?endpoint=absences%2FabsenceTypeInMonth', parameters);
   if (error) return (<div>Impossibile caricare la situazione annuale</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />
 

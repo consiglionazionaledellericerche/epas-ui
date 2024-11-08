@@ -2,7 +2,6 @@ import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import VacationSummaryModalContent from './vacationSummaryModalContent'
-import { useRequest } from "../../request/useRequest"
 import { getServerSession } from "next-auth/next"
 import { getSession } from 'next-auth/react';
 import { CustomSession } from "../../types/customSession";
@@ -39,7 +38,7 @@ class VacationModal extends React.Component<VacationModalProps, VacationModalSta
           accessToken = session.accessToken;
         }
 
-        const url = '/api/rest/v4/vacations/summary?'+parameters;
+        const url = '/api/rest/v4?endpoint=vacations%2Fsummary&'+parameters;
 
         fetch(url, {
             method: 'GET',

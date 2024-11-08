@@ -16,6 +16,7 @@ function AbsencesGroups() {
   const router = useRouter();
 
 // Accesso ai parametri dalla query
+  console.log('router.query.>>> ',router.query);
   let from = router.query.from;
   let groupAbsenceTypeId = router.query.groupAbsenceTypeId;
   let personId = router.query.personId;
@@ -50,7 +51,7 @@ function AbsencesGroups() {
   const parameters = personId ? `id=${personId}&from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}` : `from=${from}&groupAbsenceTypeId=${groupAbsenceTypeId}`
 
   console.log("absencegroup params", parameters);
-  const {data, error} = useRequest('/absencesGroups/groupStatus', parameters);
+  const {data, error} = useRequest('?endpoint=absencesGroups%2FgroupStatus', parameters);
 
   if (error) return (<div>Impossibile caricare la situazione delle assenze</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />

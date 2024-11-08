@@ -20,7 +20,7 @@ function TrainingRecap() {
   const year = currentDate.year
   const parameters = `year=${year}`
 
-  const {data, error} = useRequest('/personmonths/trainingHours', parameters);
+  const {data, error} = useRequest('?endpoint=personmonths%2FtrainingHours', parameters);
   if (error) return (<div>Impossibile caricare la situazione annuale</div>);
   if (!data) return <React.Suspense fallback={<Spinner />} />
 

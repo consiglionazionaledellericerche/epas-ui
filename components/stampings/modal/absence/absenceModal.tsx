@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import AbsenceModalTab from "./absenceModalTab";
 import { fetchDataAbsence, simulateData } from '../apiUtils';
-import { secureCheck } from '../../../../utils/apiUtility';
+import { secureCheck } from '../../../../utils/secureCheck';
 interface AbsenceModalProps {
   title: string,
   tmpshow: boolean,

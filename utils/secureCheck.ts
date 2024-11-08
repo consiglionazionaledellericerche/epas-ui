@@ -14,7 +14,7 @@ export const secureCheck = async (params: any) => {
   let accessToken = session?.accessToken || null;
 
   const queryString = buildQueryString(params);
-  const url = `/api/rest/v4/secure/check?${queryString}`;
+  const url = `/api/rest/v4?endpoint=secure%2Fcheck&${queryString}`;
 
   try {
     const response = await fetch(url, {

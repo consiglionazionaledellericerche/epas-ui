@@ -8,7 +8,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 import { useState, useEffect } from 'react';
 import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
-import { useRequest } from "../../../request/useRequest"
 import { Spinner } from 'react-bootstrap'
 import {AbsenceSubPeriod} from "../../../types/absenceSubPeriod";
 

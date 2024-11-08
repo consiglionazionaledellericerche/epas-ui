@@ -22,7 +22,7 @@ function Vacations() {
 
   const parameters = personId ? `personId=${personId}&year=${year}&month=${month}` : `year=${year}&month=${month}`
 
-  const {data, error} = useRequest('/vacations', parameters);
+  const {data, error} = useRequest('?endpoint=vacations', parameters);
   if (error) return <div>Impossibile caricare la situazione annuale</div>
   if (!data) return <React.Suspense fallback={<Spinner />} />
 
