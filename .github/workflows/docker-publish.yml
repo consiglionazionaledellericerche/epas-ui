@@ -39,6 +39,6 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            consiglionazionalericerche/epas:${{ github.ref_name }}
+            consiglionazionalericerche/epas-ui:${{ github.ref_name }}
             ghcr.io/consiglionazionaledellericerche/epas-ui:${{ github.ref_name }}
             ghcr.io/consiglionazionaledellericerche/epas-ui:stable
