@@ -10,7 +10,7 @@ possibile all'attuale interfaccia utente di ePAS generata server side.
 ePAS UI deve essere affiancata ad un'istanza funzionante di epas-service della quale utilizzerà gli endpoint REST.
 
 Il progetto è attualmente in fase di sviluppo e nelle prime versioni fornirà solo interfacce in sola lettura
-per la consultazione dei proprio dati da parte del personale dipendente.
+per la consultazione dei propri dati da parte del personale dipendente.
 
 Per maggiori informazioni su ePAS è possibile consultare la documentazione completa all'indirizzo:
 
@@ -30,8 +30,8 @@ lato server.
 Al momento è possibile utilizzare l'autenticazione tramite Bearer Token OAUTH2 oppure Basic Auth.
 
 ## Configurazione
-Per configurare il comportamento dell'interfaccia e i servizi REST che utilizza, è necessario configurare il file .env come
-documentato al suo interno
+Per configurare il comportamento dell'interfaccia e i servizi REST che utilizza, è possibile utilizzare l'immagine docker tramite il file docker-compose.yml contenuto in questo repository.
+La configurazione dei parametri è possibile effettuarla tramite le variabili definite nel docker-compose.yml e nel file .env, seguendo la documentazione all'interno del file .env.
 
 ## 👏 Come Contribuire 
 
