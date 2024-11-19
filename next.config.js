@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-const defaultEpasService = 'https://epas-service.devel.iit.cnr.it/:path*';
-
 const nextConfig = {
   env: {
       CLIENTID: process.env.NEXT_PUBLIC_CLIENTID,
@@ -15,7 +13,6 @@ const nextConfig = {
     },
 
   reactStrictMode: true,
-  swcMinify: true,
   async rewrites() {
     return [
       {
