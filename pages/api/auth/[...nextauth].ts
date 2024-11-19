@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions} from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import dotenv from 'dotenv';
 dotenv.config();
@@ -9,7 +9,7 @@ const NEXTAUTH_SECRET = process.env.NEXT_PUBLIC_NEXTAUTH_SECRET || process.env.N
 const OAUTH_CONFIG_URL = process.env.NEXT_PUBLIC_OAUTH_CONFIG_URL || "";
 const OAUTH_ISSUER_URL = process.env.NEXT_PUBLIC_OAUTH_ISSUER_URL || "";
 
-async function refreshAccessToken(token) {
+async function refreshAccessToken(token: any) {
   try {
     const url = `${OAUTH_ISSUER_URL}/protocol/openid-connect/token`;
     const response = await fetch(url, {
@@ -21,7 +21,7 @@ async function refreshAccessToken(token) {
         client_id: CLIENTID,
         client_secret: CLIENTSECRET,
         grant_type: "refresh_token",
-        refresh_token: token.refresh_token,
+        refresh_token: token.refresh_token || "",
       }),
     });
 
@@ -48,8 +48,6 @@ async function refreshAccessToken(token) {
 }
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
-  // https://next-auth.js.org/configuration/providers/oauth
   providers: [
     KeycloakProvider({
       clientId: CLIENTID,
@@ -63,32 +61,34 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, user, token }) {
       if (token) {
-          session = Object.assign({}, session, {accessToken: token.access_token,
-          refreshToken:token.refresh_token,
-          user:token.user});
+        session = Object.assign({}, session, {
+          accessToken: token.access_token,
+          refreshToken: token.refresh_token,
+          user: token.user,
+        });
       }
-      return session
+      return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      if (account){
-       console.log("Nuovo access token ricevuto:", account.access_token);
-       return {
-                user: {name: token.name,
-                       email: token.email},
-                access_token: account.access_token,
-                refresh_token: account.refresh_token
-              }
+      if (account) {
+        console.log("Nuovo access token ricevuto:", account.access_token);
+        return {
+          user: { name: token.name, email: token.email },
+          access_token: account.access_token,
+          refresh_token: account.refresh_token
+        };
       }
-      if (Date.now() < token.access_token_expires) {
-            console.log("Token di accesso valido, nessun refresh necessario.");
-            return token;
-          }
+
+      if (typeof token.access_token_expires === "number" && Date.now() < token.access_token_expires) {
+              console.log("Token di accesso valido, nessun refresh necessario.");
+              return token;
+            }
 
       // Altrimenti, esegui il refresh del token
       console.log("Access token scaduto. Tentativo di refresh...");
       return await refreshAccessToken(token);
     }
   }
-}
+};
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
