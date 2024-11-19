@@ -40,7 +40,7 @@ const AbsencesMonthlyTable: React.FC<AbsencesMonthlyTableProps> = ({
             <td key={absence.description}>{absence.description}</td>
             <td key={absence.code}>{absence.code}</td>
             <td key={absence.numberOfDays}>
-               <a id="absenceMonth" data-async-modal="#defaultModal" href="javascript:void(0)" onClick={() => setModalParam(absence.code, month, year)}>
+               <a id="absenceMonth" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam(absence.code, month, year)}>
                   {absence.numberOfDays}
                </a>
              </td>
