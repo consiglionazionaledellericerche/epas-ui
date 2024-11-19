@@ -1,12 +1,10 @@
 /** @type {import('next').NextConfig} */
 
-const defaultEpasService = 'https://epas-service.devel.iit.cnr.it/:path*';
-
 const nextConfig = {
   env: {
       CLIENTID: process.env.NEXT_PUBLIC_CLIENTID,
       CLIENTSECRET: process.env.NEXT_PUBLIC_CLIENT_SECRET,
-      NEXTAUTH_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
       NETXTAUTH_SECRET: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
       OAUTH_LOGIN: process.env.NEXT_PUBLIC_OAUTH_LOGIN || "true",
       LDAP_LOGIN: process.env.NEXT_PUBLIC_LDAP_LOGIN || "false",
@@ -15,7 +13,6 @@ const nextConfig = {
     },
 
   reactStrictMode: true,
-  swcMinify: true,
   async rewrites() {
     return [
       {

@@ -20,7 +20,7 @@ const CompetencesView: React.FC<CompetencesViewProps> = ({
   if (!data.personMonthCompetenceRecap || Object.keys(data.personMonthCompetenceRecap).length === 0) {
       content = <>
           <div className="alert alert-danger">
-             <p>Risultano non correttamente inizializzati i dati sulle competenze effettuate nell'anno selezionato.</p>
+             <p>Risultano non correttamente inizializzati i dati sulle competenze effettuate nell&apos;anno selezionato.</p>
              <p>Impossibile costruire la situazione richiesta.</p>
           </div>
       </>
