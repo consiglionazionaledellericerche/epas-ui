@@ -1,10 +1,7 @@
-import React from "react";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import { getServerSession } from "next-auth/next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from '../../pages/api/auth/[...nextauth]';
-import { getSession } from 'next-auth/react';
+import React, { useEffect, useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { getSession } from "next-auth/react";
 import DateUtility from "../../utils/dateUtility";
 import { AbsenceInMonth } from "../../types/absenceInMonth";
 import { CustomSession } from "../../types/customSession";
@@ -14,87 +11,88 @@ interface AbsencesMonthlyModalProps {
   close: () => void;
   parameters: string;
 }
-interface AbsencesMonthlyModalState {
-  data: AbsenceInMonth | null;
-  show: boolean;
-  title: string
-}
-class AbsencesMonthlyModal  extends React.Component<AbsencesMonthlyModalProps,AbsencesMonthlyModalState> {
-  constructor(props:any) {
-    super(props);
-    this.state = { data: null, show:false, title: ""};
-  }
 
-  async componentDidUpdate(propsPrecedenti:any) {
-    if (this.props.tmpshow !== propsPrecedenti.tmpshow) {
-      if (this.props.tmpshow){
-        const parameters = this.props.parameters
-        const session = await getSession() as CustomSession;
-        let accessToken = null;
-        if (session) {
-          accessToken = session.accessToken;
-          const url = '/api/rest/v4?endpoint=absences%2FabsenceInMonth?'+parameters;
+const AbsencesMonthlyModal: React.FC<AbsencesMonthlyModalProps> = ({ tmpshow, close, parameters }) => {
+  const [data, setData] = useState<AbsenceInMonth | null>(null);
+  const [show, setShow] = useState(false);
+  const [title, setTitle] = useState("");
 
-          fetch(url, {
-              method: 'GET',
+  useEffect(() => {
+    const fetchData = async () => {
+      if (tmpshow) {
+        const session = (await getSession()) as CustomSession | null;
+        if (session?.accessToken) {
+          const accessToken = session.accessToken;
+          const url = `/api/rest/v4?endpoint=absences%2FabsenceInMonth&${parameters}`;
+          try {
+            const response = await fetch(url, {
+              method: "GET",
               headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  Authorization: 'Bearer '+accessToken
-              }
-          }).then(response => response.json())
-            .catch(error => console.error("unable to achive this", error))
-            .then(data => {
-                  this.setState({'data':data, 'show':true, 'title':"Date in cui è stata effettuata l'assenza "+data.code})
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
             });
+
+            if (response.ok) {
+              const data = await response.json();
+              setData(data);
+              setShow(true);
+              setTitle(`Date in cui è stata effettuata l'assenza ${data.code}`);
+            } else {
+              console.error("Errore durante il recupero dei dati:", response.statusText);
+              setData(null);
+              setShow(false);
+              setTitle("");
+            }
+          } catch (error) {
+            console.error("Errore durante il fetch:", error);
+            setData(null);
+            setShow(false);
+            setTitle("");
+          }
+        } else {
+          setData(null);
+          setShow(false);
+          setTitle("");
         }
-        else {
-               this.setState({'data':null,'show':false, 'title':""})
-        }
+      } else {
+        setData(null);
+        setShow(false);
+        setTitle("");
       }
-      else {
-        this.setState({'data':null,'show':false, 'title':""})
-        }
-    }
-  }
+    };
 
-  handleClose = () => {
-    this.setState ({'show': false})
-  }
+    fetchData();
+  }, [tmpshow, parameters]);
 
- render() {
-
-    let dateList = this.state.data ? this.state.data.dateAbsences?.map((date) => <li key={DateUtility.formatDate(date)}>{DateUtility.formatDate(date)}</li>) : ""
-
-    return (
-              <Modal
-                      tmpshow= {this.props.tmpshow.toString()}
-                      show={this.state.show}
-                      onHide={this.handleClose}
-                      cancel={this.handleClose}
-                      size="lg"
-                      aria-labelledby="modal-absencemonth-info"
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>{this.state.title}</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                         {this.state.show ? dateList : ''}
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button onClick={this.handleClose}>Cancel</Button>
-                      </Modal.Footer>
-                    </Modal>
-    );
-  }
-
-}
-
-export async function getServerSideProps({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
-  return {
-    props: {
-      session: await getServerSession(req, res, authOptions),
-    },
+  const handleClose = () => {
+    setShow(false);
+    close();
   };
-}
+
+  const dateList = data
+    ? data.dateAbsences?.map((date) => (
+        <li key={DateUtility.formatDate(date)}>{DateUtility.formatDate(date)}</li>
+      ))
+    : null;
+
+  return (
+    <Modal
+      show={show}
+      onHide={handleClose}
+      size="lg"
+      aria-labelledby="modal-absencemonth-info"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{show ? <ul>{dateList}</ul> : "Nessun dato disponibile."}</Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleClose}>Cancel</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
 export default AbsencesMonthlyModal;
