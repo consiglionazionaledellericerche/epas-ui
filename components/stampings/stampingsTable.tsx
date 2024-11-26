@@ -48,8 +48,10 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
       };
 
     const personId = monthRecap.personId;
-    console.log("personId ", personId);
-    console.log("monthRecap ", monthRecap);
+
+    useEffect(() => {
+    setMonthRecapData(monthRecap);
+    }, [monthRecap]);
 
     useEffect(() => {
         let isMounted = true;  // Flag per sapere se il componente è ancora montato
@@ -130,13 +132,11 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             const url = `/api/rest/v4?endpoint=monthrecaps&${parameters}`;
             async function getData() {
               var res = await fetchData(url, "", null);
-               console.log('Dati recuperati:', res);
               setMonthRecapData(res.data);
             }
             getData();
         }
-      }, [refreshStampingModal, personId,year,month]);
-    console.log('monthRecapData.canEditStampings---+', monthRecapData.canEditStampings);
+      }, [refreshStampingModal, personId, year, month]);
     return (<>
            <AbsenceModal
                        title={titleAbsenceModal}
@@ -203,7 +203,9 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         )}
                         </td>
 
-                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={showEditStamping} />
+                        <StampingsTemplate personDayRecap={pdr}
+                        setEditModalParam={setEditModalParam}
+                        canEditStampings={showEditStamping} />
                         <td>
                         {
                           showInsertStamping && !pdr.personDay.future ?
