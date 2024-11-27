@@ -38,7 +38,7 @@ nav {
 .navbar-brand {
   font-family: 'Shadows Into Light', cursive !important;
   font-size: 200% !important;
-  padding: 1px 15px !important;
+  /*padding: 1px 15px !important;*/
 }
 
 .nav-item {
