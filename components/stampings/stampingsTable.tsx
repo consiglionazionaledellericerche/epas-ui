@@ -164,7 +164,8 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                     </React.Fragment>
                     ))
                 }
-                {showInsertStamping ? <th className="group-single">Inserisci<br/>timbratura</th>: <th className="invisible"></th>}
+                {showInsertStamping && !pdr.personDay.future ?
+                (<th className="group-single">Inserisci<br/>timbratura</th>): ''}
                 <th className="invisible"></th>
                 <th className="group-single">Tempo<br />lavoro</th>
                 <th className="group-single">Diffe-<br />renza</th>
@@ -206,15 +207,14 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         <StampingsTemplate personDayRecap={pdr}
                         setEditModalParam={setEditModalParam}
                         canEditStampings={showEditStamping} />
-                        <td>
                         {
                           showInsertStamping && !pdr.personDay.future ?
                           (
+                        <td>
                           <a id="new-stamping" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam('Stamping',pdr)}>
                           +++
-                          </a>):''
-                          }
-                        </td>
+                          </a>
+                        </td>):''}
                         <td className="invisible"></td>
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
                         <td>{pdr.wttd?.workingTimeType?.description}</td>
