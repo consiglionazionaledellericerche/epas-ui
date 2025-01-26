@@ -20,6 +20,7 @@ function PersonalDataMenu() {
             <NavDropdown.Item href="/competences"><FontAwesomeIcon icon={faMoneyBill} /> Competenze</NavDropdown.Item>
             <NavDropdown.Item href="/trainingRecap"><FontAwesomeIcon icon={faGraduationCap} /> Ore di formazione</NavDropdown.Item>
             <NavDropdown.Item href="/personMonthsHoursRecap"><FontAwesomeIcon icon={faClock} /> Riepilogo orario</NavDropdown.Item>
+            <NavDropdown.Item href="/seatOrganizationChart"><FontAwesomeIcon icon={faClock} /> Ruoli in ePAS all`interno della sede</NavDropdown.Item>
             {/*
             <NavDropdown.Item href="#action/3.5">Competenze</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.8">Ruoli in ePAS all`interno della sede</NavDropdown.Item>
