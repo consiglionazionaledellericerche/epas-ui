@@ -48,8 +48,10 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
       };
 
     const personId = monthRecap.personId;
-    console.log("personId ", personId);
-    console.log("monthRecap ", monthRecap);
+
+    useEffect(() => {
+    setMonthRecapData(monthRecap);
+    }, [monthRecap]);
 
     useEffect(() => {
         let isMounted = true;  // Flag per sapere se il componente è ancora montato
@@ -130,13 +132,11 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
             const url = `/api/rest/v4?endpoint=monthrecaps&${parameters}`;
             async function getData() {
               var res = await fetchData(url, "", null);
-               console.log('Dati recuperati:', res);
               setMonthRecapData(res.data);
             }
             getData();
         }
-      }, [refreshStampingModal, personId,year,month]);
-    console.log('monthRecapData.canEditStampings---+', monthRecapData.canEditStampings);
+      }, [refreshStampingModal, personId, year, month]);
     return (<>
            <AbsenceModal
                        title={titleAbsenceModal}
@@ -164,7 +164,8 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                     </React.Fragment>
                     ))
                 }
-                {showInsertStamping ? <th className="group-single">Inserisci<br/>timbratura</th>: <th className="invisible"></th>}
+                {showInsertStamping && !pdr.personDay.future ?
+                (<th className="group-single">Inserisci<br/>timbratura</th>): ''}
                 <th className="invisible"></th>
                 <th className="group-single">Tempo<br />lavoro</th>
                 <th className="group-single">Diffe-<br />renza</th>
@@ -203,16 +204,17 @@ const StampingsTable: React.FC<StampingsTableProps> = ({
                         )}
                         </td>
 
-                        <StampingsTemplate personDayRecap={pdr} setEditModalParam={setEditModalParam} canEditStampings={showEditStamping} />
-                        <td>
+                        <StampingsTemplate personDayRecap={pdr}
+                        setEditModalParam={setEditModalParam}
+                        canEditStampings={showEditStamping} />
                         {
                           showInsertStamping && !pdr.personDay.future ?
                           (
+                        <td>
                           <a id="new-stamping" data-async-modal="#defaultModal" href="#" onClick={() => setModalParam('Stamping',pdr)}>
                           +++
-                          </a>):''
-                          }
-                        </td>
+                          </a>
+                        </td>):''}
                         <td className="invisible"></td>
                         <TimeAtWorkDifferenceProgressive personDayRecap={pdr} />
                         <td>{pdr.wttd?.workingTimeType?.description}</td>

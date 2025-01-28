@@ -31,7 +31,8 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   showFindCodeTab,
   showForceInsert
 }) => {
-  const [selectedTab, setSelectedTab] = useState<string | null | any>(tabName);
+  const [selectedTab, setSelectedTab] = useState<string | null | any>(null);
+  const [activeTab,setActiveTab] = useState<string | null | any>(null);
   const [visibleTabs, setVisibleTabs] = useState(Object.values(tabsVisible));
   const [dataTab, setDataTab] = useState(data);
   const [simDataTab, setSimDataTab] = useState(simData);
@@ -48,7 +49,9 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
 
     newParams['id'] = parameters.id;
     newParams['from'] = parameters.from;
-    newParams['category'] = selectedTab;
+    if (selectedTab){
+      newParams['category'] = selectedTab;
+    }
     newParams['switchGroup'] = false;
 
     if (!('groupAbsenceTypeName' in element) && dataTab.groupSelected) {
@@ -88,6 +91,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
       params['category'] = selectedTab;
       var dataAbs = await fetchDataAbsence(params, false);
       setDataTab(dataAbs.data);
+      setActiveTab(dataAbs.data.categoryTabSelected.name);
     }
     getData();
    }
@@ -118,7 +122,7 @@ const AbsenceModalTab: React.FC<AbsenceModalTabProps> = ({
   return (
     <>
       <Tabs
-        activeKey={selectedTab}
+        activeKey={activeTab}
         id="absenceTabs"
         className="mb-3"
         onSelect={(k) => handleTabChange(k)}
