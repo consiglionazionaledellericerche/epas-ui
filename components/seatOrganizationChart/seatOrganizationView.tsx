@@ -6,15 +6,22 @@ import DateUtility from "../../utils/dateUtility";
 import { useTranslations } from 'next-intl';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UserShow } from "../../types/userShow";
+import { SeatOrganizationChart } from "../../types/seatOrganizationChart";
 
-const RoleList = ({ data, trans, setRoleModal, setShowModal }) => {
+interface UserListType {
+  [key: string]: UserShow[];
+}
+
+interface RoleListProps {
+  data: UserListType;
+  trans: (key: string) => string;
+  handleRoleSelect: (role: any) => void;
+}
+
+const RoleList: React.FC<RoleListProps> = ({ data, trans, handleRoleSelect }) => {
   const [role, setRole] = useState(null);
-  useEffect(() => {
-      if (role) {
-        setRoleModal(role);  // Impostiamo il ruolo
-        setShowModal(true);   // Mostriamo la modale
-      }
-    }, [role, setRoleModal, setShowModal]);
+
   return (
     <>
       {Object.entries(data).map(([key, userList]) => (
@@ -33,7 +40,7 @@ const RoleList = ({ data, trans, setRoleModal, setShowModal }) => {
                     <a
                       className="label label-badge label-info pull-right"
                       href="#"
-                      onClick={() => setRole(key)}
+                      onClick={() => handleRoleSelect(key)}
                       data-async-modal="#modalViewRole"
                       data-webui-popover-hover
                       data-content="Vedi azioni che può compiere"
@@ -52,38 +59,35 @@ const RoleList = ({ data, trans, setRoleModal, setShowModal }) => {
 };
 
 interface SeatOrganizationViewProps {
-        data: object;
+        data: SeatOrganizationChart;
 }
 
 const SeatOrganizationView: React.FC<SeatOrganizationViewProps> = ({
     data
   }) => {
   const [showModal, setShowModal] = useState(false);
-  const [roleModal, setRoleModal] = useState(null);
+  const [roleModal, setRoleModal] = useState("");
 
   const trans = useTranslations('Message');
 
-useEffect(() => {
-  console.log("showModal è stato aggiornato:", showModal);
-}, [showModal]);  // Viene eseguito ogni volta che showModal cambia
-
 const handleClose = () => {
-                     console.log("closeModal chiamata nel componente padre",showModal);
                      setShowModal(false);
-                     setRoleModal(null);
-                     console.log("closeModal chiamata nel componente padre",showModal);
+                     setRoleModal("");
                    };
 
+const handleRoleSelect = (role:string) => {
+                     if (role) {
+                             setRoleModal(role);
+                             setShowModal(true);
+                           }
+                   };
   let content = <>
                   <DescriptionModal tmpshow={showModal} closeModal={handleClose} role={roleModal} />
                   <div className="col-sm-offset-1 col-sm-10" id="uroList">
-                      {/* Accordion for roles */}
                       <div className="accordion-group" id="generic">
-                      {/*--*/}
-
-                        <PanelAccordion open={false} title={`Ruoli di ${data.currentPerson.surname} ${data.currentPerson.name} sulla sede`}>
+                        <PanelAccordion open={false} title={`Ruoli di ${data.currentPerson?.surname} ${data.currentPerson?.name} sulla sede`}>
                           <ul className="list-group">
-                            {data.roles.map((role) => (
+                            {data.roles?.map((role) => (
                                                       <li key={role} className="list-group-item clearfix">
                                                         <span className="label label-primary">{trans(role)}</span>
                                                         <a
@@ -105,10 +109,9 @@ const handleClose = () => {
                                         {['seatSupervisors', 'personnelAdmins', 'technicalAdmins', 'registryManagers', 'mealTicketsManagers', 'personnelAdminsMini', 'shiftManagers', 'reperibilityManagers'].map(roleKey => (
                                           <RoleList
                                             key={roleKey}
-                                            data={data[roleKey]}
+                                            data={(data[roleKey as keyof SeatOrganizationChart] as { [key: string]: Array<UserShow> }) || {}}
                                             trans={trans}
-                                            setShowModal={setShowModal}
-                                            setRoleModal={setRoleModal}
+                                            handleRoleSelect={handleRoleSelect}
                                           />
                                         ))}
                         </PanelAccordion>
@@ -123,7 +126,7 @@ const handleClose = () => {
             <Col sm={1} />
             <Col sm={9}>
           <div className="page-header">
-              <h2>Ruoli in ePAS per la sede {data.currentPerson.office.name} </h2>
+              <h2>Ruoli in ePAS per la sede {data?.currentPerson?.office?.name} </h2>
               <br/>
           </div>
           {content}

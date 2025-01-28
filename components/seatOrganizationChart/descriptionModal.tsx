@@ -3,7 +3,22 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useTranslations } from 'next-intl';
 
-const roleDescriptions = {
+const roleDescriptions: Record<
+  'personnelAdmin' | 'personnelAdminMini' | 'seatSupervisor' | 'employee' | 'shiftManager' | 'reperibilityManager' | 'groupManager' | 'registryManager' | 'mealTicketManager' | 'technicalAdmin' | 'badgeReader',
+  string[]
+> = {
+  personnelAdmin: [
+    "Può inserire, modificare, cancellare timbrature nei cartellini dei dipendenti",
+    "Può inserire, modificare, cancellare codici di assenza nei cartellini dei dipendenti",
+    "Può vedere le assenze del personale su base mensile e annuale",
+    "Può inserire, modificare, cancellare competenze accessorie",
+    "Può vedere la situazione delle ferie e dei permessi dei dipendenti",
+    "Può vedere i calendari di turni e reperibilità, se configurati",
+    "Può definire la configurazione della sede (orari di apertura/chiusura ecc...)",
+    "Può stampare i cartellini dei dipendenti",
+    "Può inviare i dati mensili alla piattaforma <strong>Attestati</strong>",
+    "Può definire gli orari di lavoro particolari che devono essere assegnati ai dipendenti della sede (part time orizzontali, verticali).",
+  ],
   personnelAdminMini: [
     "Può vedere le timbrature nei cartellini dei dipendenti",
     "Può vedere i codici di assenza nei cartellini dei dipendenti",
@@ -78,27 +93,23 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ tmpshow, closeModal
     const [show, setShow] = useState(tmpshow);
     const [title, setTitle] = useState(`Ruolo: ${role}`);
     const trans = useTranslations('Message');
-    const descriptions = roleDescriptions[role] || [];
+    const descriptions = roleDescriptions[role as keyof typeof roleDescriptions] || [];
 
-      useEffect(() => {
-        setShow(tmpshow);
-      }, [tmpshow]);
+    useEffect(() => {
+      setShow(tmpshow);
+    }, [tmpshow]);
 
-        useEffect(() => {
-          setTitle(`Azioni eseguibili dal ruolo: ${trans(role)}`);
-        }, [role]);
-
-    const handleClose = () => {
-    console.log("handleClose chiamato");
-      setShow(false);
-      closeModal();
-    };
+    useEffect(() => {
+      if(role) {
+        setTitle(`Azioni eseguibili dal ruolo: ${trans(role)}`);
+      }
+    }, [role]);
 
     return (
       <Modal
         show={show}
-        onHide={handleClose}
-        size="lg"
+        onHide={closeModal}
+        size="xl"
         aria-labelledby="modalViewRole"
       >
         <Modal.Header closeButton>
@@ -106,6 +117,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ tmpshow, closeModal
         </Modal.Header>
         <Modal.Body>
           {descriptions.length > 0 ? (
+          <div className="alert alert-info  text-dark ">
             <ul className="list-group">
               {descriptions.map((desc, index) => (
                 <li key={index} className="list-group-item clearfix">
@@ -113,12 +125,13 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ tmpshow, closeModal
                 </li>
               ))}
             </ul>
+          </div>
           ) : (
             <p>Nessun dato disponibile.</p>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Chiudi pippo</Button>
+          <Button onClick={closeModal}>Chiudi</Button>
         </Modal.Footer>
       </Modal>
     );
