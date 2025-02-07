@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from "next/router";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Head from 'next/head';
@@ -95,6 +96,9 @@ const  Header: React.FC<HeaderProps> = ({ title }) => {
                                 || personInfo.categories.length > 0
                                 ||personInfo.reperibilities.length > 0);
 
+  const router = useRouter();
+  const isCalendarPage = router.pathname === "/reperibility";
+
   let navbarElem;
   if (loadingSession) {
     navbarElem = <><div>Caricamento...</div></>;
@@ -124,7 +128,7 @@ const  Header: React.FC<HeaderProps> = ({ title }) => {
          <ToolsMenu />
       )*/}
 
-      <SelectPeriod/>
+      {!isCalendarPage && <SelectPeriod />}
       <Nav className="ms-auto text-white">
         <Nav.Link className="text-white" onClick={handleSignOut}>
           Esci <FontAwesomeIcon icon={faRightFromBracket} />

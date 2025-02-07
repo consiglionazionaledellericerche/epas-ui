@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css'
+import '../styles/bootstrap/css/bootstrap.min.css'
 import '../styles/globals.css'
 import '../styles/epas.css'
+import '../styles/stampingsTable.css'
 
 import { SessionProvider } from "next-auth/react"
 

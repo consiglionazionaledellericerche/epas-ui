@@ -1,7 +1,4 @@
 @import url("//fonts.googleapis.com/css?family=Shadows+Into+Light");
-@import url("./bootstrap-production/css/bootstrap.css");
-@import url("./epas.css");
-@import url("./stampingsTable.css");
 
 html,
 body {
@@ -80,3 +77,31 @@ div.accordion-body h4 {
   padding: 24px;
   border-radius: 0px;
 }
+
+.holiday {
+             background-color: #fff7e0 !important;
+             color: #353535 !important;
+             opacity: .7 !important;
+             text-align: center !important;
+             padding-top: .6em !important;
+         }
+
+.fc-col-header-cell-cushion, .fc-daygrid-day-number {
+color: #333 !important;
+}
+
+ .fc-button-primary {
+   border: 1px solid !important;
+       background-color: #f5f5f5 !important;
+       background-image: -moz-linear-gradient(top, #fff, #e6e6e6) !important;
+       background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6)) !important;
+       background-image: -webkit-linear-gradient(top, #fff, #e6e6e6) !important;
+       background-image: -o-linear-gradient(top, #fff, #e6e6e6) !important;
+       background-image: linear-gradient(to bottom, #fff, #e6e6e6) !important;
+       background-repeat: repeat-x !important;
+       border-color: #e6e6e6 #e6e6e6 #bfbfbf !important;
+       border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25) !important;
+       color: #333 !important;
+       text-shadow: 0 1px 1px rgba(255, 255, 255, .75) !important;
+       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05) !important;
+ }

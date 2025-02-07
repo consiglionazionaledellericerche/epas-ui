@@ -13,17 +13,16 @@ const ReperibilityWorkers: React.FC<ReperibilityWorkersProps> = ({
   }) => {
     return(
     <>
-      <Col md={2}>
         <div id="external-events" style={{
                                              padding: "10px",
                                              width: "80%",
-                                             height: "auto",
-                                             maxHeight: "-webkit-fill-available"
+
                                            }}
                                          >
         <h4> Reperibili</h4>
         <ul className="list-group">
           {reperibilityWorkers.map(event => (
+          <>
             <li
               className={event.className}
               title={event.title}
@@ -34,10 +33,11 @@ const ReperibilityWorkers: React.FC<ReperibilityWorkersProps> = ({
             >
               {event.title}
             </li>
+            <br />
+            </>
           ))}
         </ul>
         </div>
-      </Col>
      </>
     );
     }

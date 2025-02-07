@@ -29,7 +29,6 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
                         <br/></>);
     return(
     <>
-      <Col md={2}>
       <div id="external-events" style={{
                                           padding: "10px",
                                           width: "80%",
@@ -58,7 +57,6 @@ const RecapCalendar: React.FC<RecapCalendarProps> = ({
         <br/>
         {divApproved}
       </div>
-    </Col>
      </>
     );
     }
