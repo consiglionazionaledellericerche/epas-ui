@@ -8,16 +8,19 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import itLocale from '@fullcalendar/core/locales/it'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
-import Alert from "sweetalert2";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getServerSession } from "next-auth/next"
 import { getSession } from 'next-auth/react';
 import ReperibilityWorkers from './reperibilityWorkers';
 import RecapCalendar from './recapCalendar';
-import DropdownReperibilityType from './dropdownReperibilityType';
+import DropdownReperibilityType from '../dropdownReperibilityType';
+import ButtonRemoveEvent from '../buttonRemoveEvent';
 import {useTranslations} from 'next-intl';
-import { CustomSession } from "../../types/customSession";
+import { CustomSession } from "../../../types/customSession";
 import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from '../../pages/api/auth/[...nextauth]';
+import { authOptions } from '../../../pages/api/auth/[...nextauth]';
+import DateUtility from "../../../utils/dateUtility";
 
 interface eventElem {
   title: string,
@@ -33,29 +36,6 @@ interface eventInfoType {
 
 interface CalendarViewProps {
   reperibilityID: number
-}
-
-function renderEventContent(eventInfo: eventInfoType) {
-console.log('renderEventContent', eventInfo);
-  //*********** 2023-09-12
-  //togliere il commento quando si vuole aprire anche in modifica, adesso calendario in sola lettura
-  //*************************
-  //dipende se ha i permessi per aggiungere o meno
-  let classFCEvent = "fc-event fc-event-draggable";
-  //groupid={eventInfo.event.personId};
-
-  return (
-      <>
-        <div className="fc-content"
-        id={eventInfo.event.personReperibilityDayId}
-                key={eventInfo.event.personId}
-                        style={{color:eventInfo.event.textColor, backgroundColor: eventInfo.event.borderColor, borderColor:eventInfo.event.borderColor}}
-                        color={eventInfo.event.eventColor}>
-        <span className="fc-time"></span>
-        <span className="fc-title" style={{whiteSpace: "normal"}}>{eventInfo.event.title}</span>
-        </div>
-      </>
-    )
 }
 
 const callAPI = async (startDate, endDate, reperibilityId, setReperibilities, setReperibilityId, setCalendarEvents, setReperibilityWorkers, setRecap) => {
@@ -159,8 +139,50 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isReload, setIsReload] = useState(false);
   const [componentDidMountExecuted, setComponentDidMountExecuted] = useState(false);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
   const calendarRef: React.RefObject<FullCalendar> = React.createRef();
+
+  const renderEventContent = (eventInfo: eventInfoType, editable:boolean) => {
+    let classFCEvent = "fc-content";
+    if (editable){
+      classFCEvent = classFCEvent + "fc-event fc-event-draggable";
+    }
+    //aggiungo all'evento il pulsante per la rimozione se il calendario è editabile e l'evento cancellabile
+    let buttonRemove;
+    let apiUrl = '/api/rest/v4?endpoint=reperibilitycalendar%2F'+eventInfo.event.id;
+
+    if (editable && eventInfo.event._def.ui.classNames?.includes("removable")){
+        buttonRemove = (
+                         <ButtonRemoveEvent event={eventInfo.event} onDelete={removeEventFromCalendar} apiUrl={apiUrl}/>
+                       );
+    }
+
+    return (
+        <>
+          <div className={classFCEvent}
+          id={eventInfo.event.personReperibilityDayId}
+                  key={eventInfo.event.personId}
+                          style={{color:eventInfo.event.textColor, backgroundColor: eventInfo.event.borderColor, borderColor:eventInfo.event.borderColor}}
+                          color={eventInfo.event.eventColor}>
+          <span className="fc-time"></span>
+          <span className="fc-title" style={{whiteSpace: "normal"}}>{eventInfo.event.title}</span>
+          {buttonRemove}
+          </div>
+        </>
+    )
+  }
+
+  const removeEventFromCalendar = (eventId) => {
+      setCalendarEvents((prevEvents) => {
+      const updatedEvents = prevEvents.filter((e) => e.id !== eventId);
+      setIsUpdating(false);
+      setComponentDidMountExecuted(false);
+      setReloadTrigger((prev) => prev + 1);
+      return updatedEvents;
+    });
+
+  };
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -169,9 +191,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
 
           if (!componentDidMountExecuted) {
             const fetchData = async () => {
-              await callAPI(startDate, endDate, reperibilityId, setReperibilities, setReperibilityId, setCalendarEvents, setReperibilityWorkers, setRecap);
-
               setComponentDidMountExecuted(true);
+
+              await callAPI(startDate, endDate, reperibilityId, setReperibilities, setReperibilityId, setCalendarEvents, setReperibilityWorkers, setRecap);
 
               let draggableEl = document.getElementById("external-events");
               if (draggableEl) {
@@ -200,7 +222,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
             console.log("ho chiamato fetch data");
           }
     }
-  }, [startDate, endDate, reperibilityId]);
+  }, [startDate, endDate, reperibilityId, reloadTrigger]);
 
   const handleDropdownChange = (selectedOption) => {
     setComponentDidMountExecuted(false);
@@ -232,26 +254,19 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
   };
 
   const handleEventNew = async (eventDropInfo:any) => {
-    // Get the dropped event's information
-      const { event } = eventDropInfo;
-      // Update the event's start time to match the new dropped time
-      event.setStart(eventDropInfo.start);
-      // Update the state with the modified calendarEvents array
-      setCalendarEvents((prevEvents) =>
-        prevEvents.map((calEvent: any) =>
-          calEvent.id === event.id ? event : calEvent
-        )
-      );
+      const calendarApi = eventDropInfo.view.calendar;
 
       let personId = eventDropInfo.event.id;
       let start = eventDropInfo.event.startStr;
-      let reperibilityId = 14;
 
-      const parameters = "reperibility=14&date="+start+"&personId="+personId;
+        const tempEvent = eventDropInfo.event;
+        tempEvent.remove();
+
+      const parameters = "reperibility="+reperibilityId+"&date="+start+"&personId="+personId;
       const session = await getSession() as CustomSession;
       let accessToken = session ? session.accessToken : null;
 
-      const url = '/api/rest/v4?endpoint=reperibilitycalendar%2F';
+      const url = '/api/rest/v4?endpoint=reperibilitycalendar';
 
       try {
         const response = await fetch(url, {
@@ -270,29 +285,27 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
         if (!response.ok) {
           throw new Error("Errore nel salvataggio dati handleEventNew");
         }
-        window.location.reload();
+        toast.success("Reperibilità salvata con successo!");
+
+        setReloadTrigger((prev) => prev + 1);
+        setIsUpdating(false);
+        setComponentDidMountExecuted(false);
+        if (calendarApi) {
+          calendarApi.removeAllEvents();
+          calendarApi.refetchEvents();
+        }
       } catch (error) {
         console.error("[Reperibilities] Errore nella chiamata API:", url," >>>> ",error);
       }
   };
 
   const handleEventDrop = async (eventDropInfo:any) => {
-    // Get the dropped event's information
-      const { event } = eventDropInfo;
-      // Update the event's start time to match the new dropped time
-      event.setStart(eventDropInfo.start);
-      // Update the state with the modified calendarEvents array
-      setCalendarEvents((prevEvents) =>
-        prevEvents.map((calEvent: any) =>
-          calEvent.id === event.id ? event : calEvent
-        )
-      );
+      const newStartDate = new Date(eventDropInfo.oldEvent.start);
+      newStartDate.setDate(newStartDate.getDate() + eventDropInfo.delta.days);
 
-      // You can also add any additional logic you need here
       let eventId=eventDropInfo.event.id;
-      let start=eventDropInfo.event.startStr;
-      const date = new Date(start);
-      const parameters = "newDate="+start;
+      const start = DateUtility.formatDateLocal(newStartDate);
+      const parameters = "newDate=" + start;
       const session = await getSession() as CustomSession;
       let accessToken = session ? session.accessToken : null;
 
@@ -304,60 +317,22 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
                                              'Accept': 'application/json',
                                              'Content-Type': 'application/json',
                                              Authorization: 'Bearer '+accessToken
-                                         },
-                                         body: JSON.stringify({
-                                                 "personId": personId,
-                                                 "reperibilityId": reperibilityId,
-                                                 "date": start
-                                               })
+                                         }
                                      });
           if (!response.ok) {
             throw new Error("Errore nel salvataggio dati handleEventNew");
           }
-          window.location.reload();
+          toast.success("Turno modificato con successo!");
+          setIsUpdating(false);
+          setComponentDidMountExecuted(false);
+          setReloadTrigger((prev) => prev + 1);
       } catch (error) {
         console.error("[Reperibilities] Errore nella chiamata API:", url," >>>> ",error);
       }
   };
 
-  const handleEventClick = (eventClick) => {
-    Alert.fire({
-          title: eventClick.event.title,
-          html:
-            `<div className="table-responsive">
-          <table className="table">
-          <tbody>
-          <tr >
-          <td>Title</td>
-          <td><strong>` +
-            eventClick.event.title +
-            `</strong></td>
-          </tr>
-          <tr >
-          <td>Start Time</td>
-          <td><strong>
-          ` +
-            eventClick.event.start +
-            `
-          </strong></td>
-          </tr>
-          </tbody>
-          </table>
-          </div>`,
 
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Remove Event",
-          cancelButtonText: "Close"
-        }).then(result => {
-          if (result.value) {
-            eventClick.event.remove(); // It will remove event from the calendar
-            Alert.fire("Deleted!", "Your Event has been deleted.", "success");
-          }
-        });
-  }
-
+  let apiUrl = "/api/rest/v4?endpoint=reperibilitycalendar%2Fshow";
 
   return (
     <>
@@ -376,7 +351,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
                 		</label>
                 {/* Colonna per DropdownReperibilityType */}
                 <div className="col-sm-6">
-                  <DropdownReperibilityType onChange={handleDropdownChange} />
+                  <DropdownReperibilityType onChange={handleDropdownChange} apiUrl={apiUrl} />
                 </div>
               </div>
             </div>
@@ -400,18 +375,20 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
               }}
               customButtons={{
                           next: {
-                            text: 'Next', // Testo del pulsante "Next"
-                            click: handleNextButtonClick, // Gestore personalizzato al clic
+                            text: 'Next',
+                            click: handleNextButtonClick,
                           },
                           prev: {
-                                  text: 'Prev', // Testo del pulsante "Next"
-                                  click: handlePrevButtonClick, // Gestore personalizzato al clic
+                                  text: 'Prev',
+                                  click: handlePrevButtonClick,
                                 },
                         }}
               initialView='dayGridMonth'
               dayHeaderFormat={{ weekday: 'long' }}
-              editable={false}
-              droppable={false}
+              editable={reperibilities.editable}
+              eventStartEditable={reperibilities.editable}
+              eventDurationEditable={reperibilities.editable}
+              droppable={true}
               weekends={true}
               eventsSet={(events) => {
                 console.log("Eventi caricati nel calendario:", events);
@@ -465,7 +442,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({reperibilityID}) => {
                     observer.observe(eventElementArg, { childList: true, subtree: true });
                   }
                 }}
-              eventContent={renderEventContent}
+              eventContent={(arg) => renderEventContent(arg, reperibilities.editable)}
               showNonCurrentDates={false}
             />
           </div>

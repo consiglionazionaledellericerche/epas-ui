@@ -11,11 +11,9 @@ interface DropItem {
   description:string
 }
 
-const DropdownReperibilityType: React.FC<{ onChange: (selectedOption: {label: string, value: number}) => void }> = ({ onChange }) => {
+const DropdownReperibilityType: React.FC<{ onChange: (selectedOption: {label: string, value: number}) => void, apiUrl:string }> = ({ onChange,apiUrl }) => {
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState<{ value: any; label: any; } | null>(null);
-
-  let apiUrl = "/api/rest/v4?endpoint=reperibilitycalendar%2Fshow";
 
   const { data: session, status } = useSession();
   let accessToken: string | null = null;
