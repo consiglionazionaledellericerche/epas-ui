@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from './api/auth/[...nextauth]'
 import MealTicketsView from '../components/mealTickets/mealTicketsView'
 
-function PersonMonthsHoursRecap() {
+function MealTicketsRecap() {
   const router = useRouter()
   let personId = router.query["personId"]
 
@@ -33,4 +33,4 @@ export async function getServerSideProps({ req, res }) {
     }
   }
 }
-export default PersonMonthsHoursRecap
+export default MealTicketsRecap
