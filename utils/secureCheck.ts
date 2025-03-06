@@ -27,7 +27,8 @@ export const secureCheck = async (params: any) => {
     });
 
     if (!response.ok) {
-      throw new Error('Errore durante la richiesta API');
+      console.log('Errore durante la richiesta API>>> ',response);
+      return false;
     }
 
     const data = await response.json();

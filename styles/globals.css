@@ -9,11 +9,6 @@ body {
   margin: 0;
 }
 
-a {
-    color: #337ab7;
-    text-decoration: none;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -79,4 +74,23 @@ div.accordion-body h4 {
 .well-lg {
   padding: 24px;
   border-radius: 0px;
+}
+
+.breadcrumb {
+  margin: 0 !important;
+  border: none !important;
+}
+
+.panel-primary > .panel-heading {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;}
+
+.tabPrimary > .nav-link {
+    color: #ff0000 !important;
+    text-decoration: none !important;
+}
+
+.label-normal {
+  font-weight: normal !important;
 }

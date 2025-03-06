@@ -19,6 +19,11 @@ const currentDate = new Date()
 
 import dynamic from "next/dynamic";
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+
+library.add(fas);
+
 const CurrentDateProvider = dynamic(
   () => import("../contexts/currentDateContext").then((ctx) => ctx.CurrentDateProvider),
   {

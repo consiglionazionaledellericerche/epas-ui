@@ -10,6 +10,7 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import PersonalDataMenu from './menu/personalDataMenu';
 import PersonalWorkflowsMenu from './menu/personalWorkflowsMenu';
 import CalendarsMenu from './menu/calendarsMenu';
+import AdminMenu from './menu/adminMenu';
 import SelectPeriod from './menu/selectPeriod'
 import dotenv from 'dotenv';
 dotenv.config();
@@ -78,17 +79,17 @@ const  Header: React.FC<HeaderProps> = ({ title }) => {
     const keycloakLogoutUrl = `${logoutUrl}?redirect_uri=${redirectUrl}`;
     window.location.replace(keycloakLogoutUrl);
   };
-  const isAdminOrDeveloper = ['ADMIN', 'DEVELOPER'].every(role => roles.includes(role));
+  const isAdminOrDeveloper = ['ADMIN', 'DEVELOPER'].some(role => roles.includes(role));
 
   const isAdminRolesOffice = ["Amministratore Personale Sola lettura",
-  "Amministratore Personale","Responsabile Sede","Gestore buoni pasto","Gestore anagrafica"].every(role => rolesOffice.includes(role));
+  "Amministratore Personale","Responsabile Sede","Gestore buoni pasto","Gestore anagrafica"].some(role => rolesOffice?.includes(role));
 
-  const isEmployee = rolesOffice.includes('Dipendente');
+  const isEmployee = rolesOffice?.includes('Dipendente');
 
-  const isGroupManager = ['Responsabile gruppo'].every(role => rolesOffice.includes(role));
+  const isGroupManager = ['Responsabile gruppo'].some(role => rolesOffice?.includes(role));
 
   const isSeatManager = ["Amministratore Personale","Amministratore Personale Sola lettura",
-  "Amministratore Tecnico","Responsabile Sede"].every(role => rolesOffice.includes(role));
+  "Amministratore Tecnico","Responsabile Sede"].some(role => rolesOffice?.includes(role));
 
   const hasShiftOrReperibility = personInfo && (personInfo.shiftCategories.length > 0
                                 || personInfo.reperibilityTypes.length > 0
@@ -104,9 +105,9 @@ const  Header: React.FC<HeaderProps> = ({ title }) => {
 
       {/* <PersonalWorkflowsMenu /> */}
 
-      {/*(isAdminOrDeveloper || isAdminRolesOffice) ? (
+      {(isAdminOrDeveloper || isAdminRolesOffice) ? (
          <AdminMenu />
-      )*/}
+      ): ''}
 
       {isAdminOrDeveloper || isAdminRolesOffice || hasShiftOrReperibility ?
         <CalendarsMenu/> : ''

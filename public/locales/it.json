@@ -41,6 +41,27 @@
     "no_overtime": "No straordinari assegnabili",
     "minimumTime": "Quantità minima",
     "maximumTime": "Quantità massima",
-    "takenPercentageTime": "Consumo dal monte disponibile (in caso di orario normale)"
+    "takenPercentageTime": "Consumo dal monte disponibile (in caso di orario normale)",
+
+    "off_site_stamping":"Inserimento timbratura lavoro fuori sede",
+    "off_site_absence_with_convention":"Inserimento assenza per lavoro fuori sede con convenzione",
+    "maternity_period":"Periodo Maternità",
+    "telework":"Auto inserimento codice di assenza per Telelavoro",
+    "telework_stampings":"Orario in telelavoro",
+    "enable_telework_stampings_for_worktime":"Timbrature in telelavoro abilitate anche per orario di lavoro",
+    "disabled_person_permission":"Auto inserimento assenze 104 dipendente disabile",
+    "disabled_relative_permission":"Auto inserimento assenze 104 parente disabile",
+    "right_to_study":"Permessi per diritto allo studio",
+    "covid_19":"Auto inserimento codice per emergenza COVID-19",
+    "additional_hours":"Auto inserimento ore aggiuntive",
+    "parental_leave_and_child_illness":"Auto inserimento congedi parentali e malattie figlio",
+    "second_disabled_relative_permission":"Auto inserimento assenze 104 secondo parente disabile",
+    "third_disabled_relative_permission":"Auto inserimento assenze 104 terzo parente disabile",
+    "people_allowed_insert_medical_exam":"Abilita personale all'auto inserimento di permessi per visita medica",
+    "agile_work_or_disabled_people_assistance":"Auto inserimento lavoro agile per dipendenti fragili o assistenza disabile/immunodepresso",
+    "smartworking":"Auto inserimento codice di assenza per smartworking",
+    "agile_work":"Inserimento codice di assenza per Lavoro Agile di cui alla nota del DG 22278 del 22 marzo 2022",
+    "parental_leave_for_fathers":"Inserimento codici di congedo parentale per il padre"
+
   }
 }
