@@ -20,7 +20,6 @@ export const useRequest = (path: string, parameters: string | null = null) => {
 
     const delim = path.includes('?') ? '&' : '?';
     const url = parameters ? baseUrl + path + delim + parameters : baseUrl + path;
-    console.log("SWR URL >>>> ", url);
     const { data, error} = useSwr(url,
                                    {  revalidateIfStale: false,
                                       revalidateOnFocus: false,

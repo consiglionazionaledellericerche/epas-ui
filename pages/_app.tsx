@@ -11,7 +11,7 @@ import React, {useEffect} from 'react'
 import { SWRConfig } from 'swr'
 import { useSession} from "next-auth/react"
 import {createTranslator, NextIntlClientProvider} from 'next-intl';
-
+import { ToastContainer } from "react-toastify";
 import itMessages from '../public/locales/it.json';
 
 // import { CurrentDateContext } from '../contexts/currentDateContext'
@@ -61,6 +61,7 @@ export default function App({ Component, pageProps: { session, ...pageProps }}: 
                        },
                    }}>
       <CurrentDateProvider>
+        <ToastContainer position="top-right" autoClose={3000} />
         <Layout>
           <Component {...pageProps} />
         </Layout>

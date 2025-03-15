@@ -94,3 +94,8 @@ div.accordion-body h4 {
 .label-normal {
   font-weight: normal !important;
 }
+
+.form-select {
+  font-size: inherit !important;
+}
+

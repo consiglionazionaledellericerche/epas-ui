@@ -3,8 +3,6 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { getSession } from 'next-auth/react';
 import PeopleTable from "./peopleTable";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 interface PeopleTabProps {
   tabName: string;
@@ -33,12 +31,12 @@ const PeopleTab: React.FC<PeopleTabProps> = ({
         className="mb-3"
         onSelect={(k) => handleTabChange(k)}
       >
-            <Tab key="withContract" eventKey="WITHCONTRACT" title="Personale Attivo">
-              <PeopleTable data={withContract} typeTable="A" />
-            </Tab>
-            <Tab key="withoutContract" eventKey="WITHOUTCONTRACT" title="Personale Non Attivo">
-              <PeopleTable data={withoutContract} typeTable="D" />
-            </Tab>
+        <Tab key="withContract" eventKey="WITHCONTRACT" title="Personale Attivo">
+          <PeopleTable data={withContract} typeTable="A" />
+        </Tab>
+        <Tab key="withoutContract" eventKey="WITHOUTCONTRACT" title="Personale Non Attivo">
+          <PeopleTable data={withoutContract} typeTable="D" />
+        </Tab>
       </Tabs>
     </>
   );
