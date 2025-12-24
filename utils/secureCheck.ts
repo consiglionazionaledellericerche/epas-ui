@@ -31,10 +31,9 @@ export const secureCheck = async (params: any) => {
     }
 
     const data = await response.json();
-    console.log("data securecheck ", data);
     return data;  // Restituisci i dati
   } catch (error) {
-    console.error("unable to achieve this", error);
-    return false;  // In caso di errore restituisci false
+      console.error("unable to achieve this", error);
+      return false;  // In caso di errore restituisci false
   }
 };
