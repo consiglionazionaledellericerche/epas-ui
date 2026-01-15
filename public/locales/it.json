@@ -41,6 +41,20 @@
     "no_overtime": "No straordinari assegnabili",
     "minimumTime": "Quantità minima",
     "maximumTime": "Quantità massima",
-    "takenPercentageTime": "Consumo dal monte disponibile (in caso di orario normale)"
+    "takenPercentageTime": "Consumo dal monte disponibile (in caso di orario normale)",
+
+    "seatSupervisor": "Responsabile Sede",
+    "personnelAdmin": "Amministratore Personale",
+    "personnelAdminMini": "Amministratore Personale Sola lettura",
+    "employee": "Dipendente",
+    "badgeReader": "Lettore di badge",
+    "restClient": "Client rest",
+    "technicalAdmin": "Amministratore Tecnico",
+    "shiftManager": "Gestore turni",
+    "reperibilityManager": "Gestore reperibilità",
+    "groupManager": "Responsabile gruppo",
+    "mealTicketManager": "Gestore buoni pasto",
+    "registryManager": "Gestore anagrafica",
+    "personDayReader": "Lettore informazioni"
   }
 }
