@@ -1,11 +1,16 @@
-import { faCalendarDays, faUserXmark, faPlane, faCalendar } from "@fortawesome/free-solid-svg-icons"
+import { faCalendarDays, faListCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NavDropdown } from "react-bootstrap"
 
 function AdminMenu() {
-    return (        
+    return (
         <NavDropdown title="Amministrazione" id="admin">
-          <NavDropdown.Item href="/peopleList"><FontAwesomeIcon icon={faCalendarDays} /> Lista Persone</NavDropdown.Item>
+          <NavDropdown.Item href="/peopleList">
+            <FontAwesomeIcon icon={faCalendarDays} /> Lista Persone
+          </NavDropdown.Item>
+          <NavDropdown.Item href="/admin/competences/show">
+            <FontAwesomeIcon icon={faListCheck} /> Gestione Competenze
+          </NavDropdown.Item>
         </NavDropdown>
     )
 }

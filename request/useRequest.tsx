@@ -13,13 +13,18 @@ class CustomError extends Error {
 
 const baseUrl = '/api/rest/v4';
 
-export const useRequest = (path: string, parameters: string | null = null) => {
+export const useRequest = (
+    path: string,
+    parameters: string | null = null,
+    customBaseUrl?: string
+) => {
     if (!path) {
         throw new Error('Path is required');
     }
 
+    const base = customBaseUrl ?? baseUrl;
     const delim = path.includes('?') ? '&' : '?';
-    const url = parameters ? baseUrl + path + delim + parameters : baseUrl + path;
+    const url = parameters ? base + path + delim + parameters : base + path;
     const { data, error} = useSwr(url,
                                    {  revalidateIfStale: false,
                                       revalidateOnFocus: false,

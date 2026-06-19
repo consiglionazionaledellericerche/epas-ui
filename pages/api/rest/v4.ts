@@ -6,7 +6,15 @@ export default async function handler(req:any, res:any) {
   // Recupera la sessione
   const session = await getServerSession(req, res, authOptions)
   let accessToken = session ? session.accessToken : null;
+  if (accessToken) {
+    try {
+      const payload = JSON.parse(Buffer.from((accessToken as string).split('.')[1], 'base64url').toString());
+      console.log('[v4 proxy] token issuer:', payload.iss, '| exp:', new Date(payload.exp * 1000).toISOString());
+    } catch {}
+  }
+  console.log('[v4 proxy] session:', !!session, '| accessToken:', !!accessToken);
   if (!accessToken) {
+    console.log('[v4 proxy] 401 - nessuna sessione/token');
     return res.status(401).json({ error: 'Non autenticato' });
   }
 
@@ -40,6 +48,7 @@ export default async function handler(req:any, res:any) {
       ? await apiResponse.json()
       : await apiResponse.text();
 
+    console.log('[v4 proxy] backend response status:', apiResponse.status, 'url:', finalUrl.toString());
     res.status(apiResponse.status).send(data);
 
   } catch (error) {
